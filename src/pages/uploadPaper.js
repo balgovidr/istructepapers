@@ -15,6 +15,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import { format } from 'date-fns';
 
+
 export default function UploadPaper() {
     // const [user, setUser] = useState(null);
     // const [year, setYear] = useState(null);
@@ -28,7 +29,6 @@ export default function UploadPaper() {
     const [alertSeverity, setAlertSeverity] = useState('error');
     const [alertCollapse, setAlertCollapse] = React.useState(false);
 
-    const reader = new FileReader();
     const user = auth.currentUser;
 
     /** Listen for auth state changes */
@@ -73,8 +73,9 @@ export default function UploadPaper() {
             const today = format(new Date(), 'yyyy-MM-dd-kk-mm-ss');
             const filePath = 'solvedPapers/'+year+'-'+month+'-'+questionNumber+'-'+user.uid+'-'+today+'.pdf';
             const storageRef = ref(storage, filePath);
+            const File = File(file)
 
-            const uploadTask = uploadBytesResumable(storageRef, blob);
+            const uploadTask = uploadBytesResumable(storageRef, File);
             
             uploadTask.on('state_changed',
                 (snapshot) => {

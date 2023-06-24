@@ -17,7 +17,7 @@
   --bs-info: #0dcaf0;
   --bs-warning: #ffc107;
   --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
+  --bs-light: #ffffff;
   --bs-dark: #212529;
   --bs-font-sans-serif: "Plus Jakarta Sans";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -56,6 +56,11 @@ html, body {
   height:100%;
   overflow: auto;
 }
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
 #root {
   height:100%;
 }
@@ -75,6 +80,8 @@ html, body {
 }
 .col-1 {
   flex-grow: 1;
+  /* flex-shrink: 1; */
+  flex-basis: 0;
 }
 .center {
   display: flex;
@@ -143,6 +150,15 @@ nav .h1, nav h1 {
 .mg-l-50 {
   margin-left: 50px;
 }
+.mg-r-10 {
+  margin-right: 10px;
+}
+.mg-t-10 {
+  margin-top: 10px;
+}
+.mg-t-20 {
+  margin-top: 20px;
+}
 .mg-t-25 {
   margin-top: 25px;
 }
@@ -151,6 +167,9 @@ nav .h1, nav h1 {
 }
 .mg-t-100 {
   margin-top: 100px;
+}
+.mg-b-5 {
+  margin-bottom: 10px;
 }
 .mg-a-10p {
   margin: 10%;
@@ -202,6 +221,15 @@ nav .h1, nav h1 {
 .font-size-12 {
   font-size: 12px;
 }
+.font-size-13 {
+  font-size: 13px;
+}
+.font-size-14 {
+  font-size: 14px;
+}
+.font-size-15 {
+  font-size: 15px;
+}
 .font-size-20 {
   font-size: 20px;
 }
@@ -240,8 +268,14 @@ nav .h1, nav h1 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.text-align-left {
+  text-align: left;
+}
 .d-inline {
   display: inline !important;
+}
+.hidden {
+  display: none;
 }
 
 .full-height {
@@ -263,4 +297,13 @@ input, input:focus {
 }
 label {
   text-align: start;
+}
+.form-control:active, .form-control:focus {
+  padding-left:5px ;
+}
+
+/* Solid border */
+hr.solid {
+  border-top: 1px solid var(--bs-primary);
+  margin:50px 10%;
 }
