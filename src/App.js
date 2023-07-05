@@ -5,6 +5,8 @@ import Home from './pages/home';
 import SignUp from './pages/signUp';
 import Login from './pages/login';
 import UploadPaper from './pages/uploadPaper';
+import Filter from './pages/filter';
+import Viewer from './pages/viewer';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
   {
     path: "/upload",
     element: <UploadPaper />,
+  },
+  {
+    path: "/filter",
+    element: <Filter />,
+  },
+  {
+    path: "/viewer",
+    element: <Viewer />,
   },
 ]);
 

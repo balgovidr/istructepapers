@@ -29,7 +29,7 @@ export default function Navbar() {
     return(
         <nav>
             <div class="row space-between align-items-center">
-                <a href="index.html" class="row align-items-center">
+                <a href="/" class="row align-items-center">
                     <img src={logo} alt="Paper trail logo" height="50"/>
                     <span class="h1 mg-l-10">PAPER TRAIL</span>
                 </a>

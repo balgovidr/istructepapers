@@ -1,16 +1,14 @@
 import React, {useState} from 'react';
 import '../App.css';
 import logo from "../assets/Logo.svg";
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {  createUserWithEmailAndPassword  } from 'firebase/auth';
-import { collection, addDoc, setDoc, doc } from "firebase/firestore"; 
+import { setDoc, doc } from "firebase/firestore"; 
 import { auth, db } from '../firebase';
 import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -38,7 +36,8 @@ export default function SignUp() {
                 const docRef = await setDoc(doc(db, "users", user.uid), {
                   first: firstName,
                   last: lastName,
-                  uid: user.uid
+                  uid: user.uid,
+                  papersViewable: 1
                 });
                 console.log("Document written with ID: ", docRef.id);
 
