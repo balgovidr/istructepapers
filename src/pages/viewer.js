@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import '../App.css';
 import { db, auth } from '../firebase';
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { useLocation } from 'react-router-dom';
-import file1 from '../assets/Balgovind Ranjith CV.pdf'
 import { Document, Page, pdfjs } from "react-pdf";
 import { onAuthStateChanged } from 'firebase/auth';
+import UserProfile from "../components/userProfile";
+import RatePaper from "../components/ratePaper";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -16,21 +17,19 @@ export default function Viewer() {
   const params = new URLSearchParams(location.search);
   const id = params.get('id') || 'N/A';
   const [displayedPages, setDisplayedPages] = useState(0);
-  const [numPages, setNumPages] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     /** Fetching the solvedPapers data from Firestore */
     const fetchData = async () => {
-      console.log('fetching paper data')
       try {
         const docRef = doc(db, "solvedPapers", id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            console.log('Setting paper data')
-            setPaper(docSnap.data());
-            console.log('Set paper data')
+            var tempDoc = docSnap.data();
+            tempDoc.id = docSnap.id;
+            setPaper(tempDoc);
         } else {
           // docSnap.data() will be undefined in this case
           console.log("No such document!");
@@ -43,22 +42,20 @@ export default function Viewer() {
     };
 
     fetchData();
-    console.log('Triggered fetch paper data')
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log('Fetching user data')
       try {
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
           var tempUser = user;
-          tempUser.papersViewable = userDocSnap.data().papersViewable
-          console.log('Setting user data')
+          tempUser.papersViewable = userDocSnap.data().papersViewable;
+          tempUser.papersAllowed = userDocSnap.data().papersAllowed;
+          tempUser.monthsAllowed = userDocSnap.data().monthsAllowed;
           setUser(tempUser);
-          console.log('Set user data')
         } else {
           // docSnap.data() will be undefined in this case
           console.log("No such user!");
@@ -70,17 +67,8 @@ export default function Viewer() {
 
     if (user !== null) {
       fetchUserData();
-      console.log('Triggered fetch user data')
     }
   }, [user]);
-
-//   useEffect(() => {
-//     console.log('User or paper has changed')
-//     if (user !== null && paper !== null) {
-//       console.log('Loading stopped')
-//       setLoading(false)
-//     }
-//   }, [user, paper])
 
   /** Listen for auth state changes */
   useEffect(() => {
@@ -100,35 +88,37 @@ export default function Viewer() {
     return date.toLocaleString('en-US', { month: 'short' });
   }
 
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    console.log('Pdf loaded')
+  const onDocumentLoadSuccess = async ({ numPages }) => {
     if (user) {
-      if (user.papersViewable >= 1) {
-        setDisplayedPages(numPages);
-        console.log('Pages set to many')
-      } else {
-        setDisplayedPages(1)
-        console.log('pages set to 1')
-      }
+        // If the user is logged in, check if they have prior access to this specific paper or this months paper
+        if (user.papersAllowed.includes(paper.id) || user.monthsAllowed.includes(paper.month + '-' + paper.year)) {
+            setDisplayedPages(numPages);
+        } else if (user.papersViewable >= 1) {
+            // If they don't have access to this paper, then deduct from their credits and show the paper
+            await updateDoc(doc(db, "users", user.uid), {
+                papersAllowed: [...user.papersAllowed, paper.id],
+                papersViewable: user.papersViewable-1
+            })
+        
+            setDisplayedPages(numPages);
+        } else {
+            setDisplayedPages(1)
+        }
     } else {
-      setDisplayedPages(3)
-      console.log('pages set to 3')
+      setDisplayedPages(2)
     }
   };
 
   function limitReached() {
-    console.log('Rendering the add on')
     if (user) {
       if (user.papersViewable >= 1) {
         // User is logged in and has enough credits to view the paper
-        console.log('Rendering user logged in and can view full paper')
         return null;
       } else {
         // User is logged in but does not have enough credits to view the paper. Ask to upload or answer questions
-        console.log('Rendering user logged in but no credit')
         return (
           <div class="background-color-light pd-a-10p full-width">
-            <h2 class="text-gradient">You've already seen one paper.</h2>
+            <h2 class="text-gradient">You've already used up your allowance.</h2>
             <br />
             <h2>View the rest of the solved papers of {paper.year + ' ' + getMonthName(paper.month)} by uploading a solved paper of your own or view this paper by answering a few questions.</h2>
             <div class="row mg-t-50 justify-content-center">
@@ -140,7 +130,6 @@ export default function Viewer() {
       }
     } else {
       // User is not logged in. View the rest of the paper by creating an account or logging in.
-      console.log('Rendering user logged out')
       return (
         <div class="background-color-light pd-a-10p full-width">
           <h2 class="text-gradient">This is just the preview.</h2>
@@ -171,8 +160,14 @@ export default function Viewer() {
         {limitReached()}
       </div>
       <div class="tail-container mg-t-10">
-        <h2 class="d-inline">{paper.year + ' ' + getMonthName(paper.month)}</h2>
-        <p class="d-inline"> | Question number: {paper.questionNumber}</p>
+        <div>
+            <h2 class="d-inline">{paper.year + ' ' + getMonthName(paper.month)}</h2>
+            <p class="d-inline"> | Question number: {paper.questionNumber}</p>
+        </div>
+        <div class="row justify-content-space-between">
+            <UserProfile uid={paper.owner} />
+            <RatePaper id={paper.id} />
+        </div>
       </div>
     </div>
   )

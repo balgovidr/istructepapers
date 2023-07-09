@@ -34,10 +34,12 @@ export default function SignUp() {
             console.log(user);
             try {
                 const docRef = await setDoc(doc(db, "users", user.uid), {
-                  first: firstName,
-                  last: lastName,
+                  firstName: firstName,
+                  lastName: lastName,
                   uid: user.uid,
-                  papersViewable: 1
+                  papersViewable: 3,
+                  papersAllowed: [],
+                  monthsAllowed: []
                 });
                 console.log("Document written with ID: ", docRef.id);
 

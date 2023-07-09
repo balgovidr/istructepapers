@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import '../App.css';
 import logo from "../assets/Logo.svg";
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, updateDoc, doc, arrayUnion } from "firebase/firestore"; 
 import {auth, db, storage } from '../firebase';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
@@ -83,14 +83,18 @@ export default function UploadPaper() {
                         downloadUrl: downloadUrl,
                         owner: user.uid,
                         uploadDate: today
-                    }).then(()=> {
-                        setAlertContent('Upload completed.');
+                    }).then(async ()=> {
+                        await updateDoc(doc(db, "users", user.uid), {
+                            monthsAllowed: arrayUnion(month + '-' + year),
+                        }).then(() => {
+                            setAlertContent('Upload completed.');
                         setAlertSeverity('success')
                         setAlert(true);
                         setAlertCollapse(true);
                         setTimeout(() => {
                             setAlertCollapse(false);
                         }, 3000);
+                        })
                     });
                 })
             })
