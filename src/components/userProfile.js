@@ -4,6 +4,9 @@ import { db } from "../firebase";
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faStar as faStarO} from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Rating from '@mui/material/Rating';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 const UserProfile = ({ uid }) => {
   const [userData, setUserData] = useState(null);
@@ -46,27 +49,22 @@ const UserProfile = ({ uid }) => {
   };
 
   const renderStarRating = () => {
-    const stars = [];
-
     if (userData) {
-      if (userData.starRating === undefined) {
-        for (let i = 0; i < 5; i++) {
-          stars.push(<FontAwesomeIcon key={i} icon={faStarO} color="lightGrey" />);
-        }
-        return <div id="star-not-rated" className="star-rating">{stars}</div> ;
+      if (userData.rating === undefined) {
+        return(
+          <div class="column">
+            <Rating name="no-value" value={null} size="small" readOnly />
+          </div>
+        )
       } else {
-        const starRating = Math.round(userData.starRating);
-        const emptyStars = 5 - starRating;
+        const starRating = Math.round(userData.rating);
   
-        for (let i = 0; i < starRating; i++) {
-          stars.push(<FontAwesomeIcon key={i} icon={faStar} color="black" />);
-        }
-  
-        for (let i = 0; i < emptyStars; i++) {
-          stars.push(<FontAwesomeIcon key={`empty-${i}`} icon={faStar} color="lightGrey" />);
-        }
-  
-        return <div className="star-rating">{stars}</div>;
+        return (
+          <div class="star-rating-dark column">
+            <Rating className="star-rating" name="read-only" value={starRating} icon={<StarIcon fontSize="inherit"/>}
+            emptyIcon={<StarIcon fontSize="inherit" />} size="small" readOnly />
+          </div>
+        )
       }
     }
 

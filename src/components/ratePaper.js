@@ -5,13 +5,14 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { updateUserRating } from "../functions/paper";
 
 
 const RatePaper = ({ id }) => {
-  const [rating, setRating] = useState(null);
   const [ratingMap, setRatingMap] = useState(null);
   const [currentUserRating, setCurrentUserRating] = useState(null);
   const [user, setUser] = useState(null);
+  const [owner, setOwner] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +23,7 @@ const RatePaper = ({ id }) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setRatingMap(data.rating);
+          setOwner(data.owner);
         } else {
           console.log("Paper document does not exist");
         }
@@ -54,14 +56,12 @@ const RatePaper = ({ id }) => {
   }, [ratingMap, user]);
 
   const renderStarRating = () => {
-    console.log(currentUserRating)
-    console.log(ratingMap)
       if (currentUserRating) {
         const starRating = Math.round(currentUserRating);
 
         return (
-          <div class="star-rating-primary">
-            <span>Rate this paper</span>
+          <div class="star-rating-primary column">
+            <span class="mg-b-5 text-align-right">Rate this paper</span>
             <Rating
               name="simple-controlled"
               value={starRating}
@@ -77,22 +77,19 @@ const RatePaper = ({ id }) => {
       } else if (ratingMap) {
         // Retrieve the values from the map and store them in an array
         const valuesArray = Object.values(ratingMap);
-        console.log(valuesArray)
 
         // Calculate the sum of all values
         const sum = valuesArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-        console.log(sum)
 
         // Calculate the average
         const averageRating = sum / valuesArray.length;
-        console.log(averageRating)
 
         const starRating = Math.round(averageRating);
         
         if (user) {
           return (
             <div class="star-rating-dark column">
-              <span>Rate this paper</span>
+              <span class="mg-b-5 text-align-right">Rate this paper</span>
               <Rating
                 name="simple-controlled"
                 value={starRating}
@@ -107,7 +104,7 @@ const RatePaper = ({ id }) => {
         } else {
           return (
             <div class="star-rating-dark column">
-              <span>Rating:</span>
+              <span class="mg-b-5 text-align-right">Rating</span>
               <Rating className="star-rating" name="read-only" value={starRating} icon={<StarIcon fontSize="inherit"/>}
               emptyIcon={<StarIcon fontSize="inherit" />} readOnly />
             </div>
@@ -118,7 +115,7 @@ const RatePaper = ({ id }) => {
         if (user) {
           return (
             <div class="star-rating-dark column">
-              <span>Rate this paper</span>
+              <span class="mg-b-5 text-align-right">Rate this paper</span>
               <Rating className="star-rating"
                 name="no-value"
                 value={null}
@@ -133,7 +130,7 @@ const RatePaper = ({ id }) => {
         } else {
           return(
             <div class="column">
-              <span>Rate this paper</span>
+              <span class="mg-b-5 text-align-right">No rating set yet</span>
               <Rating name="no-value" value={null} readOnly />
             </div>
           )
@@ -154,6 +151,7 @@ const RatePaper = ({ id }) => {
       const updateField = "rating." + currentUserUid;
       updateDoc(docRef, {[updateField]: newRating })
         .then(() => {
+          updateUserRating(owner);
           setCurrentUserRating(newRating);
         })
         .catch((error) => {
