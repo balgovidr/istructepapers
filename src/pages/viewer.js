@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import '../App.css';
 import { db, auth } from '../firebase';
-import { getDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { getDoc, doc, updateDoc, arrayUnion } from "@firebase/firestore";
 import { useLocation } from 'react-router-dom';
 import { Document, Page, pdfjs } from "react-pdf";
 import { onAuthStateChanged } from 'firebase/auth';
 import UserProfile from "../components/userProfile";
 import RatePaper from "../components/ratePaper";
+import Comments from "../components/comments";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -117,13 +118,13 @@ export default function Viewer() {
       } else {
         // User is logged in but does not have enough credits to view the paper. Ask to upload or answer questions
         return (
-          <div class="background-color-light pd-a-10p full-width">
-            <h2 class="text-gradient">You've already used up your allowance.</h2>
+          <div className="background-color-light pd-a-10p full-width">
+            <h2 className="text-gradient">You've already used up your allowance.</h2>
             <br />
             <h2>View the rest of the solved papers of {paper.year + ' ' + getMonthName(paper.month)} by uploading a solved paper of your own or view this paper by answering a few questions.</h2>
-            <div class="row mg-t-50 justify-content-center">
-              <a class="btn btn-primary-outline mg-l-50" href="/upload">Upload a paper</a>
-              <a class="btn btn-primary-outline mg-l-50" href="/surveys">Answer questions</a>
+            <div className="row mg-t-50 justify-content-center">
+              <a className="btn btn-primary-outline mg-l-50" href="/upload">Upload a paper</a>
+              <a className="btn btn-primary-outline mg-l-50" href="/surveys">Answer questions</a>
             </div>
           </div>
         )
@@ -131,12 +132,12 @@ export default function Viewer() {
     } else {
       // User is not logged in. View the rest of the paper by creating an account or logging in.
       return (
-        <div class="background-color-light pd-a-10p full-width">
-          <h2 class="text-gradient">This is just the preview.</h2>
+        <div className="background-color-light pd-a-10p full-width">
+          <h2 className="text-gradient">This is just the preview.</h2>
           <h2>View the rest of this paper by signing up or logging in.</h2>
-          <div class="row mg-t-50 justify-content-center">
-            <a class="btn btn-primary-outline mg-l-50" href="/signup">Sign Up</a>
-            <a class="btn btn-primary-outline mg-l-50" href="/login">Login</a>
+          <div className="row mg-t-50 justify-content-center">
+            <a className="btn btn-primary-outline mg-l-50" href="/signup">Sign Up</a>
+            <a className="btn btn-primary-outline mg-l-50" href="/login">Login</a>
           </div>
         </div>
       )
@@ -148,8 +149,8 @@ export default function Viewer() {
   }
 
   return (
-    <div class="column">
-      <div class="pdf-container align-items-center column">
+    <div className="column">
+      <div className="pdf-container align-items-center column">
         <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
           {displayedPages === 0 ?
             <p>Loading...</p> :
@@ -159,15 +160,16 @@ export default function Viewer() {
         </Document>
         {limitReached()}
       </div>
-      <div class="tail-container mg-t-10">
+      <div className="tail-container mg-t-10">
         <div>
-            <h2 class="d-inline">{paper.year + ' ' + getMonthName(paper.month)}</h2>
-            <p class="d-inline"> | Question number: {paper.questionNumber}</p>
+            <h2 className="d-inline">{paper.year + ' ' + getMonthName(paper.month)}</h2>
+            <p className="d-inline"> | Question number: {paper.questionNumber}</p>
         </div>
-        <div class="row justify-content-space-between">
+        <div className="row justify-content-space-between">
             <UserProfile uid={paper.owner} />
             <RatePaper id={paper.id} />
         </div>
+        <Comments paperId={paper.id} />
       </div>
     </div>
   )

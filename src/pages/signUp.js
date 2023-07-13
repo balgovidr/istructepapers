@@ -3,7 +3,7 @@ import '../App.css';
 import logo from "../assets/Logo.svg";
 import { useNavigate } from 'react-router-dom';
 import {  createUserWithEmailAndPassword  } from 'firebase/auth';
-import { setDoc, doc } from "firebase/firestore"; 
+import { setDoc, doc } from "@firebase/firestore"; 
 import { auth, db } from '../firebase';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
@@ -78,24 +78,24 @@ export default function SignUp() {
     }
 
   return (
-    <div class="row full-height">
-        <div class="col-1 background-color-primary center">
+    <div className="row full-height">
+        <div className="col-1 background-color-primary center">
             <img src={logo} alt="Paper trail logo" height="100"/>
         </div>
-        <div class="col-1 column pd-a-10p">
+        <div className="col-1 column pd-a-10p">
             <h2>Registration</h2>
-            <form class="column">
+            <form className="column">
                 <label for="first-name">First Name</label>
-                <input type="text" class="form-control" id="first-name" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)}   required/>
+                <input type="text" className="form-control" id="first-name" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)}   required/>
                 <label for="last-name">Last Name</label>
-                <input type="text" class="form-control" id="last-name" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
+                <input type="text" className="form-control" id="last-name" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <input type="email" className="form-control" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-                <div class="row justify-content-center align-items-center mg-t-25">
-                    <button type="submit" onClick={onSubmit} class="btn btn-primary">Sign Up</button>
-                    <a href="/login" class="mg-l-20 font-size-12 text-color-grey underline">I'm already a member</a>
+                <input type="password" className="form-control" id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
+                <div className="row justify-content-center align-items-center mg-t-25">
+                    <button type="submit" onClick={onSubmit} className="btn btn-primary">Sign Up</button>
+                    <a href="/login" className="mg-l-20 font-size-12 text-color-grey underline">I'm already a member</a>
                 </div>
             </form>
             <Stack sx={{ width: "100%" }} spacing={2}>

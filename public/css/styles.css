@@ -69,6 +69,9 @@ button {
   flex-direction: column;
   height:100%
 }
+.flex {
+  display:flex;
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -97,6 +100,9 @@ button {
 }
 .align-items-end {
   align-items: flex-end;
+}
+.align-items-baseline {
+  align-items: baseline;
 }
 .justify-items-start {
   justify-items: flex-start;
@@ -161,6 +167,9 @@ nav .h1, nav h1 {
 .mg-r-10p {
   margin-right: 10%;
 }
+.mg-t-2 {
+  margin-top: 2px;
+}
 .mg-t-10 {
   margin-top: 10px;
 }
@@ -182,8 +191,17 @@ nav .h1, nav h1 {
 .mg-b-10 {
   margin-bottom: 10px;
 }
+.mg-b-20 {
+  margin-bottom: 20px;
+}
 .mg-a-10p {
   margin: 10%;
+}
+.pd-t-5 {
+  padding-top: 5px;
+}
+.pd-b-5 {
+  padding-bottom: 5px;
 }
 .pd-r-10p {
   padding-right: 10%;
@@ -200,7 +218,7 @@ nav .h1, nav h1 {
   padding: 8px 25px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  /* display: inline-block; */
   font-size: var(--bs-body-font-size);
   border-radius: 6px;
 }
@@ -307,11 +325,31 @@ nav .h1, nav h1 {
 }
 
 /* form styling */
-input, input:focus {
+input, input:focus, .input, .input:focus {
   border: none;
   border-bottom: 1px solid #999;
   margin-bottom: 20px;
   padding:10px 0px;
+}
+.input:empty:before {
+  content: attr(placeholder);
+  color: gray;
+}
+.input-comment, .input-comment:focus {
+  border: none;
+  border-bottom: 1px solid #999;
+  margin-bottom: 20px;
+  padding:5px 0px;
+  font-size:13px;
+}
+.input-comment:empty:before {
+  content: attr(placeholder);
+  color: gray;
+}
+input:focus, span[contentEditable="true"]:focus {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #999;
 }
 label {
   text-align: start;
@@ -403,6 +441,14 @@ hr.solid {
   margin-right: 10px;
 }
 
+.profile-picture-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
 .profile-picture img {
   width: 100%;
   height: 100%;
@@ -419,6 +465,10 @@ hr.solid {
   color: #fff;
   font-size: 24px;
   border-radius: 50%;
+}
+
+.profile-picture-small > .initials-icon {
+  font-size:18px;
 }
 
 .user-info {

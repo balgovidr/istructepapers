@@ -3,7 +3,7 @@ import '../App.css';
 import logo from "../assets/Logo.svg";
 import { NavLink, useNavigate } from 'react-router-dom';
 import {  sendPasswordResetEmail  } from 'firebase/auth';
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "@firebase/firestore";
 import { auth, db } from '../firebase';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';

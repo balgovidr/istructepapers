@@ -7,6 +7,7 @@ import Login from './pages/login';
 import UploadPaper from './pages/uploadPaper';
 import Filter from './pages/filter';
 import Viewer from './pages/viewer';
+import Surveys from './pages/surveys';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/viewer",
     element: <Viewer />,
+  },
+  {
+    path: "/surveys",
+    element: <Surveys />,
   },
 ]);
 

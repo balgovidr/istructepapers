@@ -28,22 +28,22 @@ export default function Navbar() {
     
     return(
         <nav>
-            <div class="row space-between align-items-center">
-                <a href="/" class="row align-items-center">
+            <div className="row space-between align-items-center">
+                <a href="/" className="row align-items-center">
                     <img src={logo} alt="Paper trail logo" height="50"/>
-                    <span class="h1 mg-l-10">PAPER TRAIL</span>
+                    <span className="h1 mg-l-10">PAPER TRAIL</span>
                 </a>
                 
-                <div class="row">
-                    <div class="align-items-center">
+                <div className="row">
+                    <div className="align-items-center">
                         {user ?
                             <div>
-                                <button class="btn btn-white-outline" onClick={submitSignOut}>Logout</button>
+                                <button className="btn btn-white-outline" onClick={submitSignOut}>Logout</button>
                             </div>
                         :
                             <div>
-                                <a class="btn btn-white-outline" href="/signup">Sign up</a>
-                                <a class="btn btn-white mg-l-10" href="/login">Login</a>
+                                <a className="btn btn-white-outline" href="/signup">Sign up</a>
+                                <a className="btn btn-white mg-l-10" href="/login">Login</a>
                             </div>
                         }
                         

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import '../App.css';
 import { auth, db } from '../firebase';
 import {  onAuthStateChanged  } from 'firebase/auth';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "@firebase/firestore";
 
 export default function Content({ user, setUser }) {
     const [papers, setPapers] = useState([]);

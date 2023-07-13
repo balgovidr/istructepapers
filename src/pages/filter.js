@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import '../App.css';
 import { db } from '../firebase';
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "@firebase/firestore";
 import { useLocation } from 'react-router-dom';
 
 export default function Filter() {

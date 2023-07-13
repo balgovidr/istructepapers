@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { getDoc, doc, setDoc, updateDoc } from "@firebase/firestore";
 import { db, auth } from "../firebase";
 import { onAuthStateChanged } from 'firebase/auth';
 import Rating from '@mui/material/Rating';
@@ -60,8 +60,8 @@ const RatePaper = ({ id }) => {
         const starRating = Math.round(currentUserRating);
 
         return (
-          <div class="star-rating-primary column">
-            <span class="mg-b-5 text-align-right">Rate this paper</span>
+          <div className="star-rating-primary column">
+            <span className="mg-b-5 text-align-right">Rate this paper</span>
             <Rating
               name="simple-controlled"
               value={starRating}
@@ -88,8 +88,8 @@ const RatePaper = ({ id }) => {
         
         if (user) {
           return (
-            <div class="star-rating-dark column">
-              <span class="mg-b-5 text-align-right">Rate this paper</span>
+            <div className="star-rating-dark column">
+              <span className="mg-b-5 text-align-right">Rate this paper</span>
               <Rating
                 name="simple-controlled"
                 value={starRating}
@@ -103,8 +103,8 @@ const RatePaper = ({ id }) => {
           )
         } else {
           return (
-            <div class="star-rating-dark column">
-              <span class="mg-b-5 text-align-right">Rating</span>
+            <div className="star-rating-dark column">
+              <span className="mg-b-5 text-align-right">Rating</span>
               <Rating className="star-rating" name="read-only" value={starRating} icon={<StarIcon fontSize="inherit"/>}
               emptyIcon={<StarIcon fontSize="inherit" />} readOnly />
             </div>
@@ -114,8 +114,8 @@ const RatePaper = ({ id }) => {
       } else {
         if (user) {
           return (
-            <div class="star-rating-dark column">
-              <span class="mg-b-5 text-align-right">Rate this paper</span>
+            <div className="star-rating-dark column">
+              <span className="mg-b-5 text-align-right">Rate this paper</span>
               <Rating className="star-rating"
                 name="no-value"
                 value={null}
@@ -129,8 +129,8 @@ const RatePaper = ({ id }) => {
           )
         } else {
           return(
-            <div class="column">
-              <span class="mg-b-5 text-align-right">No rating set yet</span>
+            <div className="column">
+              <span className="mg-b-5 text-align-right">No rating set yet</span>
               <Rating name="no-value" value={null} readOnly />
             </div>
           )

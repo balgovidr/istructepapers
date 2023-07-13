@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc } from "@firebase/firestore";
 import { db } from "../firebase";
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faStar as faStarO} from '@fortawesome/free-regular-svg-icons'
@@ -52,7 +52,7 @@ const UserProfile = ({ uid }) => {
     if (userData) {
       if (userData.rating === undefined) {
         return(
-          <div class="column">
+          <div className="column">
             <Rating name="no-value" value={null} size="small" readOnly />
           </div>
         )
@@ -60,7 +60,7 @@ const UserProfile = ({ uid }) => {
         const starRating = Math.round(userData.rating);
   
         return (
-          <div class="star-rating-dark column">
+          <div className="star-rating-dark column">
             <Rating className="star-rating" name="read-only" value={starRating} icon={<StarIcon fontSize="inherit"/>}
             emptyIcon={<StarIcon fontSize="inherit" />} size="small" readOnly />
           </div>
