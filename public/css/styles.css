@@ -72,6 +72,9 @@ button {
 .flex {
   display:flex;
 }
+.flex-wrap {
+  flex-wrap: wrap;
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -116,6 +119,9 @@ button {
 }
 .space-between {
   justify-content: space-between;
+}
+.justify {
+  justify-content: space-around;
 }
 .justify-content-center {
   justify-content: center;
@@ -203,11 +209,17 @@ nav .h1, nav h1 {
 .pd-b-5 {
   padding-bottom: 5px;
 }
+.pd-b-10 {
+  padding-bottom: 10px;
+}
 .pd-r-10p {
   padding-right: 10%;
 }
 .pd-l-10p {
   padding-left: 10%;
+}
+.pd-a-5p {
+  padding: 5%;
 }
 .pd-a-10p {
   padding: 10%;
@@ -312,12 +324,15 @@ nav .h1, nav h1 {
 
 .full-height {
   display:flex;
-  flex:1 1 auto;
-  height:100%;
+  min-height:100%;
 }
 
 .full-width {
   width:100%;
+}
+.half-width {
+  width:50%;
+  max-width:50%
 }
 
 .shadow {
@@ -393,12 +408,17 @@ hr.solid {
 
 .pdf-container {
   flex-grow: 1;
-  height: calc(90vh - 50px); /* 90% of the viewport height */
   background-color: lightgray;
-  overflow-y: auto; /* Enable scrolling */
   scrollbar-width: thin;
   scrollbar-color: lightgray;
   overflow-x: hidden;
+}
+.pdf-container-viewer {
+  height: calc(90vh - 50px); /* 90% of the viewport height */
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .tail-container {
@@ -419,12 +439,17 @@ hr.solid {
 .pdf-container::-webkit-scrollbar-thumb {
   border-radius: 20px;
   border: 3px solid lightgray;
+  background-color: gray;
 }
 
 .background-color-light {
   background-color: var(--bs-light);
 }
 
+.row.button-container {
+  flex-wrap: wrap;
+  gap: 15px;
+}
 
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 .user-profile {
@@ -447,6 +472,7 @@ hr.solid {
   border-radius: 50%;
   overflow: hidden;
   margin-right: 10px;
+  min-width: 40px;
 }
 
 .profile-picture img {
@@ -485,3 +511,119 @@ hr.solid {
 .MuiRating-iconEmpty {
   color:lightgray
 }
+.pc-hide {
+  display:none;
+}
+
+/* CSS for phones */
+@media screen and (min-width: 100px) and (max-width: 601px) {
+  .nav .heading {
+    font-size: 20px;
+  }
+  .nav .header-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .nav .button-container {
+    width: 100%;
+    justify-content: space-evenly;
+  }
+
+  .welcome .button-container {
+    width: 100%;
+    justify-content: space-evenly;
+    margin-top: 50px;
+  }
+  .welcome .button-container .btn {
+    margin: 0px;
+  }
+  .mob-hide {
+    display:none;
+  }
+
+  .content {
+    padding:0px 10px;
+  }
+  .content .button-container, .filter .button-container, .viewer .button-container {
+    width: 100%;
+    justify-content: space-evenly;
+  }
+  .content .button-container .btn, .filter .button-container .btn, .viewer .button-container .btn {
+    margin: 0px;
+    max-width: 80px;
+  }
+  .content .font-size-20, .filter .font-size-20 {
+    font-size: 15px;
+  }
+  .content .cell {
+    flex-direction: row;
+    padding: 0px;
+    width: 100%;
+    margin: 0px;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: baseline;
+    padding: 10px;
+  }
+  .content .cell h2, .content .cell h3 {
+    margin: 0px;
+  }
+
+  .filter .cell {
+    flex-direction: row;
+    width: 100%;
+    margin: 0px;
+    margin-top: 20px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+  }
+  .filter .cell h3 {
+    margin: 0px;
+  }
+  .filter .cell .info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  .filter .cell .info span {
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+  }
+
+  .viewer .info {
+    flex-direction: column-reverse;
+    align-items: start;
+  }
+  .viewer .rating {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .viewer .star-rating-dark {
+    flex-direction: row;
+    align-self: start;
+  }
+  .viewer .user-info {
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+  .viewer .tail-container {
+    padding: 0 20px;
+  }
+  .viewer .user-profile {
+    width: 100%;
+  }
+  .viewer .comments {
+    font-size: 14px;
+  }
+  
+  .react-tabs__tab-list {
+    border-bottom: none;
+    margin: 0px !important;
+    background-color: var(--bs-primary);
+    color: #FFFFFF;
+  }
+}
+

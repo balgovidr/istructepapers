@@ -8,6 +8,8 @@ import UploadPaper from './pages/uploadPaper';
 import Filter from './pages/filter';
 import Viewer from './pages/viewer';
 import Surveys from './pages/surveys';
+import ForgotPassword from './pages/forgotPassword';
+import Content from './pages/content';
 
 const router = createBrowserRouter([
   {
@@ -23,8 +25,16 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+  },
+  {
     path: "/upload",
     element: <UploadPaper />,
+  },
+  {
+    path: "/content",
+    element: <Content />,
   },
   {
     path: "/filter",

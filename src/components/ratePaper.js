@@ -89,7 +89,7 @@ const RatePaper = ({ id }) => {
         if (user) {
           return (
             <div className="star-rating-dark column">
-              <span className="mg-b-5 text-align-right">Rate this paper</span>
+              <span className="mg-b-5 text-align-right mob-hide">Rate this paper</span>
               <Rating
                 name="simple-controlled"
                 value={starRating}
@@ -104,7 +104,7 @@ const RatePaper = ({ id }) => {
         } else {
           return (
             <div className="star-rating-dark column">
-              <span className="mg-b-5 text-align-right">Rating</span>
+              <span className="mg-b-5 text-align-right mob-hide">Paper rating</span>
               <Rating className="star-rating" name="read-only" value={starRating} icon={<StarIcon fontSize="inherit"/>}
               emptyIcon={<StarIcon fontSize="inherit" />} readOnly />
             </div>
@@ -115,7 +115,7 @@ const RatePaper = ({ id }) => {
         if (user) {
           return (
             <div className="star-rating-dark column">
-              <span className="mg-b-5 text-align-right">Rate this paper</span>
+              <span className="mg-b-5 text-align-right mob-hide">Rate this paper</span>
               <Rating className="star-rating"
                 name="no-value"
                 value={null}
@@ -130,7 +130,7 @@ const RatePaper = ({ id }) => {
         } else {
           return(
             <div className="column">
-              <span className="mg-b-5 text-align-right">No rating set yet</span>
+              <span className="mg-b-5 text-align-right mob-hide">No rating set yet</span>
               <Rating name="no-value" value={null} readOnly />
             </div>
           )

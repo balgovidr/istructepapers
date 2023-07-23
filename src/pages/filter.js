@@ -53,8 +53,8 @@ export default function Filter() {
       }
 
     return (
-        <div class="full-height column">
-            <div class="row mg-t-50 justify-content-center">
+        <div class="full-height column filter">
+            <div class="row mg-t-50 justify-content-center button-container">
                 <a class="btn btn-primary-outline mg-l-50" href="/upload">Upload a paper</a>
                 <a class="btn btn-primary-outline mg-l-50" href="resume.html">Answer questions</a>
             </div>
@@ -69,10 +69,12 @@ export default function Filter() {
                     {papers.map((doc, index) => (
                         <a key={index} class="cell" href={'./viewer?id='+doc.id}>
                             <h3 class="mg-t-10">{doc.year + ' ' + getMonthName(doc.month)}</h3>
-                            <span>Question number: {doc.questionNumber}</span>
-                            <span>Parts attempted: {doc.attempted.map((each, index) => (
-                                index === 0 ? each : ', ' + each
-                            ))}</span>
+                            <div className="info">
+                                <span>Question number: {doc.questionNumber}</span>
+                                <span>Parts attempted: {doc.attempted.map((each, index) => (
+                                    index === 0 ? each : ', ' + each
+                                ))}</span>
+                            </div>
                         </a>
                     ))}
                 </div>

@@ -40,7 +40,7 @@ export default function Comments({paperId}) {
       documents.sort((a, b) => {
         const dateTimeA = a.data().dateTime;
         const dateTimeB = b.data().dateTime;
-        return dateTimeB.localeCompare(dateTimeB);
+        return dateTimeB.localeCompare(dateTimeA);
       });
 
       const commentsArray = [];
@@ -119,10 +119,6 @@ const generateCommentComponent = (userDoc, commentData) => {
 
   useEffect (() => {
     if(commentsFetched && userDataFetched) {
-      console.log('comments' + commentsFetched)
-      console.log(userDataFetched)
-      console.log(comments)
-      console.log(userData)
       setIsLoading(false)
     }
   }, [commentsFetched, userDataFetched]);
@@ -206,15 +202,17 @@ const generateCommentComponent = (userDoc, commentData) => {
     }
   }
 
-  if (isLoading) {
-    return (
-      <p>Loading</p>
-    )
-  }
+  // if (isLoading) {
+  //   return (
+  //     <p>Loading</p>
+  //   )
+  // }
   return (
     <div className="comments-section mg-t-25">
       {commentForm()}
       <div className="comments">
+        Comments:
+        <hr class="solid" style={{margin: "0px", marginBottom: "10px"}}/>
         {commentsFetched ? comments
          : (<p>Loading...</p>)}
       </div>

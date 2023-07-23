@@ -53,7 +53,7 @@ export default function ForgotPassword() {
 
   return (
     <div class="row full-height">
-        <div class="col-1 background-color-primary center">
+        <div class="col-1 background-color-primary center mob-hide">
             <img src={logo} alt="Paper trail logo" height="100"/>
         </div>
         <div class="col-1 column pd-a-10p">

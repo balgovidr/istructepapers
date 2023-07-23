@@ -49,7 +49,7 @@ export default function Login() {
 
   return (
     <div class="row full-height">
-        <div class="col-1 background-color-primary center">
+        <div class="col-1 background-color-primary center mob-hide">
             <img src={logo} alt="Paper trail logo" height="100"/>
         </div>
         <div class="col-1 column pd-a-10p">
@@ -61,7 +61,7 @@ export default function Login() {
                 <input type="password" class="form-control" id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                 <div class="row justify-content-center align-items-center mg-t-25">
                     <button type="submit" onClick={onSubmit} class="btn btn-primary">Login</button>
-                    <a href="/login" class="mg-l-20 font-size-12 text-color-grey underline">Forgot my password</a>
+                    <a href="/forgot-password" class="mg-l-20 font-size-12 text-color-grey underline">Forgot my password</a>
                     <a href="/signup" class="mg-l-20 font-size-12 text-color-grey underline">Sign up</a>
                 </div>
             </form>

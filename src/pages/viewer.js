@@ -19,6 +19,22 @@ export default function Viewer() {
   const id = params.get('id') || 'N/A';
   const [displayedPages, setDisplayedPages] = useState(0);
   const [user, setUser] = useState(null);
+  const [windowSize, setWindowSize] = useState([
+    window.innerWidth,
+    window.innerHeight,
+  ]);
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+        setWindowSize([window.innerWidth, window.innerHeight]);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+        window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [windowSize]);
 
   useEffect(() => {
     /** Fetching the solvedPapers data from Firestore */
@@ -122,8 +138,8 @@ export default function Viewer() {
             <h2 className="text-gradient">You've already used up your allowance.</h2>
             <br />
             <h2>View the rest of the solved papers of {paper.year + ' ' + getMonthName(paper.month)} by uploading a solved paper of your own or view this paper by answering a few questions.</h2>
-            <div className="row mg-t-50 justify-content-center">
-              <a className="btn btn-primary-outline mg-l-50" href="/upload">Upload a paper</a>
+            <div className="row mg-t-50 justify-content-center button-container">
+              <a className="btn btn-primary-outline" href="/upload">Upload a paper</a>
               <a className="btn btn-primary-outline mg-l-50" href="/surveys">Answer questions</a>
             </div>
           </div>
@@ -135,8 +151,8 @@ export default function Viewer() {
         <div className="background-color-light pd-a-10p full-width">
           <h2 className="text-gradient">This is just the preview.</h2>
           <h2>View the rest of this paper by signing up or logging in.</h2>
-          <div className="row mg-t-50 justify-content-center">
-            <a className="btn btn-primary-outline mg-l-50" href="/signup">Sign Up</a>
+          <div className="row mg-t-50 justify-content-center button-container">
+            <a className="btn btn-primary-outline" href="/signup">Sign Up</a>
             <a className="btn btn-primary-outline mg-l-50" href="/login">Login</a>
           </div>
         </div>
@@ -149,13 +165,17 @@ export default function Viewer() {
   }
 
   return (
-    <div className="column">
-      <div className="pdf-container align-items-center column">
+    <div className="column viewer">
+      <div className="pdf-container pdf-container-viewer align-items-center column">
         <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
           {displayedPages === 0 ?
             <p>Loading...</p> :
             Array.from({ length: displayedPages }, (_, index) => (
-              <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} />
+              <div>
+                <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} width={windowSize[0] > 610 ? null : windowSize[0]}/>
+                <span className="font-size-12">Page {index+1}</span>
+                <br />
+              </div>
             ))}
         </Document>
         {limitReached()}
@@ -165,7 +185,7 @@ export default function Viewer() {
             <h2 className="d-inline">{paper.year + ' ' + getMonthName(paper.month)}</h2>
             <p className="d-inline"> | Question number: {paper.questionNumber}</p>
         </div>
-        <div className="row justify-content-space-between">
+        <div className="row justify-content-space-between info">
             <UserProfile uid={paper.owner} />
             <RatePaper id={paper.id} />
         </div>

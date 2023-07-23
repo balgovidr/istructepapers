@@ -4,16 +4,9 @@ import { auth, db } from '../firebase';
 import {  onAuthStateChanged  } from 'firebase/auth';
 import { collection, query, where, getDocs } from "@firebase/firestore";
 
-export default function Content({ user, setUser }) {
+export default function Content() {
     const [papers, setPapers] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    /** Listen for auth state changes */
-    useEffect(() => {
-        onAuthStateChanged(auth, (result) => {
-            setUser(result);
-        });
-    });
 
     useEffect(() => {
         /** Fetching the solvedPapers data from Firestore */
@@ -57,9 +50,9 @@ export default function Content({ user, setUser }) {
       }
 
     return (
-        <div class="full-height column">
-            <div class="row mg-t-50 justify-content-center">
-                <a class="btn btn-primary-outline mg-l-50" href="/upload">Upload a paper</a>
+        <div class="full-height column content">
+            <div class="row mg-t-50 justify-content-center button-container">
+                <a class="btn btn-primary-outline" href="/upload">Upload a paper</a>
                 <a class="btn btn-primary-outline mg-l-50" href="/surveys">Answer questions</a>
             </div>
             <hr class="solid"/>
@@ -72,7 +65,7 @@ export default function Content({ user, setUser }) {
                 <div class="grid mg-l-10p mg-r-10p center">
                     {papers.map((item, index) => (
                         <a key={index} class="cell" href={'./filter?year='+item.year+'&month='+item.month}>
-                            <h2 class="mg-b-10">{item.year}</h2>
+                            <h2 class="mg-b-10">{item.year}</h2>&nbsp;
                             <h3 class="mg-t-10">{getMonthName(item.month)}</h3>
                         </a>
                     ))}

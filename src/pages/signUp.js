@@ -39,7 +39,9 @@ export default function SignUp() {
                   uid: user.uid,
                   papersViewable: 3,
                   papersAllowed: [],
-                  monthsAllowed: []
+                  monthsAllowed: [],
+                  userRating: 0,
+                  points: 10,
                 });
                 console.log("Document written with ID: ", docRef.id);
 
@@ -79,7 +81,7 @@ export default function SignUp() {
 
   return (
     <div className="row full-height">
-        <div className="col-1 background-color-primary center">
+        <div className="col-1 background-color-primary center mob-hide">
             <img src={logo} alt="Paper trail logo" height="100"/>
         </div>
         <div className="col-1 column pd-a-10p">
