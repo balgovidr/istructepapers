@@ -16,13 +16,13 @@ export default function Comments({paperId}) {
 
   /** Listen for auth state changes */
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (result) => {
-      setUser(result);
-    });
+      const unsubscribe = onAuthStateChanged(auth, (result) => {
+          setUser(result);
+      });
 
-    return () => {
-      unsubscribe();
-    };
+      return () => {
+          unsubscribe();
+      };
   }, []);
   
 
@@ -78,20 +78,26 @@ const fetchUserDocument = async (userId) => {
 };
 
 const generateCommentComponent = (userDoc, commentData) => {
+  if (userDoc && commentData) {
+    return (
+      <div className="row mg-b-20" key={commentData.id}>
+        <div className="profile-picture-small">
+          {renderProfilePicture(userDoc.photoUrl, userDoc.firstName, userDoc.lastName)}
+        </div>
+        <div className="column">
+          <span>{userDoc.firstName + ' ' + userDoc.lastName}</span>
+          <span className="font-size-13 mg-t-2">{commentData.text}</span>
+          {/* <a href="/" className="font-size-13 mg-t-2"><ReplyIcon fontSize="inherit"/>Reply</a> */}
+          {/* {replies(commentData.replies)} */}
+          {/* When you update the replies, the link to a good preview is here: https://github.com/RiyaNegi/react-comments-section */}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="row mg-b-20" key={commentData.id}>
-      <div className="profile-picture-small">
-        {renderProfilePicture(userDoc.photoUrl, userDoc.firstName, userDoc.lastName)}
-      </div>
-      <div className="column">
-        <span>{userDoc.firstName + ' ' + userDoc.lastName}</span>
-        <span className="font-size-13 mg-t-2">{commentData.text}</span>
-        {/* <a href="/" className="font-size-13 mg-t-2"><ReplyIcon fontSize="inherit"/>Reply</a> */}
-        {/* {replies(commentData.replies)} */}
-        {/* When you update the replies, the link to a good preview is here: https://github.com/RiyaNegi/react-comments-section */}
-      </div>
-    </div>
-  );
+    <div>Loading...</div>
+  )
 };
   
 
@@ -148,14 +154,13 @@ const generateCommentComponent = (userDoc, commentData) => {
         setCommentText("");
         fetchComments();
       });
-      console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
 
   const commentForm = () => {
-    if (user) {
+    if (user && userData) {
       return (
         <div className="comment-form row mg-t-20">
           <form className="row full-width align-items-baseline">
@@ -212,7 +217,7 @@ const generateCommentComponent = (userDoc, commentData) => {
       {commentForm()}
       <div className="comments">
         Comments:
-        <hr class="solid" style={{margin: "0px", marginBottom: "10px"}}/>
+        <hr className="solid" style={{margin: "0px", marginBottom: "10px"}}/>
         {commentsFetched ? comments
          : (<p>Loading...</p>)}
       </div>

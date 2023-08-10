@@ -25,6 +25,10 @@ export default function UploadPaper() {
     const [user, setUser] = useState(null);
     const [schemeDiagram, setSchemeDiagram] = useState(null);
     const [userAllowedToUpload, setUserAllowedToUpload] = useState(false);
+    const [windowSize, setWindowSize] = useState([
+        window.innerWidth,
+        window.innerHeight,
+      ]);
 
     //Todo - The papers that the viewer can watch is added to a waiting list and is only appended to the final list after their papers have been verified.
 
@@ -38,6 +42,18 @@ export default function UploadPaper() {
         unsubscribe();
         };
     }, []);
+
+    useEffect(() => {
+        const handleWindowResize = () => {
+            setWindowSize([window.innerWidth, window.innerHeight]);
+        };
+    
+        window.addEventListener('resize', handleWindowResize);
+    
+        return () => {
+            window.removeEventListener('resize', handleWindowResize);
+        };
+      }, [windowSize]);
 
     useEffect(() => {
         //Checks if the user is reliable enough to carry out surveys and then fetches a paper
@@ -134,23 +150,23 @@ export default function UploadPaper() {
 
       if (userAllowedToUpload) {
         return (
-            <div class="row full-height">
-                <div class="col-1 background-color-primary center mob-hide">
+            <div className="row full-height-navbar-discount">
+                <div className="col-1 background-color-primary center mob-hide">
                     <img src={logo} alt="Paper trail logo" height="100"/>
                 </div>
-                <div class="col-1 column pd-a-10p">
+                <div className={windowSize[0] > 610 ? "col-1 column pd-a-10p overflow-y-auto" : "col-1 column pd-a-10p"}>
                     <h2>Upload a solved paper</h2>
-                    <span class="font-size-15 text-align-left">Once you've solved an IStructE Chartered Membership Exam's past paper, upload it so others can learn using it!</span>
+                    <span className="font-size-15 text-align-left">Once you've solved an IStructE Chartered Membership Exam's past paper, upload it so others can learn using it!</span>
                     <br />
-                    <span class="font-size-15 text-align-left">If you choose it, make your paper commentable and recieve feedback.</span>
-                    <hr class="solid"/>
-                    <form class="column">
+                    <span className="font-size-15 text-align-left">If you choose it, make your paper commentable and recieve feedback.</span>
+                    <hr className="solid"/>
+                    <form className="column">
                         <label for="month">Month and Year</label>
-                        <input type="month" class="form-control mg-b-20" id="month" value={date} onChange={(e) => setDate(e.target.value)}   required/>
+                        <input type="month" className="form-control mg-b-20" id="month" value={date} onChange={(e) => setDate(e.target.value)}   required/>
                         <label for="last-name">Question number</label>
-                        <input type="number" class="form-control mg-b-20" id="question-number" placeholder="1" value={questionNumber} onChange={(e) => setQuestionNumber(e.target.value)} min="1" max="8" required/>
-                        <label for="attempted" class="mg-b-5">Parts attempted</label>
-                        <div class="row mg-b-20 button-container">
+                        <input type="number" className="form-control mg-b-20" id="question-number" placeholder="1" value={questionNumber} onChange={(e) => setQuestionNumber(e.target.value)} min="1" max="8" required/>
+                        <label for="attempted" className="mg-b-5">Parts attempted</label>
+                        <div className="row mg-b-20 button-container">
                             <button type="button" onClick={(e) => appendToAttempted("1a")} className={"btn mg-r-10 " + (attempted.includes("1a") ? "btn-primary" : "btn-primary-outline")}>1a</button>
                             <button type="button" onClick={(e) => appendToAttempted("1b")} className={"btn mg-r-10 " + (attempted.includes("1b") ? "btn-primary" : "btn-primary-outline")}>1b</button>
                             <button type="button" onClick={(e) => appendToAttempted("2a")} className={"btn mg-r-10 " + (attempted.includes("2a") ? "btn-primary" : "btn-primary-outline")}>2a</button>
@@ -159,11 +175,11 @@ export default function UploadPaper() {
                         </div>
                         <label htmlFor="scheme-diagram">What page is a scheme diagram on?</label>
                         <input type="number" className="form-control mg-b-20" id="scheme-diagram" placeholder="1" value={schemeDiagram} onChange={(e) => setSchemeDiagram(e.target.value)} min="1" required/>
-                        <label for="password" class="mg-t-20">Attach pdf file</label>
-                        <input type="file" accept="application/pdf" class="form-control" id="file" name="Attach" onChange={(e) => setFile(e.target.files[0])} required/>
+                        <label for="password" className="mg-t-20">Attach pdf file</label>
+                        <input type="file" accept="application/pdf" className="form-control" id="file" name="Attach" onChange={(e) => setFile(e.target.files[0])} required/>
 
-                        <div class="row justify-content-center align-items-center mg-t-25 mg-b-20">
-                            <button type="submit" onClick={onSubmit} class="btn btn-primary">Upload</button>
+                        <div className="row justify-content-center align-items-center mg-t-25 mg-b-20">
+                            <button type="submit" onClick={onSubmit} className="btn btn-primary">Upload</button>
                         </div>
                     </form>
                     <Stack sx={{ width: "100%" }} spacing={2}>
@@ -182,13 +198,13 @@ export default function UploadPaper() {
 
     if (!user) {
         return (
-            <div class="row full-height">
-                <div class="col-1 background-color-primary center mob-hide">
+            <div className="row full-height">
+                <div className="col-1 background-color-primary center mob-hide">
                     <img src={logo} alt="Paper trail logo" height="100"/>
                 </div>
-                <div class="col-1 column pd-a-10p justify-content-center">
+                <div className="col-1 column pd-a-10p justify-content-center">
                     <h2>Upload a solved paper</h2>
-                    <span class="font-size-15">Please create an account or login first.</span>
+                    <span className="font-size-15">Please create an account or login first.</span>
                     <div className="row mg-t-50 justify-content-center button-container">
                         <a className="btn btn-primary-outline" href="/signup">Sign Up</a>
                         <a className="btn btn-primary-outline mg-l-50" href="/login">Login</a>
@@ -199,13 +215,13 @@ export default function UploadPaper() {
     }
     
     return (
-        <div class="row full-height">
-            <div class="col-1 background-color-primary center mob-hide">
+        <div className="row full-height">
+            <div className="col-1 background-color-primary center mob-hide">
                 <img src={logo} alt="Paper trail logo" height="100"/>
             </div>
-            <div class="col-1 column pd-a-10p justify-content-center">
+            <div className="col-1 column pd-a-10p justify-content-center">
                 <h2>Upload a solved paper</h2>
-                <span class="font-size-15 text-align-left">You've uploaded too many invalid papers, you can not upload any more. Please carry out surveys to be able to view further solved papers.</span>
+                <span className="font-size-15 text-align-left">You've uploaded too many invalid papers, you can not upload any more. Please carry out surveys to be able to view further solved papers.</span>
             </div>
         </div>
     );

@@ -326,6 +326,10 @@ nav .h1, nav h1 {
   display:flex;
   min-height:100%;
 }
+.full-height-navbar-discount {
+  display:flex;
+  max-height: calc(100vh - 70px);
+}
 
 .full-width {
   width:100%;
