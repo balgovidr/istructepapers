@@ -421,6 +421,20 @@ hr.solid {
   height: calc(90vh - 50px); /* 90% of the viewport height */
 }
 
+.pdf-container-viewer canvas {
+  margin:0 auto;
+  background-color: lightgray;
+}
+.pdf-container-viewer canvas::before {
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
 .overflow-y-auto {
   overflow-y: auto;
 }
@@ -517,6 +531,11 @@ hr.solid {
 }
 .pc-hide {
   display:none;
+}
+
+.filter .cell .info {
+  display: flex;
+  flex-direction: column;
 }
 
 /* CSS for phones */

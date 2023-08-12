@@ -167,17 +167,17 @@ export default function Viewer() {
   return (
     <div className="column viewer">
       <div className="pdf-container pdf-container-viewer align-items-center column">
-        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
-          {displayedPages === 0 ?
-            <p>Loading...</p> :
-            Array.from({ length: displayedPages }, (_, index) => (
-              <div>
-                <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} width={windowSize[0] > 610 ? null : windowSize[0]}/>
-                <span className="font-size-12">Page {index+1}</span>
-                <br />
-              </div>
-            ))}
-        </Document>
+            <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
+            {displayedPages === 0 ?
+              <p>Loading...</p> :
+              Array.from({ length: displayedPages }, (_, index) => (
+                <div>
+                  <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} width={windowSize[0] > 610 ? 600 : windowSize[0]} loading="Loading page..." canvasBackground="#d3d3d3"/>
+                  <span className="font-size-12">Page {index+1}</span>
+                  <br />
+                </div>
+              ))}
+            </Document>
         {limitReached()}
       </div>
       <div className="tail-container mg-t-10">

@@ -65,7 +65,7 @@ export default function Navbar() {
                 <div className="flex header-container">
                     <a href="/" className="row align-items-center">
                         <img src={logo} alt="Paper trail logo" height={windowSize[0] > 601 ? "50" : "40"}/>
-                        <span className="h1 mg-l-10 heading">PAPER TRAIL</span>
+                        <span className="h1 mg-l-10 heading">ISTRUCTE PAPERS</span>
                     </a>
                     <IconButton aria-label="close" size="small" onClick={() => {toggleShowMenu();}} style={{display: windowSize[0] > 601 ? "none" : "flex"}}>
                         <MenuIcon fontSize="inherit" sx={{ color: "#FFFFFF" }}/>
