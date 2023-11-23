@@ -3,6 +3,7 @@ import '../App.css';
 import { db } from '../firebase';
 import { collection, query, where, getDocs } from "@firebase/firestore";
 import { useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 export default function Filter() {
     const [papers, setPapers] = useState([]);
@@ -54,12 +55,16 @@ export default function Filter() {
 
     return (
         <div class="full-height column filter">
+            <Helmet>
+                <title>Filtered papers - {getMonthName(month) + " " + year} - Solved IStructE exam papers</title>
+                <meta name={"Filtered papers - " + getMonthName(month) + " " + year} content={"Filtered papers from " + getMonthName(month) + " " + year}/>
+            </Helmet>
             <div class="row mg-t-50 justify-content-center button-container">
                 <a class="btn btn-primary-outline mg-l-50" href="/upload">Upload a paper</a>
                 <a class="btn btn-primary-outline mg-l-50" href="resume.html">Answer questions</a>
             </div>
             <hr class="solid"/>
-
+            <h1>Solved <span className="text-gradient d-inline">IStructE</span> papers - {getMonthName(month) + " " + year}</h1>
             <div class="font-size-20">Pick a solved paper to view.</div>
 
             {loading ? (

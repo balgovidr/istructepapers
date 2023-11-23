@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDocs, getDoc, doc, addDoc, collection, query, where, orderBy } from "@firebase/firestore";
+import { getDocs, getDoc, doc, addDoc, collection, query, where } from "@firebase/firestore";
 import { db, auth } from "../firebase";
 import { onAuthStateChanged } from 'firebase/auth';
 import { format } from 'date-fns';
@@ -11,8 +11,6 @@ export default function Comments({paperId}) {
   const [comments, setComments] = useState(null);
   const [userData, setUserData] = useState(null);
   const [commentsFetched, setCommentsFetched] = useState(false);
-  const [userDataFetched, setUserDataFetched] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   /** Listen for auth state changes */
   useEffect(() => {
@@ -112,8 +110,6 @@ const generateCommentComponent = (userDoc, commentData) => {
             setUserData(data)
         } catch (error) {
           console.error("Error fetching user data:", error);
-        } finally {
-          setUserDataFetched(true)
         }
       } else {
         console.log('User not logged in')
@@ -122,12 +118,6 @@ const generateCommentComponent = (userDoc, commentData) => {
 
     fetchUserData();
   }, [user]);
-
-  useEffect (() => {
-    if(commentsFetched && userDataFetched) {
-      setIsLoading(false)
-    }
-  }, [commentsFetched, userDataFetched]);
 
 
   const renderProfilePicture = (photoUrl, firstName, lastName) => {
@@ -216,7 +206,7 @@ const generateCommentComponent = (userDoc, commentData) => {
     <div className="comments-section mg-t-25">
       {commentForm()}
       <div className="comments">
-        Comments:
+        <h3>Comments:</h3>
         <hr className="solid" style={{margin: "0px", marginBottom: "10px"}}/>
         {commentsFetched ? comments
          : (<p>Loading...</p>)}

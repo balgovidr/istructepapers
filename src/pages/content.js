@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import '../App.css';
-import { auth, db } from '../firebase';
-import {  onAuthStateChanged  } from 'firebase/auth';
-import { collection, query, where, getDocs } from "@firebase/firestore";
+import { db } from '../firebase';
+import { collection, getDocs } from "@firebase/firestore";
+import { Helmet } from "react-helmet";
 
 export default function Content() {
     const [papers, setPapers] = useState([]);
@@ -51,12 +51,17 @@ export default function Content() {
 
     return (
         <div class="full-height column content">
+            <Helmet>
+                <title>Archive browser - Solved IStructE exam papers</title>
+                <meta name="Archive browser" content="Browse and select the year and month of the paper you would like to view" />
+            </Helmet>
             <div class="row mg-t-50 justify-content-center button-container">
                 <a class="btn btn-primary-outline" href="/upload">Upload a paper</a>
                 <a class="btn btn-primary-outline mg-l-50" href="/surveys">Answer questions</a>
             </div>
             <hr class="solid"/>
 
+            <h1>Solved <span className="text-gradient d-inline">IStructE</span> paper repository</h1>
             <div class="font-size-20">Pick a year and month from below to view solved papers.</div>
 
             {loading ? (

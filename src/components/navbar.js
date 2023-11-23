@@ -21,7 +21,7 @@ export default function Navbar() {
 
     window.addEventListener('resize', handleWindowResize);
 
-    if (windowSize[0] < 601) {
+    if (windowSize[0] < 700) {
         setShowMenu(false)
     } else {
         setShowMenu(true)
@@ -64,14 +64,14 @@ export default function Navbar() {
             <div className="row space-between align-items-center flex-wrap nav">
                 <div className="flex header-container">
                     <a href="/" className="row align-items-center">
-                        <img src={logo} alt="Paper trail logo" height={windowSize[0] > 601 ? "50" : "40"}/>
-                        <span className="h1 mg-l-10 heading">ISTRUCTE PAPERS</span>
+                        <img src={logo} alt="Paper trail logo" height={windowSize[0] > 700 ? "50" : "40"}/>
+                        <span className="h1 mg-l-10 heading">STRUCTURAL PAPERS</span>
                     </a>
-                    <IconButton aria-label="close" size="small" onClick={() => {toggleShowMenu();}} style={{display: windowSize[0] > 601 ? "none" : "flex"}}>
+                    <IconButton aria-label="close" size="small" onClick={() => {toggleShowMenu();}} style={{display: windowSize[0] > 700 ? "none" : "flex"}}>
                         <MenuIcon fontSize="inherit" sx={{ color: "#FFFFFF" }}/>
                     </IconButton>
                 </div>
-                <div className="row align-items-center button-container" style={{display: showMenu ? "flex" : "none", marginTop: windowSize[0] > 601 ? "0px" : "10px"}}>
+                <div className="row align-items-center button-container" style={{display: showMenu ? "flex" : "none", marginTop: windowSize[0] > 700 ? "0px" : "10px"}}>
                     {user ?
                         <div className="flex button-container">
                             <button className="btn btn-white-outline" onClick={submitSignOut}>Logout</button>

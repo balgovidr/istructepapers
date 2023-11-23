@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
+import { Helmet } from 'react-helmet';
 
 
 export default function ForgotPassword() {
@@ -53,6 +54,10 @@ export default function ForgotPassword() {
 
   return (
     <div class="row full-height">
+        <Helmet>
+            <title>Reset Password - Solved IStructE exam papers</title>
+            <meta name="Reset Password" content="Reset a forgotten password" />
+        </Helmet>
         <div class="col-1 background-color-primary center mob-hide">
             <img src={logo} alt="Paper trail logo" height="100"/>
         </div>

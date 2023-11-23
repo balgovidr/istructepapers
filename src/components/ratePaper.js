@@ -49,7 +49,7 @@ const RatePaper = ({ id }) => {
   useEffect(() => {
     // Check if the current user has already rated the paper
     if (ratingMap && user) {
-      const currentUserUid = user.uid; // Replace with your own logic to get the current user's UID
+      const currentUserUid = user.uid;
       const currentUserRating = ratingMap[currentUserUid];
       setCurrentUserRating(currentUserRating);
     }
@@ -61,7 +61,7 @@ const RatePaper = ({ id }) => {
 
         return (
           <div className="star-rating-primary column">
-            <span className="mg-b-5 text-align-right">Rate this paper</span>
+            <h3 className="mg-b-5 text-align-right">Rate this paper</h3>
             <Rating
               name="simple-controlled"
               value={starRating}
@@ -89,7 +89,7 @@ const RatePaper = ({ id }) => {
         if (user) {
           return (
             <div className="star-rating-dark column">
-              <span className="mg-b-5 text-align-right mob-hide">Rate this paper</span>
+              <h3 className="mg-b-5 text-align-right mob-hide">Rate this paper</h3>
               <Rating
                 name="simple-controlled"
                 value={starRating}
@@ -104,7 +104,7 @@ const RatePaper = ({ id }) => {
         } else {
           return (
             <div className="star-rating-dark column">
-              <span className="mg-b-5 text-align-right mob-hide">Paper rating</span>
+              <h3 className="mg-b-5 text-align-right mob-hide">Paper rating</h3>
               <Rating className="star-rating" name="read-only" value={starRating} icon={<StarIcon fontSize="inherit"/>}
               emptyIcon={<StarIcon fontSize="inherit" />} readOnly />
             </div>
@@ -115,7 +115,7 @@ const RatePaper = ({ id }) => {
         if (user) {
           return (
             <div className="star-rating-dark column">
-              <span className="mg-b-5 text-align-right mob-hide">Rate this paper</span>
+              <h3 className="mg-b-5 text-align-right mob-hide">Rate this paper</h3>
               <Rating className="star-rating"
                 name="no-value"
                 value={null}

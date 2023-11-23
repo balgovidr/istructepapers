@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { format } from 'date-fns';
 import { onAuthStateChanged } from 'firebase/auth';
+import { Helmet } from "react-helmet";
 
 export default function UploadPaper() {
     const [date, setDate] = useState(null);
@@ -151,6 +152,10 @@ export default function UploadPaper() {
       if (userAllowedToUpload) {
         return (
             <div className="row full-height-navbar-discount">
+                <Helmet>
+                    <title>Upload - Solved IStructE exam papers</title>
+                    <meta name="Upload" content="Upload solved papers"/>
+                </Helmet>
                 <div className="col-1 background-color-primary center mob-hide">
                     <img src={logo} alt="Paper trail logo" height="100"/>
                 </div>
@@ -199,6 +204,10 @@ export default function UploadPaper() {
     if (!user) {
         return (
             <div className="row full-height">
+                <Helmet>
+                    <title>Upload - Solved IStructE exam papers</title>
+                    <meta name="Upload" content="Upload solved papers"/>
+                </Helmet>
                 <div className="col-1 background-color-primary center mob-hide">
                     <img src={logo} alt="Paper trail logo" height="100"/>
                 </div>
@@ -216,6 +225,10 @@ export default function UploadPaper() {
     
     return (
         <div className="row full-height">
+            <Helmet>
+                <title>Upload - Solved IStructE exam papers</title>
+                <meta name="Upload" content="Upload solved papers"/>
+            </Helmet>
             <div className="col-1 background-color-primary center mob-hide">
                 <img src={logo} alt="Paper trail logo" height="100"/>
             </div>

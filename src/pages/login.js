@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import { Helmet } from 'react-helmet';
 
 
 export default function Login() {
@@ -49,6 +50,10 @@ export default function Login() {
 
   return (
     <div class="row full-height">
+        <Helmet>
+            <title>Login - Solved IStructE exam papers</title>
+            <meta name="Login" content="Log in to your account"/>
+        </Helmet>
         <div class="col-1 background-color-primary center mob-hide">
             <img src={logo} alt="Paper trail logo" height="100"/>
         </div>

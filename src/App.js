@@ -10,6 +10,10 @@ import Viewer from './pages/viewer';
 import Surveys from './pages/surveys';
 import ForgotPassword from './pages/forgotPassword';
 import Content from './pages/content';
+import CookiePolicy from './pages/statements/cookiePolicy';
+import { CookiesProvider } from 'react-cookie';
+import CookieBanner from './components/cookieBanner';
+import PrivacyPolicy from './pages/statements/privacyPolicy';
 
 const router = createBrowserRouter([
   {
@@ -48,15 +52,25 @@ const router = createBrowserRouter([
     path: "/surveys",
     element: <Surveys />,
   },
+  {
+    path: "/cookie-policy",
+    element: <CookiePolicy />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
+  },
 ]);
 
 function App() {
   return (
-
-    <div className="App">
-      <Navbar/>
-      <RouterProvider router={router} />
-    </div>
+    <CookiesProvider defaultSetOptions={{ path: '/' }}>
+      <div className="App">
+        <Navbar/>
+        <RouterProvider router={router} />
+        <CookieBanner/>
+      </div>
+    </CookiesProvider>
   );
 }
 

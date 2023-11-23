@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getDoc, doc } from "@firebase/firestore";
 import { db } from "../firebase";
-import { faStar } from '@fortawesome/free-solid-svg-icons'
-import { faStar as faStarO} from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 const UserProfile = ({ uid }) => {
   const [userData, setUserData] = useState(null);
@@ -79,7 +75,7 @@ const UserProfile = ({ uid }) => {
       <div className="user-info">
         {userData && (
           <>
-            <span>{userData.firstName} {userData.lastName}</span>
+            <h2>{userData.firstName} {userData.lastName}</h2>
             {renderStarRating()}
           </>
         )}

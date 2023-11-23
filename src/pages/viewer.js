@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import '../App.css';
 import { db, auth } from '../firebase';
-import { getDoc, doc, updateDoc, arrayUnion } from "@firebase/firestore";
+import { getDoc, doc, updateDoc } from "@firebase/firestore";
 import { useLocation } from 'react-router-dom';
 import { Document, Page, pdfjs } from "react-pdf";
 import { onAuthStateChanged } from 'firebase/auth';
 import UserProfile from "../components/userProfile";
 import RatePaper from "../components/ratePaper";
 import Comments from "../components/comments";
+import { Helmet } from "react-helmet";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -161,11 +162,60 @@ export default function Viewer() {
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div>
+        <Helmet>
+          <title>Viewer - Solved IStructE exam papers</title>
+          <meta name="Viewer" content="Paper viewer"/>
+        </Helmet>
+        <p>Loading...</p>
+      </div>
+      );
   }
 
   return (
     <div className="column viewer">
+      <Helmet>
+          <title>{paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber} - Solved IStructE exam papers</title>
+          <meta name={paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " IStructE exam"} content={"View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber}/>
+
+          {/* Schema.org markup for Solved Paper */}
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "http://schema.org",
+              "@type": "WebPage",
+              "name": paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " IStructE exam",
+              "description": "View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber,
+              "url": "https://structuralpapers.com/viewer?id=" + id,
+              "mainEntity": {
+                "@type": "CreativeWork",
+                "name": paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " IStructE exam",
+                "description": "View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber,
+                "url": "https://structuralpapers.com/viewer?id=" + id,
+                // "author": {
+                //   "@type": "Person",
+                //   "name": "John Doe"
+                // },
+                "datePublished": paper.uploadDate,
+                // "image": "https://yourwebsite.com/images/solution-thumbnail.jpg",
+                "about": {
+                  "@type": "Question",
+                  "name": "IStructE Exam Paper " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber
+                },
+                // "interactionStatistic": {
+                //   "@type": "InteractionCounter",
+                //   "interactionType": "http://schema.org/Comment",
+                //   "userInteractionCount": 20
+                // },
+                // "aggregateRating": {
+                //   "@type": "AggregateRating",
+                //   "ratingValue": "4.5",
+                //   "reviewCount": paper.reviews
+                // }
+              }
+            })}
+          </script>
+      </Helmet>
       <div className="pdf-container pdf-container-viewer align-items-center column">
             <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
             {displayedPages === 0 ?
@@ -181,10 +231,10 @@ export default function Viewer() {
         {limitReached()}
       </div>
       <div className="tail-container mg-t-10">
-        <div>
-            <h2 className="d-inline">{paper.year + ' ' + getMonthName(paper.month)}</h2>
-            <p className="d-inline"> | Question number: {paper.questionNumber}</p>
-        </div>
+        <h1>
+            <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)} | </p>
+            <p className="d-inline">Question number: {paper.questionNumber}</p>
+        </h1>
         <div className="row justify-content-space-between info">
             <UserProfile uid={paper.owner} />
             <RatePaper id={paper.id} />

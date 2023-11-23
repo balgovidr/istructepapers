@@ -134,20 +134,35 @@ button {
 }
 
 .h1, h1 {
-  font-size: 30px;
-  font-weight: 200;
-  letter-spacing: 0.5em;
+  font-weight: 300;
+}
+.viewer h1, .viewer h2 {
+  font-size: 16px;
+  font-weight: normal;
+  margin-block-end: auto;
+  margin-block-start: auto;
 }
 nav .h1, nav h1 {
   color: #fff;
+  font-size: 30px;
+  font-weight: 200;
+  letter-spacing: 0.45em;
+  margin-block-start: auto;
+  margin-block-end: auto;
 }
 .h2, h2 {
   font-size: 25px;
   font-weight: 300;
 }
-.h3, h3 {
+.content h3, .filter h3, .welcome h3 {
   font-size: 20px;
   font-weight: var(--bs-body-font-weight);
+}
+.viewer h3 {
+  font-size: 16px;
+  font-weight: normal;
+  margin-block-end: auto;
+  margin-block-start: auto;
 }
 .mg-l-5 {
   margin-left: 5px;
@@ -203,6 +218,9 @@ nav .h1, nav h1 {
 .mg-a-10p {
   margin: 10%;
 }
+.mg-a-10 {
+  margin: 10px;
+}
 .pd-t-5 {
   padding-top: 5px;
 }
@@ -223,6 +241,13 @@ nav .h1, nav h1 {
 }
 .pd-a-10p {
   padding: 10%;
+}
+.pd-a-10 {
+  padding: 10px;
+}
+
+.leading-4 {
+  line-height: 1rem;
 }
 
 .btn {
@@ -259,6 +284,18 @@ nav .h1, nav h1 {
   border: 1px solid var(--bs-light);
 }
 
+.btn-success, .btn-success-outline:hover {
+  background-color: var(--bs-success);
+  color: var(--bs-light);
+  border: 1px solid var(--bs-success);
+}
+
+.btn-success-outline, .btn-success:hover {
+  background-color: var(--bs-light);
+  color: var(--bs-success);
+  border: 1px solid var(--bs-success);
+}
+
 .font-size-12 {
   font-size: 12px;
 }
@@ -273,6 +310,9 @@ nav .h1, nav h1 {
 }
 .font-size-20 {
   font-size: 20px;
+}
+.font-size-23 {
+  font-size: 23px;
 }
 .font-size-25 {
   font-size: 25px;
@@ -538,7 +578,29 @@ hr.solid {
   flex-direction: column;
 }
 
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  text-align: center;
+  border-top-color: var(--bs-primary);
+  border-top: ridge;
+}
+
 /* CSS for phones */
+@media screen and (min-width: 601px) and (max-width: 900px) {
+  nav .heading {
+    font-size: 20px;
+  }
+}
+@media screen and (min-width: 601px) and (max-width: 700px) {
+  .nav .header-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
 @media screen and (min-width: 100px) and (max-width: 601px) {
   .nav .heading {
     font-size: 20px;
