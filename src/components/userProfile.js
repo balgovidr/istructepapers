@@ -1,6 +1,8 @@
+'use client'
+
 import React, { useEffect, useState } from "react";
 import { getDoc, doc } from "@firebase/firestore";
-import { db } from "../firebase";
+import { db } from "@/firebase";
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 
@@ -28,7 +30,7 @@ const UserProfile = ({ uid }) => {
           console.log("User document does not exist");
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("4Error fetching user data:", error);
       }
     };
 
