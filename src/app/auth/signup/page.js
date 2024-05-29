@@ -1,10 +1,10 @@
 'use client'
 
 import React, {useState, useEffect} from 'react';
-import logo from "../../../public/Logo.svg";
-import {  createUserWithEmailAndPassword, onIdTokenChanged  } from '@firebase/auth';
-import { setDoc, doc } from "@firebase/firestore"; 
-import { auth, db } from '../../firebase';
+import logo from "@/app/assets/Logo.svg";
+import {  createUserWithEmailAndPassword, onIdTokenChanged  } from 'firebase/auth';
+import { setDoc, doc } from "firebase/firestore"; 
+import { auth, db } from '@/firebase/firebaseClient';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
@@ -14,10 +14,13 @@ import { useRouter } from 'next/navigation'
 import Head from 'next/head';
 import Image from 'next/image';
 import nookies from 'nookies';
-
+import {useCreateUserWithEmailAndPassword} from 'react-firebase-hooks/auth'
+import { TailSpin } from 'react-loading-icons'
 
 export default function SignUp() {
-    const router = useRouter();
+  const router = useRouter();
+  const params = new URLSearchParams(router.search);
+  const previousLink = params.get('redirectTo') || null;
     
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -30,31 +33,21 @@ export default function SignUp() {
     const [alertSeverity, setAlertSeverity] = useState('error');
     const [alertCollapse, setAlertCollapse] = React.useState(false);
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      const unsubscribe = onIdTokenChanged(auth, async (result) => {
-          if (result) {
-            setUser(result);
-            const token = await result.getIdToken();
-            nookies.set(undefined, 'token', token, { path: '/' });
-            router.push('/')
-          } else {
-            setUser(null);
-            nookies.set(undefined, 'token', '', { path: '/' });
-          }
-        }, 10 * 60 * 1000);
-     
-        return unsubscribe;
-    }, []);
+    const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
 
     const onSubmit = async (e) => {
       e.preventDefault()
 
+      setLoading(true)
+
       if (firstName !== '' && lastName !== '' && privacy) {
-        await createUserWithEmailAndPassword(auth, email, password)
+        await createUserWithEmailAndPassword(email, password)
           .then(async (userCredential) => {
               // Signed in
               const user = userCredential.user;
+
               try {
                   const docRef = await setDoc(doc(db, "users", user.uid), {
                     firstName: firstName,
@@ -84,7 +77,21 @@ export default function SignUp() {
                   console.error("Error adding document: ", e);
                 }
               
-              // ...
+                // Sending info to the server
+                fetch("/api/login", {
+                  method: "POST",
+                  headers: {
+                    Authorization: `Bearer ${await user.getIdToken()}`,
+                  },
+                }).then((response) => {
+                  if (response.status === 200) {
+                    if (previousLink) {
+                      router.push(previousLink)
+                    } else {
+                      router.push("/")
+                    }
+                  }
+                });
           })
           .catch((error) => {
               const errorCode = error.code;
@@ -115,8 +122,31 @@ export default function SignUp() {
           }, 3000);
       }
  
-   
+      setLoading(false)
+
     }
+
+    /** Listen for auth state changes */
+  useEffect(() => {
+    onAuthStateChanged(auth, async (result) => {
+        setUser(result);
+
+        try {
+          // Sending info to the server
+          await fetch("/api/login", {
+              method: "POST",
+              headers: {
+              Authorization: `Bearer ${await result.getIdToken()}`,
+              },
+          });
+          router.push("/")
+        } catch(error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+        }
+    });
+});
 
   return (
     <div className="row full-height">
@@ -128,7 +158,7 @@ export default function SignUp() {
             <Image src={logo} alt="Paper trail logo" height="100"/>
         </div>
         <div className="col-1 column pd-a-10p">
-            <h2>Registration</h2>
+            <h1>Registration</h1>
             <form className="column">
                 <label for="first-name">First Name</label>
                 <input type="text" className="form-control" id="first-name" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
@@ -147,8 +177,8 @@ export default function SignUp() {
                   <label for="email-consent" className='text-sm'>By checking the box, you agree to receive occasional emails from us with helpful exam preparation tips, and updates about our services.</label>
                 </div>
                 <div className="row justify-content-center align-items-center mg-t-25">
-                    <button type="submit" onClick={onSubmit} className="btn btn-primary">Sign Up</button>
-                    <a href="/login" className="mg-l-20 font-size-12 text-color-grey underline">I&apos;m already a member</a>
+                    <button type="submit" onClick={onSubmit} className="btn btn-primary">{loading ? <TailSpin stroke="#97BCC7" height={25}/> : "Sign Up"}</button>
+                    <a href="/auth/login" className="mg-l-20 font-size-12 text-color-grey underline">I&apos;m already a member</a>
                 </div>
             </form>
             <Stack sx={{ width: "100%" }} spacing={2}>

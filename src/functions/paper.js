@@ -1,16 +1,15 @@
-import React, {useState} from 'react';
-import {  getAuth, signOut, onAuthStateChanged  } from '@firebase/auth';
-import { collection, addDoc, setDoc, doc, query, where, getDocs, updateDoc } from "@firebase/firestore";
-import { auth, db } from '@/firebase';
+import { collection, addDoc, setDoc, doc, query, where, getDocs, updateDoc } from "firebase/firestore";
+import { InitializeFirebase, InitializeFirestore } from "@/firebase/firebaseAdmin";
 
 export function updateUserRating(ownerId) {
+  const db = InitializeFirestore();
     const fetchPaperData = async () => {
         try {
-            const q = query(collection(db, "solvedPapers"), where("owner", "==", ownerId));
+            const q = db.collection("solvedPapers").where("owner", "==", ownerId);
 
             var totalSum = 0;
 
-            const querySnapshot = await getDocs(q);
+            const querySnapshot = await q.get();
             querySnapshot.forEach((doc) => {
                 // Retrieve the values from the map and store them in an array
                 const valuesArray = Object.values(doc.data().rating);
@@ -27,8 +26,8 @@ export function updateUserRating(ownerId) {
 
             const finalAverageRating = totalSum / querySnapshot.size
 
-            const docRef = doc(db, "users", ownerId);
-            updateDoc(docRef, {rating: finalAverageRating })
+            const docRef = db.collection("users").doc(ownerId);
+            docRef.update({rating: finalAverageRating })
 
         } catch (error) {
           console.error("Error fetching paper data:", error);

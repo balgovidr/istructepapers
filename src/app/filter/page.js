@@ -1,24 +1,25 @@
-import { db } from '../../firebase';
-import { collection, query, where, getDocs } from "@firebase/firestore";
+import { InitializeFirebase, InitializeFirestore } from "@/firebase/firebaseAdmin";
+import { collection, query, where, getDocs, get } from "firebase/firestore";
 
 async function getData(context) {
+    const db = InitializeFirestore()
     //Fetch papers
     const month = context.searchParams.month
     const year = context.searchParams.year
     let papers = null
   
     try {
-        const collectionRef = collection(db, 'solvedPapers');
+        const collectionRef = db.collection('solvedPapers');
         let baseQuery = collectionRef;
 
         if (year !== 'N/A') {
-            baseQuery = query(baseQuery, where('year', '==', year));
+            baseQuery = baseQuery.where('year', '==', year);
         }
         if (month !== 'N/A') {
-            baseQuery = query(baseQuery, where('month', '==', month));
+            baseQuery = baseQuery.where('month', '==', month);
         }
         
-        const querySnapshot = await getDocs(baseQuery);
+        const querySnapshot = await baseQuery.get();
         const documents = querySnapshot.docs.map((doc) => {
             const value = doc.data();
             value.id = doc.id;
@@ -36,22 +37,27 @@ async function getData(context) {
     };
 }
 
+function getMonthName(monthNumber) {
+    const date = new Date();
+    date.setMonth(monthNumber - 1);
+  
+    return date.toLocaleString('en-US', { month: 'short' });
+  }
+
+export async function generateMetadata(context) {
+    const data = await getData(context);
+   
+    return {
+      title: ("IStructE exam solutions from " + getMonthName(data.month) + " " + data.year + " - Structural Papers"),
+      description: ("View all available IStructE solved exam papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the pdf."),
+    }
+  }
+
 export default async function Filter(context) {
     const data = await getData(context);
 
-    function getMonthName(monthNumber) {
-        const date = new Date();
-        date.setMonth(monthNumber - 1);
-      
-        return date.toLocaleString('en-US', { month: 'short' });
-      }
-
     return (
         <div className="full-height column content text-center">
-            {/* <Head>
-                <title>Filtered papers - {getMonthName(props.month) + " " + props.year} - Solved IStructE exam papers</title>
-                <meta name={"Filtered papers - " + getMonthName(props.month) + " " + props.year} content={"Filtered papers from " + getMonthName(props.month) + " " + props.year}/>
-            </Head> */}
             <div className="flex flex-row flex-wrap row mg-t-50 justify-center button-container">
                 <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/upload">Upload a paper</a>
                 <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="resume.html">Answer questions</a>
@@ -62,7 +68,7 @@ export default async function Filter(context) {
             <div className="grid mg-l-10p mg-r-10p center h-full">
                 {data.papers.map((doc, index) => (
                     <a key={index} className="cell" href={'./paper?id='+doc.id}>
-                        <h3 className="mg-t-10">{doc.year + ' ' + getMonthName(doc.month)}</h3>
+                        <h2 className="mg-t-10">{doc.year + ' ' + getMonthName(doc.month)}</h2>
                         <div className="info">
                             <span>Question number: {doc.questionNumber}</span>
                             <br />

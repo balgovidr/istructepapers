@@ -1,19 +1,20 @@
 'use client'
 
 import React, {useState, useEffect} from "react";
-import logo from "../../../public/Logo.svg";
-import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment } from "@firebase/firestore"; 
-import {auth, db, storage } from '@/firebase';
+import logo from "@/app/assets/Logo.svg";
+import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment } from "firebase/firestore"; 
+import { auth, db, storage } from '@/firebase/firebaseClient';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
-import { getDownloadURL, ref, uploadBytesResumable } from "@firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { format } from 'date-fns';
-import { onAuthStateChanged } from '@firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import Image from "next/image";
 import Head from "next/head";
+import { TailSpin } from 'react-loading-icons';
 
 export default function UploadPaper() {
     const [date, setDate] = useState(undefined);
@@ -28,10 +29,7 @@ export default function UploadPaper() {
     const [user, setUser] = useState(null);
     const [schemeDiagram, setSchemeDiagram] = useState(undefined);
     const [userAllowedToUpload, setUserAllowedToUpload] = useState(false);
-    const [windowSize, setWindowSize] = useState([
-        window.innerWidth,
-        window.innerHeight,
-      ]);
+    const [loading, setLoading] = useState(false);
 
     //Todo - The papers that the viewer can watch is added to a waiting list and is only appended to the final list after their papers have been verified.
 
@@ -45,18 +43,6 @@ export default function UploadPaper() {
         unsubscribe();
         };
     }, []);
-
-    useEffect(() => {
-        const handleWindowResize = () => {
-            setWindowSize([window.innerWidth, window.innerHeight]);
-        };
-    
-        window.addEventListener('resize', handleWindowResize);
-    
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-      }, [windowSize]);
 
     useEffect(() => {
         //Checks if the user is reliable enough to carry out surveys and then fetches a paper
@@ -90,6 +76,8 @@ export default function UploadPaper() {
     const onSubmit = async (e) => {
         e.preventDefault()
 
+        setLoading(true)
+
         const month = date.substring(5, 7)
         const year = date.substring(0, 4)
         const today = format(new Date(), 'yyyy-MM-dd-kk-mm-ss');
@@ -100,12 +88,12 @@ export default function UploadPaper() {
         
         uploadTask.on('state_changed',
             (snapshot) => {
-                setAlertContent('Uploading...');
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setAlertContent('Uploading... ' + progress + "%");
                 setAlertSeverity('info')
                 setAlert(true);
                 setAlertCollapse(true);
 
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setUploadProgress(progress)
             },
             (error) => {
@@ -131,38 +119,38 @@ export default function UploadPaper() {
                         uploadDate: today,
                         reviews: 0,
                         verified: false,
-                    }).then(async ()=> {
-                        await updateDoc(doc(db, "users", user.uid), {
-                            monthsAllowed: arrayUnion(month + '-' + year),
-                            points: increment(1),
-                        }).then(() => {
-                            setAlertContent('Upload completed.');
-                            setAlertSeverity('success')
-                            setAlert(true);
-                            setAlertCollapse(true);
-                            setTimeout(() => {
-                                setAlertCollapse(false);
-                            }, 3000);
-                        })
-                    });
-                })
+                    })
+                    
+                    updateDoc(doc(db, "users", user.uid), {
+                        monthsAllowed: arrayUnion(month + '-' + year),
+                        points: increment(1),
+                    })
+
+                    setAlertContent('Upload completed.');
+                    setAlertSeverity('success')
+                    setAlert(true);
+                    setAlertCollapse(true);
+                    setTimeout(() => {
+                        setAlertCollapse(false);
+                    }, 3000);
+                });
             })
         
-     
+        setLoading(false);
       }
 
       if (userAllowedToUpload) {
         return (
             <div className="row full-height-navbar-discount">
                 <Head>
-                    <title>Structural Papers - Upload solved exam papers</title>
-                    <meta name="description" content="Solved IStructE exam papers - Upload solved exam papers"/>
+                    <title>Upload solutions - Structural Papers - Solved IStructE exam papers</title>
+                    <meta name="description" content="View more IStructE exam solutions by uploading your own solution. Receive commments and feedback from other candidates."/>
                 </Head>
                 <div className="col-1 background-color-primary center hidden md:flex">
                     <Image src={logo} alt="Paper trail logo" height="100"/>
                 </div>
-                <div className={windowSize[0] > 610 ? "col-1 column pd-a-10p overflow-y-auto" : "col-1 column pd-a-10p"}>
-                    <h2>Upload a solved paper</h2>
+                <div className="col-1 column pd-a-10p sm:overflow-y-auto">
+                    <h1>Upload a solved paper</h1>
                     <br />
                     <span className="font-size-15 text-align-left">Once you&#39;ve solved an IStructE Chartered Membership Exam&#39;s past paper, upload it so others can learn using it!</span>
                     <br />
@@ -187,7 +175,9 @@ export default function UploadPaper() {
                         <input type="file" accept="application/pdf" className="form-control" id="file" name="Attach" onChange={(e) => setFile(e.target.files[0])} required/>
 
                         <div className="row justify-content-center align-items-center mg-t-25 mg-b-20">
-                            <button type="submit" onClick={onSubmit} className="btn btn-primary">Upload</button>
+                            <button type="submit" onClick={onSubmit} className="btn btn-primary" disabled={loading}>
+                                {loading ? <TailSpin stroke="#652cb3" height={20}/> : "Upload"}
+                            </button>
                         </div>
                     </form>
                     <Stack sx={{ width: "100%" }} spacing={2}>
@@ -219,8 +209,8 @@ export default function UploadPaper() {
                     <br />
                     <span className="font-size-15">Please create an account or login first.</span>
                     <div className="row mg-t-50 justify-content-center button-container">
-                        <a className="btn btn-primary-outline" href="/signup">Sign Up</a>
-                        <a className="btn btn-primary-outline mg-l-50" href="/login">Login</a>
+                        <a className="btn btn-primary-outline" href="/auth/signup">Sign Up</a>
+                        <a className="btn btn-primary-outline mg-l-50" href="/auth/login">Login</a>
                     </div>
                 </div>
             </div>

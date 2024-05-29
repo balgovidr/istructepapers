@@ -2,7 +2,18 @@
 var webpack = require('webpack');
 
 const nextConfig = {
-    webpack: (config) => {
+    images: {
+        formats: ['image/avif', 'image/webp'],
+        remotePatterns: [
+          {
+            protocol: 'https',
+            hostname: 'firebasestorage.googleapis.com',
+            port: '',
+            pathname: '/**',
+          },
+        ],
+      },
+      webpack: (config) => {
         config.experiments = {
             ...config.experiments,
             topLevelAwait: true,

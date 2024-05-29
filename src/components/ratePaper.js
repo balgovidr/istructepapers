@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { getDoc, doc, setDoc, updateDoc } from "@firebase/firestore";
-import { db, auth } from "@/firebase";
-import { onAuthStateChanged } from '@firebase/auth';
+import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from '@/firebase/firebaseClient';
+import { onAuthStateChanged } from 'firebase/auth';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import { updateUserRating } from "@/functions/paper";
+// import { updateUserRating } from "@/functions/paper";
 
 
 const RatePaper = ({ id }) => {
@@ -153,7 +153,7 @@ const RatePaper = ({ id }) => {
       const updateField = "rating." + currentUserUid;
       updateDoc(docRef, {[updateField]: newRating })
         .then(() => {
-          updateUserRating(owner);
+          // updateUserRating(owner);
           setCurrentUserRating(newRating);
         })
         .catch((error) => {

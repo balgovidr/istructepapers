@@ -31,9 +31,37 @@ export default function PaperComponent({paper, user}) {
           setDisplayedPages(2)
         }
       };
+    
+    function PageLoadDiv(elementId) {
+      return (
+        <div className='w-full md:w-[600px] min-h-[1.4vw] md:min-h-[850px] my-3 p-4 overflow-hidden bg-white' id={"loading-" + elementId}>
+          <div className="flex flex-col animate-pulse gap-4">
+            <div className='h-8 w-2/5 bg-slate-200 rounded'>&nbsp;</div>
+            <div className='h-4 w-2/3 bg-slate-200 rounded'>&nbsp;</div>
+            <div className='h-[40vh] w-2/3 bg-slate-200 rounded self-center'>&nbsp;</div>
+            <div className='h-4 w-3/5 bg-slate-200 rounded self-center'>&nbsp;</div>
+            <div className='h-4 w-3/5 rounded'>&nbsp;</div>
+            <div className='h-4 w-full bg-slate-200 rounded'>&nbsp;</div>
+            <div className='h-4 w-full bg-slate-200 rounded'>&nbsp;</div>
+            <div className='h-4 w-full bg-slate-200 rounded'>&nbsp;</div>
+            <div className='h-4 w-full bg-slate-200 rounded'>&nbsp;</div>
+            <div className='h-4 w-4/5 bg-slate-200 rounded'>&nbsp;</div>
+          </div>
+        </div>
+      )
+    }
+
+    function closeLoadDiv(elementId) {
+      console.log("loading-" + elementId)
+      const element = document.getElementById("loading-" + elementId);
+
+      if (element) {
+        element.parentNode.removeChild(element);
+      }
+    }
 
     return (
-        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
+        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} loading={PageLoadDiv("main")}>
             {displayedPages === 0 ?
               <p>Loading...</p> :
               Array.from({ length: displayedPages }, (_, index) => (

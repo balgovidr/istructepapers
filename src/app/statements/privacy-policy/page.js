@@ -1,13 +1,18 @@
 import Head from "next/head";
 
+export const metadata = {
+    title: 'Privacy Policy - Structural Papers',
+    description: 'View the privacy policy of Structural Papers.',
+  }
+
 export default function PrivacyPolicy() {
 
     return (
         <div class="full-height column text-align-left content px-5">
-            {/* <Head>
-                <title>Privacy policy - Solved IStructE exam papers</title>
+            <Head>
+                <title>Privacy policy - Structural Papers</title>
                 <meta name="Privacy policy" content="Privacy policy"/>
-            </Head> */}
+            </Head>
 
             {/* Cookies from https://privacypolicy.cookieyes.com/privacy-policy-generator/79DwbGQPo5Y0qVk8ePo9LRwAvm7NEK5XyBbRlNOaebJjEor902WqLMp7yZ9Bw26dwXBkD5z8YQxPKmgAv4GnV4npQDgWrO2alMxdzjJqYG0yzOJxEXagAkjW */}
             <h1 className="mg-t-50">Privacy Policy for Structural Papers</h1>

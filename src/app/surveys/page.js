@@ -1,16 +1,16 @@
 'use client'
 
 import React, {useState, useEffect, useRef} from "react";
-import logo from "../../../public/Logo.svg";
-import { collection, addDoc, updateDoc, doc, query, where, limit, getDocs, getDoc, increment, deleteDoc } from "@firebase/firestore"; 
-import {auth, db, storage } from '@/firebase';
-import { onAuthStateChanged } from '@firebase/auth';
+import logo from "@/app/assets/Logo.svg";
+import { collection, addDoc, updateDoc, doc, query, where, limit, getDocs, getDoc, increment, deleteDoc } from "firebase/firestore"; 
+import { auth, db, storage } from '@/firebase/firebaseClient';
+import { onAuthStateChanged } from 'firebase/auth';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
-import { getDownloadURL, ref, deleteObject, listAll } from "@firebase/storage";
+import { getDownloadURL, ref, deleteObject, listAll } from "firebase/storage";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -39,31 +39,8 @@ export default function Surveys() {
     const [solvedPaper, setSolvedPaper] = useState(null);
     const [schemeDiagram, setSchemeDiagram] = useState(undefined);
     const [page, setPage] = useState(1);
-    const [windowSize, setWindowSize] = useState([
-        undefined,
-        undefined,
-      ]);
     const [formHeight, setFormHeight] = useState(0)
     const formRef = useRef(null)
-
-    useEffect(() => {
-        setFormHeight(formRef?.current?.clientHeight)
-    })
-    
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const handleWindowResize = () => {
-                setWindowSize([window.innerWidth, window.innerHeight]);
-                console
-            };
-
-            window.addEventListener('resize', handleWindowResize);
-
-            return () => {
-                window.removeEventListener('resize', handleWindowResize);
-            };
-        }
-    }, [windowSize]);
 
     const router = useRouter();
 
@@ -90,7 +67,6 @@ export default function Surveys() {
             const userData = userSnap.data();
 
             if (userData.surveyAgreement > 0.5) {
-                console.log("Fetching paper")
                 fetchPaper();
             }
         }
@@ -432,8 +408,8 @@ export default function Surveys() {
         return (
             <div className="row full-height">
                 <Head>
-                    <title>Surveys - Solved IStructE exam papers</title>
-                    <meta name="Surveys" content="Answer questions about solutions"/>
+                    <title>Surveys - Structural Papers - Solved IStructE exam papers</title>
+                    <meta name="description" content="Access more IStructE exam solutions by answering questions about other solutions."/>
                 </Head>
                 <div className="col-1 background-color-primary center mob-hide">
                     <Image src={logo} alt="Paper trail logo" height="100"/>
@@ -441,8 +417,8 @@ export default function Surveys() {
                 <div className="col-1 column pd-a-10p justify-content-center">
                     <span className="font-size-15">Please log in or sign up to answer these questions and view more solved papers.</span>
                     <div className="row mg-t-50 justify-content-center">
-                        <a className="btn btn-primary-outline" href="/signup">Sign Up</a>
-                        <a className="btn btn-primary-outline mg-l-50" href="/login">Login</a>
+                        <a className="btn btn-primary-outline" href="/auth/signup">Sign Up</a>
+                        <a className="btn btn-primary-outline mg-l-50" href="/auth/login">Login</a>
                     </div>
                 </div>
             </div>

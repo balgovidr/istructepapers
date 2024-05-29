@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const renderProfilePicture = (photoUrl, firstName, lastName) => {
+export default function RenderProfilePicture(photoUrl, firstName, lastName) {
     if (photoUrl) {
       return <Image src={photoUrl} alt="Profile" />;
     } else {

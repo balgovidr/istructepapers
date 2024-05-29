@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import FormGroup from '@mui/material/FormGroup';
@@ -10,6 +12,21 @@ const CookieBanner = () => {
     const [performance, setPerformance] = useState(false);
     const [targeting, setTargeting] = useState(false);
     const [functional, setFunctional] = useState(false);
+    const [showOptions, setShowOptions] = useState(false);
+    const [consent, setConsent] = useState(true);
+
+    useEffect(() => {
+        // Check for existing consent
+        const hasConsent = cookies['consent'] === true;
+        setConsent(hasConsent);
+
+        // Delete non-essential cookies if no consent
+        if (!hasConsent) {
+            handleClearCookies()
+        } else {
+            handleCookies()
+        }
+    }, [cookies]);
 
     const handleClearCookies = () => {
         // Get all cookie names
@@ -17,7 +34,9 @@ const CookieBanner = () => {
     
         // Remove each cookie
         cookieNames.forEach(cookieName => {
-          removeCookie(cookieName, { path: '/' });
+            if (cookieName !== 'consent') {
+                removeCookie(cookieName, { path: '/' });
+            }
         });
     };
     
@@ -32,18 +51,6 @@ const CookieBanner = () => {
             removeCookie('test_cookie', { path: '/' });
         }
     };
-
-    useEffect(() => {
-        // Check for existing consent
-        const hasConsent = cookies['consent'] === true;
-
-        // Delete non-essential cookies if no consent
-        if (!hasConsent) {
-            handleClearCookies()
-        } else {
-            handleCookies()
-        }
-    }, [cookies]);
 
     const handleGiveConsent = () => {
         // Set consent cookie to 'true'
@@ -71,7 +78,7 @@ const CookieBanner = () => {
 
     const handleWithdrawConsent = () => {
         // Set consent cookie to 'true'
-        setCookie('consent', true, { path: '/' });
+        setCookie('consent', false, { path: '/' });
 
         // Set non-essential cookies
         setCookie('performance', false, { path: '/' });
@@ -81,28 +88,34 @@ const CookieBanner = () => {
         window.location.reload(false);
     };
 
-    return (
-        !cookies['consent'] && (
-        <div className="flex-column cookie-banner">
-            <p>This website uses cookies to enhance your experience. Read our <a href='/cookie-policy'>cookie policy</a>.</p>
-            <FormGroup>
-                <div className='flex-row space-between'>
-                    <div className='flex-row'>
-                        <FormControlLabel control={<Checkbox disabled checked />} label={<Typography sx={{ fontSize: 12 }}>Strictly necessary</Typography>} />
-                        <FormControlLabel control={<Checkbox />} checked={performance} onChange={() => setPerformance(!performance)} label={<Typography sx={{ fontSize: 12 }}>Performance (remembers your login)</Typography>} />
-                        <FormControlLabel control={<Checkbox />} checked={targeting} onChange={() => setTargeting(!targeting)} label={<Typography sx={{ fontSize: 12 }}>Targeting</Typography>} size="small"/>
-                        <FormControlLabel control={<Checkbox size="small"/>} checked={functional} onChange={() => setFunctional(!functional)} label={<Typography sx={{ fontSize: 12 }}>Functional</Typography>}/>
-                    </div>
-                    <div className="flex-row">
-                        <button className="btn btn-primary-outline mg-a-10 pd-a-10" onClick={() => handleWithdrawConsent()}>Decline</button>
-                        <button className="btn btn-primary-outline mg-a-10 pd-a-10" onClick={() => handleGiveConsent()}>Accept selected</button>
-                        <button className="btn btn-success mg-a-10 pd-a-10" onClick={() => handleGiveConsentAll()}>Accept all</button>
-                    </div>
+    if (!consent) {
+        return (
+            <div className='w-full relative'>
+                <div className="flex flex-col fixed bottom-0 left-0 right-0 bg-white text-center border-solid border-secondary z-40 m-2 shadow-lg text-sm rounded-lg p-3 gap-4">
+                    <p>This website uses cookies to enhance your experience. Read our <a href='/statements/cookie-policy' className='underline'>cookie policy</a>.</p>
+                    <FormGroup className='flex flex-col gap-4'>
+                        <div className={'flex-col ' + (showOptions ? 'flex' : 'hidden')}>
+                            <FormControlLabel control={<Checkbox disabled checked />} label={<Typography sx={{ fontSize: 12 }}>Strictly necessary</Typography>} />
+                            <FormControlLabel control={<Checkbox />} checked={performance} onChange={() => setPerformance(!performance)} label={<Typography sx={{ fontSize: 12 }}>Performance (remembers your login)</Typography>} />
+                            <FormControlLabel control={<Checkbox />} checked={targeting} onChange={() => setTargeting(!targeting)} label={<Typography sx={{ fontSize: 12 }}>Targeting</Typography>} size="small"/>
+                            <FormControlLabel control={<Checkbox size="small"/>} checked={functional} onChange={() => setFunctional(!functional)} label={<Typography sx={{ fontSize: 12 }}>Functional</Typography>}/>
+                        </div>
+                        <div className={"flex flex-row gap-2 justify-between " + (showOptions ? "hidden" : "flex")}>
+                            <button className="border-primary border rounded-md py-1 px-5" onClick={() => handleWithdrawConsent()}>Decline</button>
+                            <button className="border-primary border rounded-md py-1 px-5" onClick={() => setShowOptions(!showOptions)}>Accept some</button>
+                            <button className="border-primary border rounded-md py-1 px-5" onClick={() => handleGiveConsentAll()}>Accept all</button>
+                        </div>
+                        <div className={"flex flex-row gap-2 justify-between " + (showOptions ? "flex" : "hidden")}>
+                            <button className="border-primary border-2 rounded-lg py-1 px-5" onClick={() => handleWithdrawConsent()}>Decline all</button>
+                            <button className="border-primary border-2 rounded-lg py-1 px-5" onClick={() => handleGiveConsent()}>Accept selected</button>
+                        </div>
+                    </FormGroup>
                 </div>
-            </FormGroup>
-        </div>
+            </div>
         )
-    );
+    }
+
+    return null
 };
 
 export default CookieBanner;

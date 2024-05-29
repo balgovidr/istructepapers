@@ -1,10 +1,11 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
-import { getDoc, doc } from "@firebase/firestore";
-import { db } from "@/firebase";
+import { getDoc, doc } from "firebase/firestore";
+import { auth, db } from '@/firebase/firebaseClient';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
+import Image from "next/image";
 
 const UserProfile = ({ uid }) => {
   const [userData, setUserData] = useState(null);
@@ -39,7 +40,7 @@ const UserProfile = ({ uid }) => {
 
   const renderProfilePicture = () => {
     if (photoUrl) {
-      return <img src={photoUrl} alt="Profile" />;
+      return <Image src={photoUrl} alt="Profile" />;
     } else if (initials) {
       return <div className="initials-icon">{initials}</div>;
     }

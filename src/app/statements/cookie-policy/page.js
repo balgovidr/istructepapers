@@ -1,13 +1,18 @@
 import Head from "next/head";
 
+export const metadata = {
+    title: 'Cookie Policy - Structural Papers',
+    description: 'View the cookie policy of Structural Papers.',
+  }
+
 export default function CookiePolicy() {
 
     return (
         <div class="full-height column text-align-left content px-5">
-            {/* <Head>
-                <title>Cookie policy - Solved IStructE exam papers</title>
+            <Head>
+                <title>Cookie policy - Structural Papers</title>
                 <meta name="Cookie policy" content="Cookie policy"/>
-            </Head> */}
+            </Head>
 
             {/* Cookies from https://www.cookiepolicygenerator.com/download.php?lang=en&token=dgh3wJss1FPiW9xurRg116apY0x2rjv1# */}
             <h1 className="mg-t-50">Cookie Policy for Structural Papers</h1>
