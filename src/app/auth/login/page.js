@@ -60,7 +60,7 @@ export default function Login() {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            // console.log(errorCode, errorMessage);
 
             setAlertContent(errorMessage);
             setAlertSeverity('error')
@@ -90,7 +90,7 @@ export default function Login() {
             } catch(error) {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(errorCode, errorMessage);
+                // console.log(errorCode, errorMessage);
             }
         });
     });
@@ -105,7 +105,7 @@ export default function Login() {
             <Image src={logo} alt="Paper trail logo" height="100"/>
         </div>
         <div className="col-1 column pd-a-10p">
-            <h1>Login</h1>
+            <h1 className="text-3xl self-center font-extralight">Login</h1>
             <form className="column">
                 <label htmlFor="email">Email</label>
                 <input type="email" className="form-control" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>

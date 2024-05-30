@@ -174,7 +174,7 @@ export default async function Viewer(context) {
           {limitReached()}
       </div>
       <div className="tail-container mt-2.5 mb-5">
-        <h1>
+        <h1 className="text-3xl self-center font-extralight">
             <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)} | </p>
             <p className="d-inline">Question number: {paper.questionNumber}</p>
         </h1>

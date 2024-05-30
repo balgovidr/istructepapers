@@ -59,7 +59,7 @@ export default function ForgotPassword() {
             <Image src={logo} alt="Paper trail logo" height="100"/>
         </div>
         <div className="col-1 column pd-a-10p">
-            <h1>Reset Password</h1>
+            <h1 className="text-3xl self-center font-extralight">Reset Password</h1>
             <form className="column">
                 <label htmlFor="email">Email</label>
                 <input type="email" className="form-control" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>

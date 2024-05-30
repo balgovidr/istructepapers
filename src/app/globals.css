@@ -5,6 +5,7 @@
 :root {
   --bs-primary: #652cb3;
   --bs-secondary: #e21e80;
+  --bs-accent: #9376bd;
   --bs-success: #198754;
   --bs-info: #0dcaf0;
   --bs-warning: #ffc107;
@@ -269,6 +270,30 @@ nav .h1, nav h1 {
   background-color: var(--bs-light);
   color: var(--bs-primary);
   border: 1px solid var(--bs-primary);
+}
+
+.btn-secondary, .btn-secondary-outline:hover {
+  background-color: var(--bs-secondary);
+  color: var(--bs-light);
+  border: 1px solid var(--bs-secondary);
+}
+
+.btn-secondary-outline, .btn-secondary:hover {
+  background-color: var(--bs-light);
+  color: var(--bs-secondary);
+  border: 1px solid var(--bs-secondary);
+}
+
+.btn-accent, .btn-accent-outline:hover {
+  background-color: var(--bs-accent);
+  color: var(--bs-light);
+  border: 1px solid var(--bs-accent);
+}
+
+.btn-accent-outline, .btn-accent:hover {
+  background-color: var(--bs-light);
+  color: var(--bs-accent);
+  border: 1px solid var(--bs-accent);
 }
 
 .btn-white, .btn-white-outline:hover {

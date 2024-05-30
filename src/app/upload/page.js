@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect} from "react";
 import logo from "@/app/assets/Logo.svg";
-import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment } from "firebase/firestore"; 
+import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment, query, where, getDocs } from "firebase/firestore"; 
 import { auth, db, storage } from '@/firebase/firebaseClient';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
@@ -15,6 +15,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Image from "next/image";
 import Head from "next/head";
 import { TailSpin } from 'react-loading-icons';
+import SparkMD5 from 'spark-md5';
 
 export default function UploadPaper() {
     const [date, setDate] = useState(undefined);
@@ -77,65 +78,132 @@ export default function UploadPaper() {
         e.preventDefault()
 
         setLoading(true)
+        var error = false
 
-        const month = date.substring(5, 7)
-        const year = date.substring(0, 4)
-        const today = format(new Date(), 'yyyy-MM-dd-kk-mm-ss');
-        const filePath = 'solvedPapers/'+year+'-'+month+'-'+questionNumber+'-'+user.uid+'-'+today+'.pdf';
-        const storageRef = ref(storage, filePath);
+        //Check that all required fields have been input
+        if (!date || !questionNumber || !attempted || !file) {
+            error = true
+            setAlertContent('Please ensure that all required fields are complete.');
+            setAlertSeverity('error')
+            setAlert(true);
+            setAlertCollapse(true);
+            setTimeout(() => {
+                setAlertCollapse(false);
+            }, 4000);
+        }
 
-        const uploadTask = uploadBytesResumable(storageRef, file);
+        //Check that the file is a pdf
+        if (file.name.split('.').pop().toLowerCase() !== "pdf") {
+            error = true
+            setAlertContent('Please ensure that the file is a pdf.');
+            setAlertSeverity('error')
+            setAlert(true);
+            setAlertCollapse(true);
+            setTimeout(() => {
+                setAlertCollapse(false);
+            }, 3000);
+        }
+
+        //Check that the file hasn't already been uploaded
+        const fileHash = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const arrayBuffer = event.target.result;
+                const bytes = new Uint8Array(arrayBuffer);
+                const hash = SparkMD5.ArrayBuffer.hash(bytes);
+                resolve(hash);
+            };
+            reader.onerror = (event) => {
+                reject(event.target.error);
+            };
+            reader.readAsArrayBuffer(file);
+        });
         
-        uploadTask.on('state_changed',
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setAlertContent('Uploading... ' + progress + "%");
-                setAlertSeverity('info')
-                setAlert(true);
-                setAlertCollapse(true);
+        // Create a reference to the solvedPapers collection
+        const uploadedFilesRef = collection(db, "solvedPapers");
 
-                setUploadProgress(progress)
-            },
-            (error) => {
-                setAlertContent(error.message);
-                setAlertSeverity('error')
-                setAlert(true);
-                setAlertCollapse(true);
-                setTimeout(() => {
-                    setAlertCollapse(false);
-                }, 3000);
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
-                    addDoc(collection(db, "solvedPapers"), {
-                        year: year,
-                        month: month,
-                        questionNumber: questionNumber,
-                        attempted: attempted,
-                        diagram: schemeDiagram,
-                        filePath: filePath,
-                        downloadUrl: downloadUrl,
-                        owner: user.uid,
-                        uploadDate: today,
-                        reviews: 0,
-                        verified: false,
-                    })
-                    
-                    updateDoc(doc(db, "users", user.uid), {
-                        monthsAllowed: arrayUnion(month + '-' + year),
-                        points: increment(1),
-                    })
+        // Create a query against the collection.
+        const q = query(uploadedFilesRef, where("fileHash", "==", fileHash));
 
-                    setAlertContent('Upload completed.');
-                    setAlertSeverity('success')
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot.size)
+        //File has been found. Don't let the user upload it again.
+        if (querySnapshot.size > 0) {
+            error = true
+            setAlertContent('This file has already been uploaded.');
+            setAlertSeverity('error')
+            setAlert(true);
+            setAlertCollapse(true);
+            setTimeout(() => {
+                setAlertCollapse(false);
+            }, 3000);
+        }
+
+        if (!error) {
+            const month = date.substring(5, 7)
+            const year = date.substring(0, 4)
+            const today = format(new Date(), 'yyyy-MM-dd-kk-mm-ss');
+            const filePath = 'solvedPapers/'+year+'-'+month+'-'+questionNumber+'-'+user.uid+'-'+today+'.pdf';
+            const storageRef = ref(storage, filePath);
+
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    setAlertContent('Uploading... ' + progress + "%");
+                    setAlertSeverity('info')
+                    setAlert(true);
+                    setAlertCollapse(true);
+
+                    setUploadProgress(progress)
+                },
+                (error) => {
+                    setAlertContent(error.message);
+                    setAlertSeverity('error')
                     setAlert(true);
                     setAlertCollapse(true);
                     setTimeout(() => {
                         setAlertCollapse(false);
                     }, 3000);
-                });
-            })
-        
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+                        let docContents = {
+                            year: year,
+                            month: month,
+                            questionNumber: questionNumber,
+                            attempted: attempted,
+                            filePath: filePath,
+                            downloadUrl: downloadUrl,
+                            owner: user.uid,
+                            uploadDate: today,
+                            reviews: 0,
+                            verified: false,
+                            fileHash: fileHash
+                        }
+                        //Adding in the scheme diagram variable if it exists
+                        if (schemeDiagram) {
+                            docContents = {...docContents, diagram: schemeDiagram}
+                        }
+
+                        addDoc(collection(db, "solvedPapers"), docContents)
+                        
+                        updateDoc(doc(db, "users", user.uid), {
+                            monthsAllowed: arrayUnion(month + '-' + year),
+                            points: increment(1),
+                        })
+
+                        setAlertContent('Upload completed.');
+                        setAlertSeverity('success')
+                        setAlert(true);
+                        setAlertCollapse(true);
+                        setTimeout(() => {
+                            setAlertCollapse(false);
+                        }, 3000);
+                    });
+                })
+        }
         setLoading(false);
       }
 
@@ -150,28 +218,28 @@ export default function UploadPaper() {
                     <Image src={logo} alt="Paper trail logo" height="100"/>
                 </div>
                 <div className="col-1 column pd-a-10p sm:overflow-y-auto">
-                    <h1>Upload a solved paper</h1>
+                    <h1 className="text-3xl self-center font-extralight">Upload a solved paper</h1>
                     <br />
                     <span className="font-size-15 text-align-left">Once you&#39;ve solved an IStructE Chartered Membership Exam&#39;s past paper, upload it so others can learn using it!</span>
                     <br />
-                    <span className="font-size-15 text-align-left">If you choose it, make your paper commentable and recieve feedback.</span>
+                    {/* <span className="font-size-15 text-align-left">If you choose it, make your paper commentable and recieve feedback.</span> */}
                     <hr className="solid"/>
                     <form className="column">
-                        <label htmlFor="month">Month and Year</label>
+                        <label htmlFor="month">Month and Year *</label>
                         <input type="month" className="form-control mg-b-20" id="month" value={date} onChange={(e) => setDate(e.target.value)}   required/>
-                        <label htmlFor="last-name">Question number</label>
+                        <label htmlFor="last-name">Question number *</label>
                         <input type="number" className="form-control mg-b-20" id="question-number" placeholder="1" value={questionNumber} onChange={(e) => setQuestionNumber(e.target.value)} min="1" max="8" required/>
-                        <label htmlFor="attempted" className="mg-b-5">Parts attempted</label>
+                        <label htmlFor="attempted" className="mg-b-5">Parts attempted *</label>
                         <div className="row mg-b-20 button-container">
-                            <button type="button" onClick={(e) => appendToAttempted("1a")} className={"btn mg-r-10 " + (attempted.includes("1a") ? "btn-primary" : "btn-primary-outline")}>1a</button>
-                            <button type="button" onClick={(e) => appendToAttempted("1b")} className={"btn mg-r-10 " + (attempted.includes("1b") ? "btn-primary" : "btn-primary-outline")}>1b</button>
-                            <button type="button" onClick={(e) => appendToAttempted("2a")} className={"btn mg-r-10 " + (attempted.includes("2a") ? "btn-primary" : "btn-primary-outline")}>2a</button>
-                            <button type="button" onClick={(e) => appendToAttempted("2b")} className={"btn mg-r-10 " + (attempted.includes("2b") ? "btn-primary" : "btn-primary-outline")}>2b</button>
-                            <button type="button" onClick={(e) => appendToAttempted("2c")} className={"btn " + (attempted.includes("2c") ? "btn-primary" : "btn-primary-outline")}>2c</button>
+                            <button type="button" onClick={(e) => appendToAttempted("1a")} className={"btn mg-r-10 " + (attempted.includes("1a") ? "btn-accent" : "btn-primary-outline")}>1a</button>
+                            <button type="button" onClick={(e) => appendToAttempted("1b")} className={"btn mg-r-10 " + (attempted.includes("1b") ? "btn-accent" : "btn-primary-outline")}>1b</button>
+                            <button type="button" onClick={(e) => appendToAttempted("2a")} className={"btn mg-r-10 " + (attempted.includes("2a") ? "btn-accent" : "btn-primary-outline")}>2a</button>
+                            <button type="button" onClick={(e) => appendToAttempted("2b")} className={"btn mg-r-10 " + (attempted.includes("2b") ? "btn-accent" : "btn-primary-outline")}>2b</button>
+                            <button type="button" onClick={(e) => appendToAttempted("2c")} className={"btn " + (attempted.includes("2c") ? "btn-accent" : "btn-primary-outline")}>2c</button>
                         </div>
                         <label htmlFor="scheme-diagram">What page is a scheme diagram on?</label>
                         <input type="number" className="form-control mg-b-20" id="scheme-diagram" placeholder="1" value={schemeDiagram} onChange={(e) => setSchemeDiagram(e.target.value)} min="1" required/>
-                        <label htmlFor="password" className="mg-t-20">Attach pdf file</label>
+                        <label htmlFor="password" className="mg-t-20">Attach pdf file *</label>
                         <input type="file" accept="application/pdf" className="form-control" id="file" name="Attach" onChange={(e) => setFile(e.target.files[0])} required/>
 
                         <div className="row justify-content-center align-items-center mg-t-25 mg-b-20">

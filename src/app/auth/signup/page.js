@@ -16,6 +16,11 @@ import Image from 'next/image';
 import nookies from 'nookies';
 import {useCreateUserWithEmailAndPassword} from 'react-firebase-hooks/auth'
 import { TailSpin } from 'react-loading-icons'
+import {  onAuthStateChanged  } from 'firebase/auth';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { Typography } from '@mui/material';
 
 export default function SignUp() {
   const router = useRouter();
@@ -96,7 +101,7 @@ export default function SignUp() {
           .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
-              console.log(errorCode, errorMessage);
+              // console.log(errorCode, errorMessage);
 
               setAlertContent(errorMessage);
               setAlertSeverity('error')
@@ -143,7 +148,7 @@ export default function SignUp() {
         } catch(error) {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            // console.log(errorCode, errorMessage);
         }
     });
 });
@@ -158,29 +163,28 @@ export default function SignUp() {
             <Image src={logo} alt="Paper trail logo" height="100"/>
         </div>
         <div className="col-1 column pd-a-10p">
-            <h1>Registration</h1>
-            <form className="column">
-                <label for="first-name">First Name</label>
+            <h1 className="text-3xl self-center font-extralight">Registration</h1>
+            <div className="column">
+                <label htmlFor="first-name">First Name</label>
                 <input type="text" className="form-control" id="first-name" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required/>
-                <label for="last-name">Last Name</label>
+                <label htmlFor="last-name">Last Name</label>
                 <input type="text" className="form-control" id="last-name" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
-                <label for="email">Email</label>
+                <label htmlFor="email">Email</label>
                 <input type="email" className="form-control" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-                <label for="password">Password</label>
+                <label htmlFor="password">Password</label>
                 <input type="password" className="form-control" id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-                <div className='flex-row mb-3'>
-                  <input type="checkbox" id="privacy-policy" className="mb-0" value={privacy} onChange={(e) => setPrivacy(!privacy)} name="privacy-policy" required/>
-                  <label for="privacy-policy" className='text-sm'>I have read and understood the privacy policy stated <a href="/privacy-policy">here</a>.</label>
-                </div>
-                <div className='flex-row'>
-                  <input type="checkbox" id="email-consent" className="mb-0" value={emailConsent} onChange={(e) => setEmailConsent(!emailConsent)} name="email-consent"/>
-                  <label for="email-consent" className='text-sm'>By checking the box, you agree to receive occasional emails from us with helpful exam preparation tips, and updates about our services.</label>
-                </div>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox checked={privacy} onChange={() => setPrivacy(!privacy)} size="small" />} label={<Typography className="text-sm">I have read and understood the privacy policy found in the link below.</Typography>} className='text-sm'/>
+                  <FormControlLabel control={<Checkbox checked={emailConsent} onChange={() => setEmailConsent(!emailConsent)} size="small" />} label={<Typography className="text-sm">By checking the box, you agree to receive occasional emails from us with helpful exam preparation tips, and updates about our services.</Typography>} size="small" />
+                </FormGroup>
                 <div className="row justify-content-center align-items-center mg-t-25">
                     <button type="submit" onClick={onSubmit} className="btn btn-primary">{loading ? <TailSpin stroke="#97BCC7" height={25}/> : "Sign Up"}</button>
                     <a href="/auth/login" className="mg-l-20 font-size-12 text-color-grey underline">I&apos;m already a member</a>
                 </div>
-            </form>
+                <div className='flex flex-row justify-center items-center w-full my-10'>
+                <a href="/privacy-policy" className="mg-l-20 font-size-12 text-color-grey underline">Privacy policy</a>
+                </div>
+            </div>
             <Stack sx={{ width: "100%" }} spacing={2}>
                 <Collapse in={alertCollapse}>
                     {alert ? <Alert severity={alertSeverity} action={

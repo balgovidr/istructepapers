@@ -25,12 +25,9 @@ export default async function Home() {
       }
     }
   } catch (error) {
-    //Likely no user found
-    // console.log(error)
   }
 
   if (user !== null) {
-    console.log(user)
     redirect("/content");
   }
 

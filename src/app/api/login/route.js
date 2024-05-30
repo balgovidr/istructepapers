@@ -34,30 +34,26 @@ export async function POST() {
 
 export async function GET(request) {
   InitializeFirebase()
-    const session = cookies().get("session")?.value;
+  const session = cookies().get("session")?.value;
+
+  //Validate if the cookie exist in the request
+  if (session === "undefined" || session === null || session == "") {
+      return NextResponse.json({ isLogged: false}, {status: 401 });
+  } else {
+    //Use Firebase Admin to validate the session cookie
+    try {
+      const decodedClaims = await auth().verifySessionCookie(session, true);
   
-    //Validate if the cookie exist in the request
-    if (session === "undefined" || session === null || session == "") {
-        return NextResponse.json({ isLogged: false}, {status: 401 });
-    } else {
-  
-      //Use Firebase Admin to validate the session cookie
-      try {
-        const decodedClaims = await auth().verifySessionCookie(session, true);
-    
-        if (!decodedClaims) {
-            return NextResponse.json({ isLogged: false }, { status: 401 });
-        }
-        
-        return NextResponse.json({ isLogged: true, user: decodedClaims, status: 200 });
-      } catch (error) {
-        if (error.code == "auth/session-cookie-expired") {
-          return NextResponse.redirect(new URL('/auth/login', request.url))
-        }
-        return NextResponse.json({ isLogged: false, error: error.code, status: 401 });
+      if (!decodedClaims) {
+          return NextResponse.json({ isLogged: false }, { status: 401 });
       }
-    
-    
-      
+
+      return NextResponse.json({ isLogged: true, user: decodedClaims, status: 200 });
+    } catch (error) {
+      if (error.code == "auth/session-cookie-expired") {
+        return NextResponse.redirect(new URL('/auth/login', request.url))
+      }
+      return NextResponse.json({ isLogged: false, error: error.code, status: 401 });
     }
+  }
 }
