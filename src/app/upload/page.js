@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import logo from "@/app/assets/Logo.svg";
 import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment, query, where, getDocs } from "firebase/firestore"; 
 import { auth, db, storage } from '@/firebase/firebaseClient';
@@ -16,6 +16,7 @@ import Image from "next/image";
 import Head from "next/head";
 import { TailSpin } from 'react-loading-icons';
 import SparkMD5 from 'spark-md5';
+import { useRouter } from 'next/navigation'
 
 export default function UploadPaper() {
     const [date, setDate] = useState(undefined);
@@ -26,11 +27,12 @@ export default function UploadPaper() {
     const [alert, setAlert] = useState(false);
     const [alertContent, setAlertContent] = useState('');
     const [alertSeverity, setAlertSeverity] = useState('error');
-    const [alertCollapse, setAlertCollapse] = React.useState(false);
+    const [alertCollapse, setAlertCollapse] = useState(false);
     const [user, setUser] = useState(null);
     const [schemeDiagram, setSchemeDiagram] = useState(undefined);
     const [userAllowedToUpload, setUserAllowedToUpload] = useState(false);
     const [loading, setLoading] = useState(false);
+    const router = useRouter()
 
     //Todo - The papers that the viewer can watch is added to a waiting list and is only appended to the final list after their papers have been verified.
 
@@ -202,6 +204,9 @@ export default function UploadPaper() {
                             setAlertCollapse(false);
                         }, 3000);
                     });
+
+                    //Reset the form fields
+                    router.push('/upload')
                 })
         }
         setLoading(false);
@@ -240,7 +245,7 @@ export default function UploadPaper() {
                         <label htmlFor="scheme-diagram">What page is a scheme diagram on?</label>
                         <input type="number" className="form-control mg-b-20" id="scheme-diagram" placeholder="1" value={schemeDiagram} onChange={(e) => setSchemeDiagram(e.target.value)} min="1" required/>
                         <label htmlFor="password" className="mg-t-20">Attach pdf file *</label>
-                        <input type="file" accept="application/pdf" className="form-control" id="file" name="Attach" onChange={(e) => setFile(e.target.files[0])} required/>
+                        <input type="file" accept="application/pdf" className="form-control" id="file" name="Attach" onChange={(e) => setFile(e.target.files[0])} onClick={e =>  (e.target.value = "")} required/>
 
                         <div className="row justify-content-center align-items-center mg-t-25 mg-b-20">
                             <button type="submit" onClick={onSubmit} className="btn btn-primary" disabled={loading}>
