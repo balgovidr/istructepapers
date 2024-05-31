@@ -3,10 +3,8 @@
 import React, {useState} from 'react';
 import { Document, Page, pdfjs } from "react-pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.js',
-    import.meta.url,
-  ).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+//If facing CORS issues: https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin
 
 export default function PaperComponent({paper, user}) {
     const [displayedPages, setDisplayedPages] = useState(0);

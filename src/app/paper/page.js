@@ -7,8 +7,6 @@ import PaperComponent from '@/components/paper';
 import { InitializeFirestore } from "@/firebase/firebaseAdmin";
 import { cookies } from "next/headers";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
 async function getUserData(user) {
   const db = InitializeFirestore()
   let userData = null
