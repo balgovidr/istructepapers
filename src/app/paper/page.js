@@ -64,6 +64,7 @@ function getMonthName(monthNumber) {
 
 export async function generateMetadata(context) {
   const paper = await getPaper(context);
+  //Todo - improve metadata for each paper
  
   return {
     title: (paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " - Structural Papers"),
@@ -172,8 +173,9 @@ export default async function Viewer(context) {
           {limitReached()}
       </div>
       <div className="tail-container mt-2.5 mb-5">
-        <h1 className="text-3xl self-center font-extralight">
-            <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)} | </p>
+        <h1 className="text-3xl self-center font-extralight flex flex-row align-middle gap-2">
+            <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)}</p>
+            <p className="d-inline h2">|</p>
             <p className="d-inline">Question number: {paper.questionNumber}</p>
         </h1>
         <div className="row justify-content-space-between info">

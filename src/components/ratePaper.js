@@ -7,8 +7,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-// import { updateUserRating } from "@/functions/paper";
-
+//Todo - Restrict a user from rating their own paper
 
 const RatePaper = ({ id }) => {
   const [ratingMap, setRatingMap] = useState(null);
@@ -71,8 +70,7 @@ const RatePaper = ({ id }) => {
                 handleStarClick(newValue);
               }}
               icon={<StarIcon fontSize="inherit"/>}
-              emptyIcon={<StarIcon fontSize="inherit"
-              />}
+              emptyIcon={<StarIcon fontSize="inherit"/>}
             />
           </div>
         )
@@ -142,7 +140,7 @@ const RatePaper = ({ id }) => {
 
   const handleStarClick = (newValue) => {
     if (user) {
-      const currentUserUid = user.uid; // Replace with your own logic to get the current user's UID
+      const currentUserUid = user.uid;
       const newRating = Math.round(newValue);
       const newRatingMap = {[currentUserUid]: newRating };
 

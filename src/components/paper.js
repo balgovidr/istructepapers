@@ -30,9 +30,9 @@ export default function PaperComponent({paper, user}) {
         }
       };
     
-    function PageLoadDiv(elementId) {
+    function PageLoadDiv() {
       return (
-        <div className='w-full md:w-[600px] min-h-[1.4vw] md:min-h-[850px] my-3 p-4 overflow-hidden bg-white' id={"loading-" + elementId}>
+        <div className='w-full md:w-[600px] min-h-[1.4vw] md:min-h-[850px] my-3 p-4 overflow-hidden bg-white'>
           <div className="flex flex-col animate-pulse gap-4">
             <div className='h-8 w-2/5 bg-slate-200 rounded'>&nbsp;</div>
             <div className='h-4 w-2/3 bg-slate-200 rounded'>&nbsp;</div>
@@ -59,13 +59,13 @@ export default function PaperComponent({paper, user}) {
     }
 
     return (
-        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} loading={PageLoadDiv("main")}>
+        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} loading={PageLoadDiv()}>
             {displayedPages === 0 ?
-              <p>Loading...</p> :
+              <PageLoadDiv /> :
               Array.from({ length: displayedPages }, (_, index) => (
-                <div key={index}>
-                  <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} className="w-full md:w-[600px]" loading="Loading page..." canvasBackground="#d3d3d3"/>
-                  <span className="font-size-12">Page {index+1}</span>
+                <div key={index} className='flex flex-col'>
+                  <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} className="w-full md:w-[600px]" loading={<PageLoadDiv />} canvasBackground="#FFFFFF"/>
+                  <span className="font-size-12 w-full text-center">Page {index+1}</span>
                   <br />
                 </div>
               ))}
