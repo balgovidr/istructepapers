@@ -63,7 +63,7 @@ export default function PaperComponent({paper, user}) {
             {displayedPages === 0 ?
               <PageLoadDiv /> :
               Array.from({ length: displayedPages }, (_, index) => (
-                <div key={index} className='flex flex-col'>
+                <div key={index} className='flex flex-col max-w-[100vw]'>
                   <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} className="w-full md:w-[600px]" loading={<PageLoadDiv />} canvasBackground="#FFFFFF"/>
                   <span className="font-size-12 w-full text-center">Page {index+1}</span>
                   <br />

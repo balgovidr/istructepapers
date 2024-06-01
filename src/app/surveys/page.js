@@ -17,12 +17,7 @@ import 'react-tabs/style/react-tabs.css';
 import Image from "next/image";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-
-// Need this for react-pdf to work on Next.js
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.js',
-    import.meta.url,
-  ).toString();
+import PaperComponent from "@/components/paper";
 
 export default function Surveys() {
     const [date, setDate] = useState(undefined);
@@ -33,6 +28,7 @@ export default function Surveys() {
     const [alertSeverity, setAlertSeverity] = useState('error');
     const [alertCollapse, setAlertCollapse] = React.useState(false);
     const [user, setUser] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [paper, setPaper] = useState(null);
     const [paperFetched, setPaperFetched] = useState(null);
     const [displayedPages, setDisplayedPages] = useState(0);
@@ -65,6 +61,7 @@ export default function Surveys() {
             const userRef = doc(db, "users", user.uid);
             const userSnap = await getDoc(userRef);
             const userData = userSnap.data();
+            setUserData(userData)
 
             if (userData.surveyAgreement > 0.5) {
                 fetchPaper();
@@ -440,21 +437,11 @@ export default function Surveys() {
                         <button className="py-2 w-1/2" onClick={() => setPage(2)}>View survey</button>
                     </div>
                 </div>
-                <div className="flex flex-row">
-                    <div className={"background-color-primary flex flex-col overflow-y-auto pdf-container w-full lg:w-1/2 " + (page === 1 ? "flex" : "hidden")}>
-                        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error}>
-                            {displayedPages === 0 ?
-                                <p>Loading...</p> :
-                                Array.from({ length: displayedPages }, (_, index) => (
-                                    <div className="pd-b-10" key={index}>
-                                        <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false}  width={windowSize[0] > 610 ? windowSize[0]*0.5 : windowSize[0]}/>
-                                        <div className="font-size-12 w-full text-center">Page {index+1}</div>
-                                        <br />
-                                    </div>
-                            ))}
-                        </Document>
+                <div className="flex flex-row overflow-x-scroll">
+                    <div className={"background-color-primary flex flex-col overflow-y-auto pdf-container w-screen lg:w-1/2"}>
+                        <PaperComponent paper={paper} user={userData} />
                     </div>
-                    <div className={"flex flex-col w-full lg:w-1/2 overflow-y-auto " + (page === 2 ? "flex" : "hidden")} ref={formRef}>
+                    <div className={"flex flex-col w-screen lg:w-1/2 overflow-y-auto"} ref={formRef}>
                         <div className="align-items-center column pd-a-5p">
                             <h2>Answer questions:</h2>
                             <span className="font-size-15 text-align-left">Answer questions about the solved paper to the left.</span>

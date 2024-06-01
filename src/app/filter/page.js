@@ -60,7 +60,7 @@ export default async function Filter(context) {
         <div className="full-height column content text-center">
             <div className="flex flex-row flex-wrap row mg-t-50 justify-center button-container">
                 <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/upload">Upload a paper</a>
-                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="resume.html">Answer questions</a>
+                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/surveys">Answer questions</a>
             </div>
             <hr className="solid"/>
             <h1 className="text-2xl mb-5">Solved <span className="text-gradient d-inline">IStructE</span> papers - {getMonthName(data.month) + " " + data.year}</h1>

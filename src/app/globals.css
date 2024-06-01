@@ -613,6 +613,12 @@ hr.solid {
   border-top: ridge;
 }
 
+.react-pdf__Page__canvas {
+  margin: 0 auto;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
 /* CSS for phones */
 @media screen and (min-width: 601px) and (max-width: 900px) {
   nav .heading {
