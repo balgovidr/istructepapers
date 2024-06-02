@@ -61,13 +61,12 @@ export default function SignUp() {
                     papersViewable: 3,
                     papersAllowed: [],
                     monthsAllowed: [],
-                    userRating: 0,
+                    authenticityScore: 0,
                     points: 10,
                     emailConsent: emailConsent,
                     rating: 0,
                     surveyAgreement: 1,
                   });
-                  // console.log("Document written with ID: ", docRef.id);
 
                   setAlertContent("Registration complete. Signing in...");
                   setAlertSeverity('success')

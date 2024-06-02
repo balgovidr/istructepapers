@@ -20,6 +20,7 @@ export default function PaperComponent({paper, user}) {
                     papersAllowed: [...user.papersAllowed, paper.id],
                     papersViewable: user.papersViewable-1
                 })
+                //Todo - Update costs of viewing a paper to be a variable that's fetched
             
                 setDisplayedPages(numPages);
             } else {
@@ -32,7 +33,7 @@ export default function PaperComponent({paper, user}) {
     
     function PageLoadDiv() {
       return (
-        <div className='w-full md:w-[600px] min-h-[1.4vw] md:min-h-[850px] my-3 p-4 overflow-hidden bg-white'>
+        <div className='w-full md:max-w-[800px] min-h-[1.4vw] md:min-h-[850px] my-3 p-4 overflow-hidden bg-white'>
           <div className="flex flex-col animate-pulse gap-4">
             <div className='h-8 w-2/5 bg-slate-200 rounded'>&nbsp;</div>
             <div className='h-4 w-2/3 bg-slate-200 rounded'>&nbsp;</div>
@@ -49,22 +50,13 @@ export default function PaperComponent({paper, user}) {
       )
     }
 
-    function closeLoadDiv(elementId) {
-      console.log("loading-" + elementId)
-      const element = document.getElementById("loading-" + elementId);
-
-      if (element) {
-        element.parentNode.removeChild(element);
-      }
-    }
-
     return (
-        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} loading={PageLoadDiv()}>
+        <Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} loading={<PageLoadDiv />}>
             {displayedPages === 0 ?
               <PageLoadDiv /> :
               Array.from({ length: displayedPages }, (_, index) => (
-                <div key={index} className='flex flex-col max-w-[100vw]'>
-                  <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} className="w-full md:w-[600px]" loading={<PageLoadDiv />} canvasBackground="#FFFFFF"/>
+                <div key={index} className='flex flex-col max-w-[100vw] items-center'>
+                  <Page key={index} pageNumber={index + 1} renderTextLayer={false} renderAnnotationLayer={false} className="!w-full md:max-w-[600px]" loading={<PageLoadDiv />} canvasBackground="#FFFFFF"/>
                   <span className="font-size-12 w-full text-center">Page {index+1}</span>
                   <br />
                 </div>
