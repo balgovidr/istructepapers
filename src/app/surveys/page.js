@@ -96,7 +96,7 @@ export default function Surveys() {
                             const paperInfo = paperDocument.data();
                             paperInfo.id = paperDocument.id;
                             //Don't show the paper if the owner is the current user
-                            if (paperInfo.owner === user.uid) {
+                            if (paperInfo.owner !== user.uid) {
                                 //Check that the user has not already reviewed this paper
                                 const userReviewThisPaperQuery = query(collection(db, "paperReviews"), where("paperId", "==", paperInfo.id), where("userId", "==", user.uid));
                                 const userReviewThisPaperSnapshot = await getDocs(userReviewThisPaperQuery);
@@ -526,7 +526,7 @@ export default function Surveys() {
                 </div>
                 <div className="flex flex-row overflow-x-scroll">
                     <div className={"background-color-primary flex flex-col overflow-y-auto pdf-container w-screen lg:w-1/2"}>
-                        {/* <PaperComponent paper={paper} user={userData} /> */}
+                        <PaperComponent paper={paper} user={userData} />
                     </div>
                     <div className={"flex flex-col w-screen lg:w-1/2 overflow-y-auto"} ref={formRef}>
                         <div className="align-items-center column pd-a-5p">
