@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect, useRef} from "react";
 import logo from "@/app/assets/Logo.svg";
-import { collection, addDoc, updateDoc, doc, query, where, limit, getDocs, getDoc, increment, deleteDoc } from "firebase/firestore"; 
+import { collection, addDoc, updateDoc, doc, query, where, limit, getDocs, getDoc, increment, deleteDoc, arrayUnion } from "firebase/firestore"; 
 import { auth, db, storage } from '@/firebase/firebaseClient';
 import { onAuthStateChanged } from 'firebase/auth';
 import Alert from '@mui/material/Alert';
@@ -38,7 +38,6 @@ export default function Surveys() {
     /** Listen for auth state changes */
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (result) => {
-            console.log(1)
             setUser(result);
         });
 
@@ -65,6 +64,13 @@ export default function Surveys() {
         }
     }
 
+    function getMonthName(monthNumber) {
+        const date = new Date();
+        date.setMonth(monthNumber - 1);
+      
+        return date.toLocaleString('en-US', { month: 'short' });
+      }
+
     //Todo - Stop the paper refreshing on every state change of unrelated variables.
 
     const fetchPaper = async () => {
@@ -89,56 +95,66 @@ export default function Surveys() {
 
                             const paperInfo = paperDocument.data();
                             paperInfo.id = paperDocument.id;
-                            if (paperInfo.reviews < 5) {
-                                tempPaper = paperInfo
-                                setPaper(paperInfo)
-                            } else {
-                                const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "==", paperInfo.id));
-                                const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
-                                const paperReviewDocuments = paperReviewsQuerySnapshot.docs;
+                            //Don't show the paper if the owner is the current user
+                            if (paperInfo.owner === user.uid) {
+                                //Check that the user has not already reviewed this paper
+                                const userReviewThisPaperQuery = query(collection(db, "paperReviews"), where("paperId", "==", paperInfo.id), where("userId", "==", user.uid));
+                                const userReviewThisPaperSnapshot = await getDocs(userReviewThisPaperQuery);
 
-                                const reviewValueCountMap = {};
-                                const totalDocuments = paperReviewDocuments.length;
+                                //If there's already a document then the user's already reviewed it
+                                if (userReviewThisPaperSnapshot.size == 0) {
+                                    if (paperInfo.reviews < 5) {
+                                        tempPaper = paperInfo
+                                        setPaper(paperInfo)
+                                    } else {
+                                        const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "==", paperInfo.id));
+                                        const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
+                                        const paperReviewDocuments = paperReviewsQuerySnapshot.docs;
 
-                                // Iterate over the documents and collect field values
-                                paperReviewDocuments.forEach((paperReviewDocument) => {
-                                    const paperReview = paperReviewDocument.data();
-                                    Object.keys(paperReview).forEach((field) => {
-                                        if (!reviewValueCountMap[field]) {
-                                            reviewValueCountMap[field] = {};
-                                        }
-                                    
-                                        const value = paperReview[field];
-                                        if (value) {
-                                            if (reviewValueCountMap[field][value]) {
-                                                reviewValueCountMap[field][value]++;
-                                            } else {
-                                                reviewValueCountMap[field][value] = 1;
+                                        const reviewValueCountMap = {};
+                                        const totalDocuments = paperReviewDocuments.length;
+
+                                        // Iterate over the documents and collect field values
+                                        paperReviewDocuments.forEach((paperReviewDocument) => {
+                                            const paperReview = paperReviewDocument.data();
+                                            Object.keys(paperReview).forEach((field) => {
+                                                if (!reviewValueCountMap[field]) {
+                                                    reviewValueCountMap[field] = {};
+                                                }
+                                            
+                                                const value = paperReview[field];
+                                                if (value) {
+                                                    if (reviewValueCountMap[field][value]) {
+                                                        reviewValueCountMap[field][value]++;
+                                                    } else {
+                                                        reviewValueCountMap[field][value] = 1;
+                                                    }
+                                                }
+                                            });
+                                        });
+                                        
+                                        Object.keys(reviewValueCountMap).forEach((field) => {
+                                            let mostCommonResponse = null;
+                                            let maxCount = 0;
+                                            const countMap = reviewValueCountMap[field];
+                                        
+                                            Object.keys(countMap).forEach((value) => {
+                                                const count = countMap[value];
+                                                if (count > maxCount) {
+                                                    mostCommonResponse = value;
+                                                    maxCount = count;
+                                                }
+                                            });
+                                            
+                                            const frequencyRatio = maxCount / totalDocuments;
+
+                                            if (frequencyRatio < 0.7) {
+                                                tempPaper = value
+                                                setPaper(value)
                                             }
-                                        }
-                                    });
-                                });
-                                
-                                Object.keys(reviewValueCountMap).forEach((field) => {
-                                    let mostCommonResponse = null;
-                                    let maxCount = 0;
-                                    const countMap = reviewValueCountMap[field];
-                                
-                                    Object.keys(countMap).forEach((value) => {
-                                        const count = countMap[value];
-                                        if (count > maxCount) {
-                                            mostCommonResponse = value;
-                                            maxCount = count;
-                                        }
-                                    });
-                                    
-                                    const frequencyRatio = maxCount / totalDocuments;
-
-                                    if (frequencyRatio < 0.7) {
-                                        tempPaper = value
-                                        setPaper(value)
+                                        });
                                     }
-                                });
+                                }
                             }
                         })
                     })
@@ -182,246 +198,294 @@ export default function Surveys() {
             return null
         }
 
-        const inputs = [date, questionNumber, attempted]
+        if (solvedPaper === true) {
+            const inputs = [date, questionNumber, attempted]
 
-        // Check if any input is empty
-            //Prompt user to fill in
-            //If the scheme diagram page input is empty - do nothing
-            //If more than one input is empty - reduce user rating by 0.1
-            //If all inputs are empty - reduce user rating by 0.5
-        const count = inputs.reduce((accumulator, currentValue) => {
-            if (currentValue === null || (Array.isArray(currentValue) && currentValue.length === 0)) {
-              return accumulator + 1;
-            }
-            return accumulator;
-          }, 0);
-
-        if (count > 0) {
-            //Show error
-            setAlertContent('Please fill in all relevant fields');
-            setAlertSeverity('error')
-            setAlert(true);
-            setAlertCollapse(true);
-            setTimeout(() => {
-                setAlertCollapse(false);
-            }, 3000);
-
-            const currentUserDocRef = doc(db, "users", user.uid);
-
-            if (count === inputs.length) {
-                await updateDoc(currentUserDocRef, {
-                    points: increment(-0.5)
-                });
-            } else if (count > 0) {
-                await updateDoc(currentUserDocRef, {
-                    points: increment(-0.1)
-                });
-            }
-        } else {
-            //Upload information to firebase
-                //If more than 5 users have checked the paper
-                    //For each field
-                        //If the field has more than 70% agreement on different value then change the value
-            
-            const month = date.substring(5, 7)
-            const year = date.substring(0, 4)
-
-            addDoc(collection(db, "paperReviews"), {
-                userId: user.uid,
-                paperId: paper.id,
-                isSolvedPaper: solvedPaper,
-                year: year,
-                month: month,
-                questionNumber: questionNumber,
-                attempted: attempted,
-                diagram: schemeDiagram,
-            }).then(async ()=> {
-                const paperRef = doc(db, "solvedPapers", paper.id);
-
-                await updateDoc(paperRef, {
-                    //Todo - Remove this number of reviews data field from the solvedPapers collection and move to stop duplicating data.
-                    reviews: increment(1)
-                }).then(async ()=> {
-                    const paperSnap = await getDoc(paperRef);
-                    const paperData = paperSnap.data();
-
-                    if (paperData.reviews > 5) {
-                        const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "==", paper.id));
-                        const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
-                        const paperReviews = paperReviewsQuerySnapshot.docs;
-
-                        const reviewValueCountMap = {};
-                        const numberOfReviews = paperReviews.length;
-
-                        // Iterate over the documents and collect field values
-                        paperReviews.forEach((paperReviewDoc) => {
-                            const paperReview = paperReviewDoc.data();
-                            Object.keys(paperReview).forEach((fieldName) => {
-                                if (!reviewValueCountMap[fieldName]) {
-                                    reviewValueCountMap[fieldName] = {};
-                                }
-                            
-                                const paperReviewFieldValue = paperReview[fieldName];
-                                if (paperReviewFieldValue) {
-                                    if (reviewValueCountMap[fieldName][paperReviewFieldValue]) {
-                                        reviewValueCountMap[fieldName][paperReviewFieldValue]++;
-                                    } else {
-                                        reviewValueCountMap[fieldName][paperReviewFieldValue] = 1;
-                                    }
-                                }
-                            });
-                        });
-                        
-                        Object.keys(reviewValueCountMap).forEach(async(fieldName) => {
-                            let mostCommonResponse = null;
-                            let maxCount = 0;
-                            const countMap = reviewValueCountMap[fieldName];
-                        
-                            Object.keys(countMap).forEach((response) => {
-                                const count = countMap[response];
-                                if (count > maxCount) {
-                                    mostCommonResponse = response;
-                                    maxCount = count;
-                                }
-                            });
-                            
-                            const frequencyRatio = maxCount / numberOfReviews;
-                            
-                            if (fieldName === "isSolvedPaper") {
-                                if (frequencyRatio > 0.7 && mostCommonResponse === false) {
-                                    //Decrease the paper's owner's rating by 2. Remove the file. Remove the solvedPaper document.
-                                    const ownerRef = doc(db, "users", paperData.owner);
-                                    await updateDoc(ownerRef, {
-                                        //Todo - Make the numbers for scores a variable that's fetched to have consistency on scores across the platform
-                                        points: increment(-2)
-                                    });
-
-                                    // Create a reference to the file to delete
-                                    const desertRef = ref(storage, paperData.filePath);
-
-                                    // Delete the file
-                                    deleteObject(desertRef).then(async() => {
-                                        // File deleted successfully
-                                        await deleteDoc(paperRef)
-                                    }).catch((error) => {
-                                        // Uh-oh, an error occurred!
-                                    });
-
-                                    //Todo - Decrease the paper's owner's authenticity score/rating
-                                    //Todo - Rename a user's rating to authenticity
-
-                                } else if (frequencyRatio > 0.7 && mostCommonResponse === true) {
-                                    //Todo - This setting shouldn't update to verified until all of the fields have been verified rather than just one of the fields.
-                                    //Confirm that the paper uploaded is a solved paper.
-                                    await updateDoc(paperRef, {
-                                        verified: true,
-                                    });
-                                }
-                            } else if (fieldName === "attempted") {
-                                if (frequencyRatio > 0.7 && mostCommonResponse.length === 1 && mostCommonResponse[0] == "None") {
-                                    //If none is most common then remove the paper. If not do the below update.
-                                    //Todo - This code is the same as above. Abstract this into a common function.
-                                    const ownerRef = doc(db, "users", paperData.owner);
-                                    await updateDoc(ownerRef, {
-                                        points: increment(-2)
-                                    });
-
-                                    // Create a reference to the file to delete
-                                    const desertRef = ref(storage, paperData.filePath);
-
-                                    // Delete the file
-                                    deleteObject(desertRef).then(async() => {
-                                        // File deleted successfully
-                                        await deleteDoc(paperRef)
-                                    }).catch((error) => {
-                                        // Uh-oh, an error occurred!
-                                    });
-
-                                    //Todo - Decrease the paper's owner's authenticity score/rating
-                                }
-                            } else if (frequencyRatio > 0.7 && paperData[field] !== mostCommonResponse) {
-                                await updateDoc(paperRef, {[field]: mostCommonResponse})
-                            }
-                        });
-                    }
-                })
-
-                //Adding to the user's points for completing a survey
-                const currentUserDocRef = doc(db, "users", user.uid);
-                await updateDoc(currentUserDocRef, {
-                    //Todo - Make the numbers for scores a variable that's fetched to have consistency on scores across the platform
-                    points: increment(1)
-                });
-
-                //Creating a score based on how frequently the user agrees with everyone else:
-                //Fetch all surveys the user has done
-                const currentUserReviewsQuery = query(collection(db, "paperReviews"), where("userId", "==", user.uid));
-                const currentUserReviewsQuerySnapshot = await getDocs(currentUserReviewsQuery);
-                const currentUserReviewsDocuments = currentUserReviewsQuerySnapshot.docs;
-
-                const documentCountMaps = {};
-
-                // Iterate over the documents and collect field values
-                currentUserReviewsDocuments.forEach(async(currentUserReviewDocument) => {
-                    const userReview = currentUserReviewDocument.data();
-                    if (!documentCountMaps[userReview.paperId]) {
-                        documentCountMaps[userReview.paperId] = {};
-                    }
-
-                    //Fetch all other surveys of the same paper
-                    const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "==", userReview.paperId));
-                    const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
-                    const paperReviewDocuments = paperReviewsQuerySnapshot.docs;
-                    const numberOfSurveys = paperReviewDocuments.length;
-
-                    if (numberOfSurveys > 5) {
-                        //For each field or for each question
-                        Object.keys(userReview).forEach((fieldName) => {
-                            if (fieldName !== "userId" && fieldName !== "paperId") {
-                                //For each survey that other users have done
-                                paperReviewDocuments.forEach((paperReviewDocument) => {
-                                    const paperReview = paperReviewDocument.data();
-                                    if (paperReview[fieldName] !== userReview[fieldName]) {
-                                        const documentCountMapCellValue = documentCountMaps[userReview.paperId][fieldName] || 0;
-                                        documentCountMaps[userReview.paperId][fieldName] = documentCountMapCellValue + 1 / numberOfSurveys;
-                                    }
-                                })
-                            }
-                        })
-                    }
-                });
-
-                //If there are enough reviews to make a decision using
-                if (Object.keys(documentCountMaps).length > 0) {
-                    //Finding the average of all values in the map
-                    // Step 1: Flatten the map of maps into a single array of values
-                    const allValues = Array.from(documentCountMaps.values()).flatMap((innerMap) => [...innerMap.values()]);
-
-                    // Step 2: Calculate the sum of all values in the array
-                    const sum = allValues.reduce((acc, val) => acc + val, 0);
-
-                    // Step 3: Divide the sum by the total number of values to get the average
-                    const average = sum / allValues.length;
-
-                    const score = 1-average;
-
-                    await updateDoc(currentUserDocRef, {
-                        surveyAgreement: score
-                    });
+            // Check if any input is empty
+                //Prompt user to fill in
+                //If the scheme diagram page input is empty - do nothing
+                //If more than one input is empty - reduce user rating by 0.1
+                //If all inputs are empty - reduce user rating by 0.5
+            const count = inputs.reduce((accumulator, currentValue) => {
+                if (currentValue === null || currentValue === "" || currentValue === undefined || (Array.isArray(currentValue) && currentValue.length === 0)) {
+                return accumulator + 1;
                 }
+                return accumulator;
+            }, 0);
 
-            }).then(() => {
-                setAlertContent('Survey submitted');
-                setAlertSeverity('success')
+            //All fields required fields have not been filled in
+            if (count > 0) {
+                //Show error
+                setAlertContent('Please fill in all relevant fields');
+                setAlertSeverity('error')
                 setAlert(true);
                 setAlertCollapse(true);
                 setTimeout(() => {
                     setAlertCollapse(false);
                 }, 3000);
-                //Reset the form fields
-                router.push("/surveys")
-            })
+
+                const currentUserDocRef = doc(db, "users", user.uid);
+
+                if (count === inputs.length) {
+                    await updateDoc(currentUserDocRef, {
+                        points: increment(-0.5),
+                        auditTrail: arrayUnion("The answer you have provided, while carrying out a survey, is entirely incomplete. You have been docked 0.5 points."),
+                        //Todo - Provide date in description
+                    });
+                } else if (count > 0) {
+                    await updateDoc(currentUserDocRef, {
+                        points: increment(-0.1),
+                        auditTrail: arrayUnion("The answer you have provided, while carrying out a survey, contains incomplete information. You have been docked 0.1 points."),
+                        //Todo - Provide date in description
+                    });
+                }
+
+                return null
+            }
         }
+
+        //Upload information to firebase
+        let reviewInformation = {
+            userId: user.uid,
+            paperId: paper.id,
+            isSolvedPaper: solvedPaper
+        }
+
+        if (solvedPaper) {
+            const month = date.substring(5, 7)
+            const year = date.substring(0, 4)
+
+            reviewInformation = {...reviewInformation,
+                year: year,
+                month: month,
+                questionNumber: questionNumber,
+                attempted: attempted,
+            }
+        }
+
+        if (schemeDiagram !== undefined) {
+            reviewInformation = {...reviewInformation,
+                diagram: schemeDiagram,
+            }
+        }
+
+        addDoc(collection(db, "paperReviews"), reviewInformation).then(async ()=> {
+            const paperRef = doc(db, "solvedPapers", paper.id);
+
+            await updateDoc(paperRef, {
+                //Todo - Remove this number of reviews data field from the solvedPapers collection and move to stop duplicating data.
+                reviews: increment(1)
+            }).then(async ()=> {
+                const paperSnap = await getDoc(paperRef);
+                const paperData = paperSnap.data();
+
+                if (paperData.reviews > 5) {
+                    const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "==", paper.id));
+                    const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
+                    const paperReviews = paperReviewsQuerySnapshot.docs;
+
+                    const reviewValueCountMap = {};
+                    const numberOfReviews = paperReviews.length;
+
+                    // Iterate over the documents and collect field values
+                    paperReviews.forEach((paperReviewDoc) => {
+                        const paperReview = paperReviewDoc.data();
+                        Object.keys(paperReview).forEach((fieldName) => {
+                            if (!reviewValueCountMap[fieldName]) {
+                                reviewValueCountMap[fieldName] = {};
+                            }
+                        
+                            const paperReviewFieldValue = paperReview[fieldName];
+                            if (paperReviewFieldValue) {
+                                if (reviewValueCountMap[fieldName][paperReviewFieldValue]) {
+                                    reviewValueCountMap[fieldName][paperReviewFieldValue]++;
+                                } else {
+                                    reviewValueCountMap[fieldName][paperReviewFieldValue] = 1;
+                                }
+                            }
+                        });
+                    });
+
+                    let agreementReached = true
+                    if (reviewValueCountMap == {}) {
+                        agreementReached = false
+                    }
+                    
+                    Object.keys(reviewValueCountMap).forEach(async(fieldName) => {
+                        let mostCommonResponse = null;
+                        let maxCount = 0;
+                        const countMap = reviewValueCountMap[fieldName];
+
+                        if (countMap == {}) {
+                            agreementReached = false
+                        }
+                    
+                        Object.keys(countMap).forEach((response) => {
+                            const count = countMap[response];
+                            if (count > maxCount) {
+                                mostCommonResponse = response;
+                                maxCount = count;
+                            }
+                        });
+                        
+                        const frequencyRatio = maxCount / numberOfReviews;
+
+                        if (frequencyRatio < 0.7) {
+                            //Agreement not yet reached on the field value
+                            agreementReached = false
+                        }
+                        
+                        if (fieldName === "isSolvedPaper") {
+                            if (frequencyRatio > 0.7 && mostCommonResponse === false) {
+                                //Decrease the paper's owner's rating by 2. Remove the file. Remove the solvedPaper document.
+                                const ownerRef = doc(db, "users", paperData.owner);
+                                await updateDoc(ownerRef, {
+                                    //Todo - Make the numbers for scores a variable that's fetched to have consistency on scores across the platform
+                                    points: increment(-4),
+                                    auditTrail: arrayUnion("The paper you had uploaded with an answer for Question " + paperData.questionNumber + " of " + getMonthName(paperData.month) + " " + paperData.year + " was found to be illegitimate and removed. You have been docked 4 points."),
+                                    authenticityScore: increment(-0.4)
+                                    //Todo - Is there a better way to score authenticity. Also create method to increase authenticity score as well.
+                                });
+
+                                // Create a reference to the file to delete
+                                const desertRef = ref(storage, paperData.filePath);
+
+                                // Delete the file
+                                deleteObject(desertRef).then(async() => {
+                                    // File deleted successfully
+                                    await deleteDoc(paperRef)
+                                }).catch((error) => {
+                                    // Uh-oh, an error occurred!
+                                });
+                            }
+                        } else if (fieldName === "attempted") {
+                            if (frequencyRatio > 0.7 && mostCommonResponse.length === 1 && mostCommonResponse[0] == "None") {
+                                //If none is most common then remove the paper. If not do the below update.
+                                //Todo - This code is the same as above. Abstract this into a common function.
+                                const ownerRef = doc(db, "users", paperData.owner);
+                                await updateDoc(ownerRef, {
+                                    points: increment(-4),
+                                    auditTrail: arrayUnion("The paper you had uploaded with an answer for Question " + paperData.questionNumber + " of " + getMonthName(paperData.month) + " " + paperData.year + " was found to be illegitimate and removed. You have been docked 4 points."),
+                                    authenticityScore: increment(-0.4)
+                                });
+
+                                // Create a reference to the file to delete
+                                const desertRef = ref(storage, paperData.filePath);
+
+                                // Delete the file
+                                deleteObject(desertRef).then(async() => {
+                                    // File deleted successfully
+                                    await deleteDoc(paperRef)
+                                }).catch((error) => {
+                                    // Uh-oh, an error occurred!
+                                });
+                            }
+                        } else if (frequencyRatio > 0.7 && paperData[fieldName] !== mostCommonResponse) {
+                            await updateDoc(paperRef, {[fieldName]: mostCommonResponse})
+                        }
+                    });
+
+                    //Check if the agreementReached value is still true then an agreement has been reached for all fields
+                    if (agreementReached == true) {
+                        await updateDoc(paperRef, {
+                            verified: true,
+                        });
+                    }
+
+                }
+            })
+
+            //Adding to the user's points for completing a survey
+            const currentUserDocRef = doc(db, "users", user.uid);
+            await updateDoc(currentUserDocRef, {
+                //Todo - Make the numbers for scores a variable that's fetched to have consistency on scores across the platform
+                points: increment(1),
+                auditTrail: arrayUnion("You completed a survey. You've received an additional point."),
+            });
+
+            //Creating a score based on how frequently the user agrees with everyone else:
+            //Fetch all surveys the user has done
+            const currentUserReviewsQuery = query(collection(db, "paperReviews"), where("userId", "==", user.uid));
+            const currentUserReviewsQuerySnapshot = await getDocs(currentUserReviewsQuery);
+            const currentUserReviewsDocuments = currentUserReviewsQuerySnapshot.docs;
+        
+            // Fetch all reviews for the papers the user has reviewed
+            const paperIds = currentUserReviewsDocuments.map(doc => doc.data().paperId);
+            const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "in", paperIds));
+            const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
+            const paperReviewDocuments = paperReviewsQuerySnapshot.docs;
+        
+            let documentCountMaps = {};
+        
+            // Create a map of paperId to reviews
+            let paperReviewsMap = {};
+            paperReviewDocuments.forEach(doc => {
+                const data = doc.data();
+                if (!paperReviewsMap[data.paperId]) {
+                    paperReviewsMap[data.paperId] = [];
+                }
+                paperReviewsMap[data.paperId].push(data);
+            });
+        
+            // Process the reviews
+            currentUserReviewsDocuments.forEach(currentUserReviewDocument => {
+                const userReview = currentUserReviewDocument.data();
+                const paperId = userReview.paperId;
+                const otherReviews = paperReviewsMap[paperId];
+                const numberOfSurveys = otherReviews.length;
+        
+                if (numberOfSurveys > 5) {
+                    if (!documentCountMaps[paperId]) {
+                        documentCountMaps[paperId] = {};
+                    }
+        
+                    Object.keys(userReview).forEach(fieldName => {
+                        if (fieldName !== "userId" && fieldName !== "paperId") {
+                            otherReviews.forEach((otherReview, index) => {
+                                if (otherReview[fieldName] !== userReview[fieldName]) {
+                                    const documentCountMapCellValue = documentCountMaps[paperId][fieldName] ?? 0;
+                                    documentCountMaps[paperId][fieldName] = documentCountMapCellValue + 1 / numberOfSurveys;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        
+            // If there are enough reviews to make a decision using
+            if (Object.keys(documentCountMaps).length > 0) {
+                // Finding the average of all values in the map
+                // Step 1: Flatten the map of maps into a single array of values
+                const allValues = Object.values(documentCountMaps).flatMap(innerMap => Object.values(innerMap));
+                
+                if (allValues.length > 0) {
+                    // Step 2: Calculate the sum of all values in the array
+                    const sum = allValues.reduce((acc, val) => acc + val, 0);
+            
+                    // Step 3: Divide the sum by the total number of values to get the average
+                    const average = sum / allValues.length;
+            
+                    const score = 1 - average;
+            
+                    await updateDoc(currentUserDocRef, {
+                        surveyAgreement: score
+                    });
+                }
+            }
+                    
+
+
+        }).then(() => {
+            setAlertContent('Survey submitted');
+            setAlertSeverity('success')
+            setAlert(true);
+            setAlertCollapse(true);
+            setTimeout(() => {
+                setAlertCollapse(false);
+            }, 3000);
+            //Reset the form fields
+            router.push("/surveys")
+        })
       }
     
     if (!user) {
@@ -462,7 +526,7 @@ export default function Surveys() {
                 </div>
                 <div className="flex flex-row overflow-x-scroll">
                     <div className={"background-color-primary flex flex-col overflow-y-auto pdf-container w-screen lg:w-1/2"}>
-                        <PaperComponent paper={paper} user={userData} />
+                        {/* <PaperComponent paper={paper} user={userData} /> */}
                     </div>
                     <div className={"flex flex-col w-screen lg:w-1/2 overflow-y-auto"} ref={formRef}>
                         <div className="align-items-center column pd-a-5p">

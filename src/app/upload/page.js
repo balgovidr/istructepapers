@@ -193,7 +193,8 @@ export default function UploadPaper() {
                         
                         updateDoc(doc(db, "users", user.uid), {
                             monthsAllowed: arrayUnion(month + '-' + year),
-                            points: increment(1),
+                            //Todo - Newer papers have better score. Newest paper has the most score.
+                            points: increment(3),
                         })
 
                         setAlertContent('Upload completed.');

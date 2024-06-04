@@ -61,6 +61,7 @@ export default function SignUp() {
                     papersViewable: 3,
                     papersAllowed: [],
                     monthsAllowed: [],
+                    auditTrail: [],
                     authenticityScore: 0,
                     points: 10,
                     emailConsent: emailConsent,
