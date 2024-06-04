@@ -21,10 +21,8 @@ async function getUserData(user) {
         userData = userDocSnap.data()
       } else {
         // docSnap.data() will be undefined in this case
-        console.log("No such user!");
       }
     } catch (error) {
-      console.error('1Error fetching user data:', error);
     }
   }
   
@@ -46,10 +44,8 @@ async function getPaper(context) {
         paper.id = docSnap.id;
     } else {
       // docSnap.data() will be undefined in this case
-      console.log("No such document!");
     }
   } catch (error) {
-    console.error('Error fetching data:', error);
   }
 
   return paper
@@ -89,12 +85,10 @@ export default async function Viewer(context) {
       userData = await getUserData(user)
     } else {
       if (response.error == "auth/session-cookie-expired") {
-        console.log("stuff1")
       }
     }
   } catch (error) {
     //Likely no user found
-    console.log(error)
   }
 
   function limitReached() {

@@ -26,10 +26,8 @@ const RatePaper = ({ id }) => {
           setRatingMap(data.rating);
           setOwner(data.owner);
         } else {
-          console.log("Paper document does not exist");
         }
       } catch (error) {
-        console.error("Error fetching paper data:", error);
       }
     };
 

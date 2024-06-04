@@ -37,7 +37,6 @@ export default function Navbar() {
               })
         }).catch((error) => {
             // An error happened.
-            console.log(error.message)
         });
         setShowMenu(false)
         router.push("/")

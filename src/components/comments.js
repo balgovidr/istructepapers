@@ -67,7 +67,6 @@ async function getComments(paperId) {
         const commentComponent = generateCommentComponent(userDoc, value);
         commentsArray.push(commentComponent);
       } else {
-        console.log("User not found for comment:", value);
       }
     }
 

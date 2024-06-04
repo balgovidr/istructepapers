@@ -28,10 +28,8 @@ const UserProfile = ({ uid }) => {
           setInitials(firstNameInitial + lastNameInitial);
         }
       } else {
-        console.log("User document does not exist");
       }
     } catch (error) {
-      console.error("4Error fetching user data:", error);
     }
   };
 

@@ -128,7 +128,6 @@ export default function UploadPaper() {
         const q = query(uploadedFilesRef, where("fileHash", "==", fileHash));
 
         const querySnapshot = await getDocs(q);
-        console.log(querySnapshot.size)
         //File has been found. Don't let the user upload it again.
         if (querySnapshot.size > 0) {
             error = true

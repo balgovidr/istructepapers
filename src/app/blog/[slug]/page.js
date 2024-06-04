@@ -15,10 +15,8 @@ async function fetchPost(slug) {
           content = docSnap.data();
       } else {
         // docSnap.data() will be undefined in this case
-        console.log("No such document!");
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
     }
   
     return content
