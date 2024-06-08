@@ -7,6 +7,8 @@ import PaperComponent from '@/components/paper';
 import { InitializeFirestore } from "@/firebase/firebaseAdmin";
 import { cookies } from "next/headers";
 
+var displayedPages = 0
+
 async function getUserData(user) {
   const db = InitializeFirestore()
   let userData = null
@@ -51,6 +53,32 @@ async function getPaper(context) {
   return paper
 }
 
+async function getDisplayedPages(user, paper) {
+  let displayedPages = 0
+
+  if (user) {
+    // If the user is logged in, check if they have prior access to this specific paper or this months paper
+    if (user.papersAllowed.includes(paper.id) || user.monthsAllowed.includes(paper.month + '-' + paper.year)) {
+      displayedPages = "All";
+    } else if (user.points >= 1) {
+        // If they don't have access to this paper, then deduct from their credits and show the paper
+        await updateDoc(doc(db, "users", user.uid), {
+            papersAllowed: [...user.papersAllowed, paper.id],
+            points: user.points-3
+        })
+        //Todo - Update costs of viewing a paper to be a variable that's fetched
+        
+        displayedPages = "All";
+    } else {
+      displayedPages = 1
+    }
+} else {
+  displayedPages = 2
+}
+
+return displayedPages
+}
+
 function getMonthName(monthNumber) {
   const date = new Date();
   date.setMonth(monthNumber - 1);
@@ -83,6 +111,7 @@ export default async function Viewer(context) {
     if (response.isLogged) {
       user = response.user
       userData = await getUserData(user)
+      displayedPages = await getDisplayedPages(userData, paper)
     } else {
       if (response.error == "auth/session-cookie-expired") {
       }
@@ -93,7 +122,7 @@ export default async function Viewer(context) {
 
   function limitReached() {
     if (user) {
-      if (user.papersViewable < 1 && !userData.papersAllowed.includes(paper.id) && !userData.monthsAllowed.includes(paper.month + '-' + paper.year)) {
+      if (user.points < 3 && !userData.papersAllowed.includes(paper.id) && !userData.monthsAllowed.includes(paper.month + '-' + paper.year)) {
         // User is logged in but does not have enough credits to view the paper. Ask to upload or answer questions
         return (
           <div className="background-color-light pd-a-10p full-width">
@@ -124,46 +153,8 @@ export default async function Viewer(context) {
   
   return (
     <div className="column viewer">
-      {/* <Head> */}
-          {/* Schema.org markup for Solved Paper */}
-          {/* <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "http://schema.org",
-              "@type": "WebPage",
-              "name": paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " IStructE exam",
-              "description": "View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber,
-              "url": "https://structuralpapers.com/viewer?id=" + id,
-              "mainEntity": {
-                "@type": "CreativeWork",
-                "name": paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " IStructE exam",
-                "description": "View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber,
-                "url": "https://structuralpapers.com/viewer?id=" + id,
-                // "author": {
-                //   "@type": "Person",
-                //   "name": "John Doe"
-                // },
-                "datePublished": paper.uploadDate,
-                // "image": "https://yourwebsite.com/images/solution-thumbnail.jpg",
-                "about": {
-                  "@type": "Question",
-                  "name": "IStructE Exam Paper " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber
-                },
-                // "interactionStatistic": {
-                //   "@type": "InteractionCounter",
-                //   "interactionType": "http://schema.org/Comment",
-                //   "userInteractionCount": 20
-                // },
-                // "aggregateRating": {
-                //   "@type": "AggregateRating",
-                //   "ratingValue": "4.5",
-                //   "reviewCount": paper.reviews
-                // }
-              }
-            })}
-          </script> */}
-      {/* </Head> */}
       <div className="pdf-container pdf-container-viewer align-items-center column">
-          <PaperComponent paper={paper} user={userData} />
+          <PaperComponent paper={paper} pageLimit={displayedPages} />
           {limitReached()}
       </div>
       <div className="tail-container mt-2.5 mb-5">

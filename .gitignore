@@ -7,10 +7,13 @@
 
 # testing
 /coverage
+istructepapers-test-fd48804d7a7f.json
+istructepapers-867f4f0c7afb.json
 
 # production
 /build
 /.next
+/.firebase
 
 # misc
 .DS_Store

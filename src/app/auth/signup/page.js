@@ -58,7 +58,6 @@ export default function SignUp() {
                     firstName: firstName,
                     lastName: lastName,
                     uid: user.uid,
-                    papersViewable: 3,
                     papersAllowed: [],
                     monthsAllowed: [],
                     auditTrail: [],

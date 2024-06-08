@@ -19,6 +19,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
+console.log(process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN)
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);

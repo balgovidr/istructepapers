@@ -484,7 +484,7 @@ export default function Surveys() {
                 setAlertCollapse(false);
             }, 3000);
             //Reset the form fields
-            router.push("/surveys")
+            router.push("./surveys")
         })
       }
     
@@ -526,7 +526,7 @@ export default function Surveys() {
                 </div>
                 <div className="flex flex-row overflow-x-scroll">
                     <div className={"background-color-primary flex flex-col overflow-y-auto pdf-container w-screen lg:w-1/2"}>
-                        <PaperComponent paper={paper} user={userData} />
+                        <PaperComponent paper={paper} pageLimit={"All"} />
                     </div>
                     <div className={"flex flex-col w-screen lg:w-1/2 overflow-y-auto"} ref={formRef}>
                         <div className="align-items-center column pd-a-5p">

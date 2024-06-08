@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import logo from "@/app/assets/Logo.svg";
 import { auth } from '@/firebase/firebaseClient';
 import Alert from '@mui/material/Alert';
@@ -11,9 +11,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'
 import Head from 'next/head';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { TailSpin } from 'react-loading-icons';
-import {  onAuthStateChanged  } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 
 export default function Login() {
@@ -28,15 +27,15 @@ export default function Login() {
     const [alertSeverity, setAlertSeverity] = useState('error');
     const [alertCollapse, setAlertCollapse] = React.useState(false);
     const [loading, setLoading] = useState(false);
-
-    const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
  
     const onSubmit = async (e) => {
       e.preventDefault()
       setLoading(true)
-        
-      signInWithEmailAndPassword(email, password)
+      console.log(0)
+      
+      signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
+          console.log(0.5)
             // Signed in
             const user = userCredential.user;
 
@@ -47,10 +46,14 @@ export default function Login() {
                   Authorization: `Bearer ${await user.getIdToken()}`,
                 },
               }).then((response) => {
+                console.log(1)
                 if (response.status === 200) {
+                  console.log(2)
                   if (previousLink) {
+                    console.log(3)
                     router.push(previousLink)
                   } else {
+                    console.log(4)
                     router.push("/")
                     //Todo - Fix the router. Doesn't work on any of the pages
                   }
@@ -59,7 +62,19 @@ export default function Login() {
         })
         .catch((error) => {
             const errorCode = error.code;
-            const errorMessage = error.message;
+            let errorMessage = error.message;
+            console.log(errorCode)
+            console.log(errorMessage)
+
+            if (errorCode === "auth/invalid-email") {
+              errorMessage = "Could not find a user with this email"
+            } else if (errorCode === "auth/invalid-email") {
+              errorMessage = "That doesn't look like a proper email"
+            } else if (errorCode === "auth/wrong-password" || errorCode === "auth/invalid-login-credentials") {
+              errorMessage = "That's not the right email and password combination"
+            } else if (errorCode === "auth/missing-password") {
+              errorMessage = "We need a password to go ahead"
+            }
 
             setAlertContent(errorMessage);
             setAlertSeverity('error')
@@ -73,25 +88,6 @@ export default function Login() {
         setLoading(false)
          
     }
-
-    /** Listen for auth state changes */
-    useEffect(() => {
-        onAuthStateChanged(auth, async (result) => {
-            try {
-              // Sending info to the server
-              await fetch("/api/login", {
-                  method: "POST",
-                  headers: {
-                  Authorization: `Bearer ${await result.getIdToken()}`,
-                  },
-              });
-              router.push("/")
-            } catch(error) {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-            }
-        });
-    });
 
   return (
     <div className="row full-height">
