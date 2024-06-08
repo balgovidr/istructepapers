@@ -18,11 +18,9 @@ const options = {
 export function initializeFirebase() {
   const firebaseAdminApps = getApps();
   if (firebaseAdminApps.length > 0) {
-    console.log('App already initialized')
     return firebaseAdminApps[0];
   }
   
-  console.log('App initializing')
   return initializeApp(options);
 }
 
@@ -30,6 +28,5 @@ export function initializeFirestore() {
   const app = initializeFirebase();
 
   const firestore = getFirestore(app);
-  console.log('Firestore initialized');
   return firestore;
 }
