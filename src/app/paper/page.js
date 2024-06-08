@@ -4,13 +4,13 @@ import UserProfile from "@/components/userProfile";
 import RatePaper from "@/components/ratePaper";
 import Comments from "@/components/comments";
 import PaperComponent from '@/components/paper';
-import { InitializeFirestore } from "@/firebase/firebaseAdmin";
+import { initializeFirestore } from "@/firebase/firebaseAdmin";
 import { cookies } from "next/headers";
 
 var displayedPages = 0
 
 async function getUserData(user) {
-  const db = InitializeFirestore()
+  const db = initializeFirestore()
   let userData = null
 
   //Fetch user information
@@ -32,7 +32,7 @@ async function getUserData(user) {
 }
 
 async function getPaper(context) {
-  const db = InitializeFirestore()
+  const db = initializeFirestore()
   const id = context.searchParams.id
   let paper = null
 
@@ -104,7 +104,7 @@ export default async function Viewer(context) {
 
   try {
     const session = cookies().get("session");
-    const encodedResponse = await fetch(process.env.NEXT_PUBLIC_DB_HOST + "/api/login", {method: "GET",
+    const encodedResponse = await fetch(process.env.NEXT_PUBLIC_HOST + "/api/login", {method: "GET",
       headers: { Cookie: `session=${session?.value}` }, });
     const response = await encodedResponse.json();
 

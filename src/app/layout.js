@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_DB_HOST,
+    canonical: process.env.NEXT_PUBLIC_HOST,
   },
 }
 
