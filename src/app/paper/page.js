@@ -8,9 +8,9 @@ import { initializeFirestore } from "@/firebase/firebaseAdmin";
 import { cookies } from "next/headers";
 
 var displayedPages = 0
+const db = initializeFirestore()
 
 async function getUserData(user) {
-  const db = initializeFirestore()
   let userData = null
 
   //Fetch user information
@@ -32,7 +32,6 @@ async function getUserData(user) {
 }
 
 async function getPaper(context) {
-  const db = initializeFirestore()
   const id = context.searchParams.id
   let paper = null
 
@@ -111,7 +110,6 @@ export default async function Viewer(context) {
     if (response.isLogged) {
       user = response.user
       userData = await getUserData(user)
-      displayedPages = await getDisplayedPages(userData, paper)
     } else {
       if (response.error == "auth/session-cookie-expired") {
       }
@@ -119,6 +117,8 @@ export default async function Viewer(context) {
   } catch (error) {
     //Likely no user found
   }
+
+  const displayedPages = await getDisplayedPages(userData, paper)
 
   function limitReached() {
     if (user) {
