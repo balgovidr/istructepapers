@@ -16,6 +16,7 @@ import Image from "next/image";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import PaperComponent from "@/components/paper";
+import { fetchSettings } from "@/functions/settings";
 
 export default function Surveys() {
     const [date, setDate] = useState(undefined);
@@ -31,6 +32,7 @@ export default function Surveys() {
     const [solvedPaper, setSolvedPaper] = useState(null);
     const [schemeDiagram, setSchemeDiagram] = useState(undefined);
     const [page, setPage] = useState(1);
+    const [pointSettings, setPointSettings] = useState(null);
     const formRef = useRef(null)
 
     const router = useRouter();
@@ -198,6 +200,9 @@ export default function Surveys() {
             return null
         }
 
+        const pointSettings = await fetchSettings("points");
+        const timestamp = Date.now();
+
         if (solvedPaper === true) {
             const inputs = [date, questionNumber, attempted]
 
@@ -228,14 +233,14 @@ export default function Surveys() {
 
                 if (count === inputs.length) {
                     await updateDoc(currentUserDocRef, {
-                        points: increment(-0.5),
-                        auditTrail: arrayUnion("The answer you have provided, while carrying out a survey, is entirely incomplete. You have been docked 0.5 points."),
+                        points: increment(-1 * pointSettings.surveyIncomplete),
+                        auditTrail: arrayUnion({timestamp: timestamp, reason: "The answer you have provided, while carrying out a survey, is entirely incomplete. You have been docked " + pointSettings.surveyIncomplete + " points."}),
                         //Todo - Provide date in description
                     });
                 } else if (count > 0) {
                     await updateDoc(currentUserDocRef, {
-                        points: increment(-0.1),
-                        auditTrail: arrayUnion("The answer you have provided, while carrying out a survey, contains incomplete information. You have been docked 0.1 points."),
+                        points: increment(-1 * pointSettings.surveyPartIncomplete),
+                        auditTrail: arrayUnion({timestamp: timestamp, reason: "The answer you have provided, while carrying out a survey, contains incomplete information. You have been docked " + pointSettings.surveyPartIncomplete + " points."}),
                         //Todo - Provide date in description
                     });
                 }
@@ -340,9 +345,8 @@ export default function Surveys() {
                                 //Decrease the paper's owner's rating by 2. Remove the file. Remove the solvedPaper document.
                                 const ownerRef = doc(db, "users", paperData.owner);
                                 await updateDoc(ownerRef, {
-                                    //Todo - Make the numbers for scores a variable that's fetched to have consistency on scores across the platform
-                                    points: increment(-4),
-                                    auditTrail: arrayUnion("The paper you had uploaded with an answer for Question " + paperData.questionNumber + " of " + getMonthName(paperData.month) + " " + paperData.year + " was found to be illegitimate and removed. You have been docked 4 points."),
+                                    points: increment(-1 * pointSettings.paperIllegitimate),
+                                    auditTrail: arrayUnion({timestamp: timestamp, reason: "The paper you had uploaded with an answer for Question " + paperData.questionNumber + " of " + getMonthName(paperData.month) + " " + paperData.year + " was found to be illegitimate and removed. You have been docked " + pointSettings.paperIllegitimate + " points."}),
                                     authenticityScore: increment(-0.4)
                                     //Todo - Is there a better way to score authenticity. Also create method to increase authenticity score as well.
                                 });
@@ -364,8 +368,8 @@ export default function Surveys() {
                                 //Todo - This code is the same as above. Abstract this into a common function.
                                 const ownerRef = doc(db, "users", paperData.owner);
                                 await updateDoc(ownerRef, {
-                                    points: increment(-4),
-                                    auditTrail: arrayUnion("The paper you had uploaded with an answer for Question " + paperData.questionNumber + " of " + getMonthName(paperData.month) + " " + paperData.year + " was found to be illegitimate and removed. You have been docked 4 points."),
+                                    points: increment(-1 * pointSettings.paperIllegitimate),
+                                    auditTrail: arrayUnion({timestamp: timestamp, reason: "The paper you had uploaded with an answer for Question " + paperData.questionNumber + " of " + getMonthName(paperData.month) + " " + paperData.year + " was found to be illegitimate and removed. You have been docked " + pointSettings.paperIllegitimate + " points."}),
                                     authenticityScore: increment(-0.4)
                                 });
 
@@ -398,9 +402,8 @@ export default function Surveys() {
             //Adding to the user's points for completing a survey
             const currentUserDocRef = doc(db, "users", user.uid);
             await updateDoc(currentUserDocRef, {
-                //Todo - Make the numbers for scores a variable that's fetched to have consistency on scores across the platform
-                points: increment(1),
-                auditTrail: arrayUnion("You completed a survey. You've received an additional point."),
+                points: increment(pointSettings.paperReview),
+                auditTrail: arrayUnion({timestamp: timestamp, reason: "You completed a survey. You've received " + pointSettings.paperReview + " additional point."}),
             });
 
             //Creating a score based on how frequently the user agrees with everyone else:

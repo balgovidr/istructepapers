@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import RenderProfilePicture from '@/components/profilePicture';
 import { revalidateTag } from "next/cache";
 import { initializeFirestore } from "@/firebase/firebaseAdmin";
-import { CommentSubmitButton } from "./commentSubmitButton";
+import { CommentSubmitButton } from "./buttons";
 // import CommentForm from "./commentForm";
 
 async function getComments(paperId) {

@@ -1,3 +1,4 @@
+import { ButtonsWithPoints } from "@/components/buttons";
 import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
 import { collection, query, where, getDocs, get } from "firebase/firestore";
 
@@ -58,10 +59,7 @@ export default async function Filter(context) {
 
     return (
         <div className="full-height column content text-center">
-            <div className="flex flex-row flex-wrap row mg-t-50 justify-center button-container">
-                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/upload">Upload a paper</a>
-                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/surveys">Answer questions</a>
-            </div>
+            <ButtonsWithPoints />
             <hr className="solid"/>
             <h1 className="text-2xl mb-5">Solved <span className="text-gradient d-inline">IStructE</span> papers - {getMonthName(data.month) + " " + data.year}</h1>
             <div className="font-size-20">Pick a solved paper to view.</div>

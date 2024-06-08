@@ -1,11 +1,18 @@
+import { CircularProgress } from "@mui/material";
 import Image from "next/image";
 
-export default function RenderProfilePicture(photoUrl, firstName, lastName) {
-    if (photoUrl) {
-      return <Image src={photoUrl} alt="Profile" />;
-    } else {
-      const firstNameInitial = firstName.charAt(0).toUpperCase();
-      const lastNameInitial = lastName.charAt(0).toUpperCase();
-      return <div className="initials-icon">{firstNameInitial + lastNameInitial}</div>;
-    }
-  };
+export function RenderProfilePicture(userData) {
+  if (userData) {
+      if (userData.photoUrl) {
+          return <Image src={userData.photoUrl} alt="Profile" />
+      } else {
+          const firstNameInitial = data.firstName.charAt(0).toUpperCase();
+          const lastNameInitial = data.lastName.charAt(0).toUpperCase();
+          const initials = firstNameInitial + lastNameInitial;
+
+          return <div className="initials-icon">{initials}</div>;
+      }
+  } else {
+      return <CircularProgress />
+  }
+}

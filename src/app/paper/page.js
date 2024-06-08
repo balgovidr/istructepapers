@@ -1,4 +1,4 @@
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, increment, updateDoc } from "firebase/firestore";
 import { pdfjs } from "react-pdf";
 import UserProfile from "@/components/userProfile";
 import RatePaper from "@/components/ratePaper";
@@ -6,9 +6,12 @@ import Comments from "@/components/comments";
 import PaperComponent from '@/components/paper';
 import { initializeFirestore } from "@/firebase/firebaseAdmin";
 import { cookies } from "next/headers";
+import { ButtonsWithPoints } from "@/components/buttons";
+import { fetchSettings } from "@/functions/settings";
 
 var displayedPages = 0
 const db = initializeFirestore()
+const pointSettings = await fetchSettings("points");
 
 async function getUserData(user) {
   let userData = null
@@ -59,11 +62,11 @@ async function getDisplayedPages(user, paper) {
     // If the user is logged in, check if they have prior access to this specific paper or this months paper
     if (user.papersAllowed.includes(paper.id) || user.monthsAllowed.includes(paper.month + '-' + paper.year)) {
       displayedPages = "All";
-    } else if (user.points >= 1) {
+    } else if (user.points >= pointSettings.paperView) {
         // If they don't have access to this paper, then deduct from their credits and show the paper
         await updateDoc(doc(db, "users", user.uid), {
             papersAllowed: [...user.papersAllowed, paper.id],
-            points: user.points-3
+            points: increment(-1 * pointSettings.paperView)
         })
         //Todo - Update costs of viewing a paper to be a variable that's fetched
         
@@ -122,17 +125,14 @@ export default async function Viewer(context) {
 
   function limitReached() {
     if (user) {
-      if (user.points < 3 && !userData.papersAllowed.includes(paper.id) && !userData.monthsAllowed.includes(paper.month + '-' + paper.year)) {
+      if (user.points < pointSettings.paperView && !userData.papersAllowed.includes(paper.id) && !userData.monthsAllowed.includes(paper.month + '-' + paper.year)) {
         // User is logged in but does not have enough credits to view the paper. Ask to upload or answer questions
         return (
           <div className="background-color-light pd-a-10p full-width">
-            <h2 className="text-gradient">You&#39;ve already used up your allowance.</h2>
+            <span className="text-gradient">You&#39;ve already used up your allowance.</span>
             <br />
-            <h2>View the rest of the solved papers of {paper.year + ' ' + getMonthName(paper.month)} by uploading a solved paper of your own or view this paper by answering a few questions.</h2>
-            <div className="row mg-t-50 justify-content-center button-container">
-              <a className="btn btn-primary-outline" href="/upload">Upload a paper</a>
-              <a className="btn btn-primary-outline mg-l-50" href="/surveys">Answer questions</a>
-            </div>
+            <span>View the rest of the solved papers of {paper.year + ' ' + getMonthName(paper.month)} by uploading a solved paper of your own or view this paper by answering a few questions.</span>
+            <ButtonsWithPoints />
           </div>
         )
       }

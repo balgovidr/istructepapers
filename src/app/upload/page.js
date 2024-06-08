@@ -140,6 +140,9 @@ export default function UploadPaper() {
             }, 3000);
         }
 
+        const pointSettings = await fetchSettings("points");
+        const timestamp = Date.now();
+
         if (!error) {
             const month = date.substring(5, 7)
             const year = date.substring(0, 4)
@@ -191,9 +194,9 @@ export default function UploadPaper() {
                         addDoc(collection(db, "solvedPapers"), docContents)
                         
                         updateDoc(doc(db, "users", user.uid), {
-                            monthsAllowed: arrayUnion(month + '-' + year),
                             //Todo - Newer papers have better score. Newest paper has the most score.
-                            points: increment(3),
+                            points: increment(pointSettings.paperUpload),
+                            auditTrail: arrayUnion({timestamp: timestamp, reason: "You've uploaded a paper'. You've received " + pointSettings.paperUpload + " additional points."}),
                         })
 
                         setAlertContent('Upload completed.');
