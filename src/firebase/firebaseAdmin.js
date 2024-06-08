@@ -1,33 +1,32 @@
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-// const { getFirestore } = require('firebase-admin/firestore');
+import admin, { getApps, initializeApp, cert } from "firebase-admin/app";
+const { getFirestore } = require("firebase-admin/firestore");
 
-if (process.env.NEXT_PUBLIC_ENVIRONMENT === "production") {
-  var serviceAccount = require("./istructepapers-firebase-adminsdk-gusds-5bb4f96be2.json");
+const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
+
+let serviceAccount;
+
+if (environment === 'production') {
+  serviceAccount = require('./istructepapers-firebase-adminsdk-gusds-0a67e7b61d.json');
 } else {
-  var serviceAccount = require("./istructepapers-test-firebase-adminsdk-s4b6h-c172725ac2.json");
+  serviceAccount = require('./istructepapers-test-firebase-adminsdk-s4b6h-c172725ac2.json');
 }
 
-console.log(process.env.NEXT_PUBLIC_ENVIRONMENT)
+const options = {
+  credential: cert(serviceAccount),
+};
 
-export function InitializeFirebase() {
-  if (getApps().length <= 0) {
-    try {
-      initializeApp({
-        credential: cert(serviceAccount),
-        databaseURL: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      });
-    } catch (error) {
-      console.log(error.message)
-    }
+export function initializeFirebase() {
+  const firebaseAdminApps = getApps();
+  if (firebaseAdminApps.length > 0) {
+    return firebaseAdminApps[0];
   }
+  
+  return initializeApp(options);
 }
 
-export function InitializeFirestore() {
-  try {
-    InitializeFirebase()
-    return getFirestore();
-  } catch (error) {
-  }
-}
+export function initializeFirestore() {
+  const app = initializeFirebase();
 
+  const firestore = getFirestore(app);
+  return firestore;
+}

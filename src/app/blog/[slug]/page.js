@@ -1,7 +1,7 @@
-import { InitializeFirestore } from "@/firebase/firebaseAdmin";
+import { initializeFirestore } from "@/firebase/firebaseAdmin";
 import { FieldValue } from 'firebase-admin/firestore';
 
-const db = InitializeFirestore()
+const db = initializeFirestore()
 
 async function fetchPost(slug) {
     let content = null

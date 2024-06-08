@@ -31,11 +31,9 @@ export default function Login() {
     const onSubmit = async (e) => {
       e.preventDefault()
       setLoading(true)
-      console.log(0)
       
       signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
-          console.log(0.5)
             // Signed in
             const user = userCredential.user;
 
@@ -46,14 +44,10 @@ export default function Login() {
                   Authorization: `Bearer ${await user.getIdToken()}`,
                 },
               }).then((response) => {
-                console.log(1)
                 if (response.status === 200) {
-                  console.log(2)
                   if (previousLink) {
-                    console.log(3)
                     router.push(previousLink)
                   } else {
-                    console.log(4)
                     router.push("/")
                     //Todo - Fix the router. Doesn't work on any of the pages
                   }
@@ -63,8 +57,6 @@ export default function Login() {
         .catch((error) => {
             const errorCode = error.code;
             let errorMessage = error.message;
-            console.log(errorCode)
-            console.log(errorMessage)
 
             if (errorCode === "auth/invalid-email") {
               errorMessage = "Could not find a user with this email"

@@ -13,7 +13,7 @@ export default async function Home() {
 
   try {
     const session = cookies().get("session");
-    const encodedResponse = await fetch(process.env.NEXT_PUBLIC_DB_HOST + "/api/login", {method: "GET",
+    const encodedResponse = await fetch(process.env.NEXT_PUBLIC_HOST + "/api/login", {method: "GET",
       headers: { Cookie: `session=${session?.value}` }, });
     const response = await encodedResponse.json();
 

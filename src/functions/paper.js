@@ -1,8 +1,8 @@
 import { collection, addDoc, setDoc, doc, query, where, getDocs, updateDoc } from "firebase/firestore";
-import { InitializeFirebase, InitializeFirestore } from "@/firebase/firebaseAdmin";
+import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
 
 export function updateUserRating(ownerId) {
-  const db = InitializeFirestore();
+  const db = initializeFirestore();
     const fetchPaperData = async () => {
         try {
             const q = db.collection("solvedPapers").where("owner", "==", ownerId);

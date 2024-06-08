@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 // import ReplyIcon from '@mui/icons-material/Reply';
 import RenderProfilePicture from '@/components/profilePicture';
 import { revalidateTag } from "next/cache";
-import { InitializeFirestore } from "@/firebase/firebaseAdmin";
+import { initializeFirestore } from "@/firebase/firebaseAdmin";
 import { CommentSubmitButton } from "./commentSubmitButton";
 // import CommentForm from "./commentForm";
 
@@ -89,7 +89,7 @@ export default async function Comments({paperId, user = null, userData = null}) 
 
   async function commentSubmit(formData) {
     "use server"
-    const db = InitializeFirestore()
+    const db = initializeFirestore()
   
     const comment = formData.get("comment");
   

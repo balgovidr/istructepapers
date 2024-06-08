@@ -2,6 +2,8 @@ env:
   # Get these values from the Firebase console
   - variable: NEXT_PUBLIC_ENVIRONMENT
     value: production
+  - variable: NEXT_PUBLIC_HOST
+    value: https://structuralpapers.com
   - variable: NEXT_PUBLIC_DB_HOST
     value: https://istructepapers--dev-edrr0ikk.web.app
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY

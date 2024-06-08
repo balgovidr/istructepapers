@@ -9,7 +9,6 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 //If facing CORS issues: https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin
 
 export default function PaperComponent({paper, pageLimit}) {
-  console.log(pageLimit)
     const [displayedPages, setDisplayedPages] = useState(0);
 
     const onDocumentLoadSuccess = async ({ numPages }) => {

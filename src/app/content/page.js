@@ -1,8 +1,8 @@
-import { InitializeFirebase, InitializeFirestore } from "@/firebase/firebaseAdmin";
+import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
 import { collection, get } from "firebase/firestore";
 
 async function getData() {
-    const db = InitializeFirestore()
+    const db = initializeFirestore()
     //Fetch paper data
     let papers = null;
 
