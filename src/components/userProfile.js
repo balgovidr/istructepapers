@@ -11,17 +11,21 @@ const UserProfile = ({ uid }) => {
   const [rating, setRating] = useState(null);
 
   useEffect(() => {
-    const userData = fetchUserData(uid);
-    const starRatingNumber = calculateUserStarRating(uid);
+    async function fetchData() {
+      const userData = await fetchUserData(uid);
+      const starRatingNumber = await calculateUserStarRating(uid);
+
+      setUserData(userData)
+      setRating(starRatingNumber)
+    }
     
-    setUserData(userData)
-    setRating(starRatingNumber)
+    fetchData();
   }, [uid]);
 
   return (
     <div className="user-profile">
       <div className="profile-picture">
-        {RenderProfilePicture(userData)}
+        <RenderProfilePicture userData={userData} />
       </div>
       <div className="user-info">
         {userData && (

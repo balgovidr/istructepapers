@@ -35,7 +35,7 @@ export default function CommentForm({user, paperId}) {
           <div className="comment-form row mg-t-20">
               <form className="row full-width align-items-baseline">
               <div className="profile-picture-small">
-                  {RenderProfilePicture(user.photoUrl, user.firstName, user.lastName)}
+                  <RenderProfilePicture userData={user} />
               </div>
               <span
                   type="text"
