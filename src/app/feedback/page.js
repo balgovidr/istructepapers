@@ -104,45 +104,45 @@ export default function UploadPaper() {
                 <form className="column">
                     {/* Question 2: Positive Aspects */}
                     <label htmlFor="positive-aspects">What do you like the most about our website?</label>
-                    <textarea className="form-control mg-b-20" id="positive-aspects" placeholder="Your answer" value={positiveAspects} onChange={(e) => setPositiveAspects(e.target.value)}></textarea>
+                    <textarea className="form-control mg-b-20 border-primary border-b" id="positive-aspects" placeholder="Your answer" value={positiveAspects} onChange={(e) => setPositiveAspects(e.target.value)}></textarea>
 
                     {/* Question 3: Negative Aspects */}
                     <label htmlFor="negative-aspects">What do you dislike or find frustrating about our website?</label>
-                    <textarea className="form-control mg-b-20" id="negative-aspects" placeholder="Your answer" value={negativeAspects} onChange={(e) => setNegativeAspects(e.target.value)}></textarea>
+                    <textarea className="form-control mg-b-20 border-primary border-b" id="negative-aspects" placeholder="Your answer" value={negativeAspects} onChange={(e) => setNegativeAspects(e.target.value)}></textarea>
 
                     {/* Question 4: Feature Suggestions */}
                     <label htmlFor="feature-suggestions">What additional features or functionalities would you like to see on our website?</label>
-                    <textarea className="form-control mg-b-20" id="feature-suggestions" placeholder="Your answer" value={featureSuggestions} onChange={(e) => setFeatureSuggestions(e.target.value)}></textarea>
+                    <textarea className="form-control mg-b-20 border-primary border-b" id="feature-suggestions" placeholder="Your answer" value={featureSuggestions} onChange={(e) => setFeatureSuggestions(e.target.value)}></textarea>
 
                     {/* Question 5: Ease of Use */}
                     <label htmlFor="ease-of-use">How easy is it to navigate and find information on our website?</label>
-                    <select className="form-control mg-b-20" id="ease-of-use" value={easeOfUse} onChange={(e) => setEaseOfUse(e.target.value)}>
-                    <option value="" disabled>Select ease of use</option>
-                    <option value="Very Easy">Very Easy</option>
-                    <option value="Easy">Easy</option>
-                    <option value="Neutral">Neutral</option>
-                    <option value="Difficult">Difficult</option>
-                    <option value="Very Difficult">Very Difficult</option>
+                    <select className="form-control mg-b-20 border-primary border-b mt-1" id="ease-of-use" value={easeOfUse} onChange={(e) => setEaseOfUse(e.target.value)}>
+                        <option value="" disabled>Select ease of use</option>
+                        <option value="Very Easy">Very Easy</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Neutral">Neutral</option>
+                        <option value="Difficult">Difficult</option>
+                        <option value="Very Difficult">Very Difficult</option>
                     </select>
 
                     {/* Question 7: Performance */}
                     <label htmlFor="performance-issues">Have you experienced any issues with the website&apos;s performance? If yes, please describe.</label>
-                    <textarea className="form-control mg-b-20" id="performance-issues" placeholder="Your answer" value={performanceIssues} onChange={(e) => setPerformanceIssues(e.target.value)}></textarea>
+                    <textarea className="form-control mg-b-20 border-primary border-b" id="performance-issues" placeholder="Your answer" value={performanceIssues} onChange={(e) => setPerformanceIssues(e.target.value)}></textarea>
 
                     {/* Question 9: Purpose and Goals */}
                     <label htmlFor="goals-achieved">Did StructuralPapers help you with the exam or find what you were looking for?</label>
-                    <select className="form-control mg-b-20" id="goals-achieved" value={goalsAchieved} onChange={(e) => setGoalsAchieved(e.target.value)}>
-                    <option value="" disabled>Select response</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                    <select className="form-control mg-b-20 border-primary border-b mt-1" id="goals-achieved" value={goalsAchieved} onChange={(e) => setGoalsAchieved(e.target.value)}>
+                        <option value="" disabled>Select response</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
                     </select>
 
                     <label htmlFor="goals-explanation">If no, what were you trying to accomplish?</label>
-                    <textarea className="form-control mg-b-20" id="goals-explanation" placeholder="Your answer" value={goalsExplanation} onChange={(e) => setGoalsExplanation(e.target.value)}></textarea>
+                    <textarea className="form-control mg-b-20 border-primary border-b" id="goals-explanation" placeholder="Your answer" value={goalsExplanation} onChange={(e) => setGoalsExplanation(e.target.value)}></textarea>
 
                     {/* Question 11: Additional Comments */}
                     <label htmlFor="additional-comments">Do you have any other comments, suggestions, or feedback for us?</label>
-                    <textarea className="form-control mg-b-20" id="additional-comments" placeholder="Your answer" value={additionalComments} onChange={(e) => setAdditionalComments(e.target.value)}></textarea>
+                    <textarea className="form-control mg-b-20 border-primary border-b" id="additional-comments" placeholder="Your answer" value={additionalComments} onChange={(e) => setAdditionalComments(e.target.value)}></textarea>
 
                     <div className="row justify-content-center align-items-center mg-t-25 mg-b-20">
                         <button type="submit" onClick={onSubmit} className="btn btn-primary" disabled={loading}>
