@@ -35,7 +35,25 @@ const nextConfig = {
             })
         )
         return config
-    }
+    },
+    async redirects(){
+      return [
+        {
+          source: '/:path*',
+          has: [{ type: 'host', value: 'www.structuralpapers.com' }],
+          destination: 'https://structuralpapers.com/:path*',
+          permanent: true
+        }
+    ]},
+  generateRobotsTxt: true,
+  robotsTxtOptions: {
+    policies: [
+        {userAgent: "*", disallow: "/api/*"},
+        {userAgent: "*", disallow: "/auth/*"},
+        {userAgent: "*", allow: "/"},
+    ],
+  },
+  exclude: ["/api/*", "/auth/*"]
 }
 
 module.exports = nextConfig

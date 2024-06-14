@@ -1,37 +1,27 @@
 'use client'
 
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState} from "react";
 import logo from "@/app/assets/Logo.svg";
-import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment, query, where, getDocs, Timestamp } from "firebase/firestore"; 
-import { auth, db, storage } from '@/firebase/firebaseClient';
+import { collection, addDoc, Timestamp } from "firebase/firestore"; 
+import { db } from '@/firebase/firebaseClient';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { format } from 'date-fns';
-import { onAuthStateChanged } from 'firebase/auth';
 import Image from "next/image";
 import Head from "next/head";
 import { TailSpin } from 'react-loading-icons';
-import SparkMD5 from 'spark-md5';
 import { useRouter } from 'next/navigation'
 
 export default function UploadPaper() {
-    const [generalSatisfaction, setGeneralSatisfaction] = useState('');
     const [positiveAspects, setPositiveAspects] = useState('');
     const [negativeAspects, setNegativeAspects] = useState('');
     const [featureSuggestions, setFeatureSuggestions] = useState('');
     const [easeOfUse, setEaseOfUse] = useState('');
-    const [contentQuality, setContentQuality] = useState('');
     const [performanceIssues, setPerformanceIssues] = useState('');
-    const [designRating, setDesignRating] = useState('');
-    const [userFriendly, setUserFriendly] = useState('');
-    const [usabilityExplanation, setUsabilityExplanation] = useState('');
     const [goalsAchieved, setGoalsAchieved] = useState('');
     const [goalsExplanation, setGoalsExplanation] = useState('');
-    const [comparativeFeedback, setComparativeFeedback] = useState('');
     const [additionalComments, setAdditionalComments] = useState('');
     const [alert, setAlert] = useState(false);
     const [alertContent, setAlertContent] = useState('');
@@ -92,7 +82,7 @@ export default function UploadPaper() {
                 <meta name="description" content="Provide feedback for how Structural Papers can do what you want"/>
             </Head>
             <div className="col-1 background-color-primary center hidden md:flex">
-                <Image src={logo} alt="Paper trail logo" height="100"/>
+                <Image src={logo} alt="Structural Papers logo" height="100"/>
             </div>
             <div className="col-1 column pd-a-10p sm:overflow-y-auto">
                 <h1 className="text-3xl self-center font-extralight">Feedback</h1>

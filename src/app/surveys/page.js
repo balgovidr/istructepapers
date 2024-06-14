@@ -499,7 +499,7 @@ export default function Surveys() {
                     <meta name="description" content="Access more IStructE exam solutions by answering questions about other solutions."/>
                 </Head>
                 <div className="col-1 background-color-primary center mob-hide">
-                    <Image src={logo} alt="Paper trail logo" height="100"/>
+                    <Image src={logo} alt="Structural Papers logo" height="100"/>
                 </div>
                 <div className="col-1 column pd-a-10p justify-content-center">
                     <span className="font-size-15">Please log in or sign up to answer these questions and view more solved papers.</span>
@@ -589,7 +589,7 @@ export default function Surveys() {
                     <meta name="Surveys" content="Answer questions about solutions"/>
                 </Head>
                 <div className="col-1 background-color-primary center mob-hide">
-                    <Image src={logo} alt="Paper trail logo" height="100"/>
+                    <Image src={logo} alt="Structural Papers logo" height="100"/>
                 </div>
                 <div className="col-1 column pd-a-10p justify-content-center">
                     <span className="font-size-15 text-align-left">No surveys remaining. Please check back later.</span>

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint"
   },
@@ -35,6 +36,7 @@
     "material-symbols": "^0.14.3",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
+    "next-sitemap": "^4.2.3",
     "nookies": "^2.5.2",
     "portfinder": "^1.0.32",
     "process": "^0.11.10",

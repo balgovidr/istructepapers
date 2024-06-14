@@ -223,7 +223,7 @@ export default function UploadPaper() {
                     <meta name="description" content="View more IStructE exam solutions by uploading your own solution. Receive commments and feedback from other candidates."/>
                 </Head>
                 <div className="col-1 background-color-primary center hidden md:flex">
-                    <Image src={logo} alt="Paper trail logo" height="100"/>
+                    <Image src={logo} alt="Structural Papers logo" height="100"/>
                 </div>
                 <div className="col-1 column pd-a-10p sm:overflow-y-auto">
                     <h1 className="text-3xl self-center font-extralight">Upload a solved paper</h1>
@@ -278,7 +278,7 @@ export default function UploadPaper() {
                     <meta name="description" content="Solved IStructE exam papers - Upload solved exam papers"/>
                 </Head>
                 <div className="col-1 background-color-primary center mob-hide">
-                    <Image src={logo} alt="Paper trail logo" height="100"/>
+                    <Image src={logo} alt="Structural Papers logo" height="100"/>
                 </div>
                 <div className="col-1 column pd-a-10p justify-content-center">
                     <h2>Upload a solved paper</h2>
@@ -300,7 +300,7 @@ export default function UploadPaper() {
                 <meta name="description" content="Solved IStructE exam papers - Upload solved exam papers"/>
             </Head>
             <div className="col-1 background-color-primary center mob-hide">
-                <Image src={logo} alt="Paper trail logo" height="100"/>
+                <Image src={logo} alt="Structural Papers logo" height="100"/>
             </div>
             <div className="col-1 column pd-a-10p justify-content-center">
                 <h2>Upload a solved paper</h2>

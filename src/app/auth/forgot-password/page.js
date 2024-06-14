@@ -56,7 +56,7 @@ export default function ForgotPassword() {
             <meta name="Reset Password" content="Reset a forgotten password" />
         </Head> */}
         <div className="col-1 background-color-primary center mob-hide">
-            <Image src={logo} alt="Paper trail logo" height="100"/>
+            <Image src={logo} alt="Structural Papers logo" height="100"/>
         </div>
         <div className="col-1 column pd-a-10p">
             <h1 className="text-3xl self-center font-extralight">Reset Password</h1>

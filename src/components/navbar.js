@@ -61,7 +61,7 @@ export default function Navbar() {
             <div className="flex flex-col sm:flex-row space-between align-items-center nav">
                 <div className="flex header-container">
                     <Link href="/" className="row align-items-center">
-                        <Image src={logo} alt="Paper trail logo" height={"40"} className="mx-2.5"/>
+                        <Image src={logo} alt="Structural Papers logo" height={"40"} className="mx-2.5"/>
                         <span className="h1 heading">STRUCTURAL PAPERS</span>
                     </Link>
                     <div onClick={() => {setShowMenu(!showMenu)}} className="mx-4 sm:hidden">
