@@ -2,7 +2,6 @@
 
 import React, {useState, useEffect} from 'react';
 import logo from "@/app/assets/Logo.svg";
-import {  createUserWithEmailAndPassword, onIdTokenChanged  } from 'firebase/auth';
 import { setDoc, doc } from "firebase/firestore"; 
 import { auth, db } from '@/firebase/firebaseClient';
 import Alert from '@mui/material/Alert';
@@ -13,7 +12,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation'
 import Head from 'next/head';
 import Image from 'next/image';
-import nookies from 'nookies';
 import {useCreateUserWithEmailAndPassword} from 'react-firebase-hooks/auth'
 import { TailSpin } from 'react-loading-icons'
 import {  onAuthStateChanged  } from 'firebase/auth';

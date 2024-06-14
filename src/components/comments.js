@@ -1,5 +1,5 @@
-import { getDocs, getDoc, doc, addDoc, collection, query, where } from "firebase/firestore";
-import { auth, db, storage } from '@/firebase/firebaseClient';
+import { getDocs, getDoc, doc, collection, query, where } from "firebase/firestore";
+import { db } from '@/firebase/firebaseClient';
 import { format } from 'date-fns';
 import { revalidateTag } from "next/cache";
 import { initializeFirestore } from "@/firebase/firebaseAdmin";

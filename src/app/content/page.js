@@ -1,6 +1,5 @@
 import { ButtonsWithPoints } from "@/components/buttons";
 import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
-import { collection, get } from "firebase/firestore";
 
 async function getData() {
     const db = initializeFirestore()

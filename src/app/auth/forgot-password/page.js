@@ -5,16 +5,18 @@ import logo from "@/app/assets/Logo.svg";
 import {  sendPasswordResetEmail  } from 'firebase/auth';
 import { auth} from '@/firebase/firebaseClient';
 import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import Image from 'next/image';
-import Head from 'next/head';
+import { useRouter } from 'next/navigation'
 
 export default function ForgotPassword() {
+    const router = useRouter();
+    const params = new URLSearchParams(router.search);
+    const previousLink = params.get('redirectTo') || null;
+    
     const [email, setEmail] = useState('');
     const [alert, setAlert] = useState(false);
     const [alertContent, setAlertContent] = useState('');
@@ -34,6 +36,13 @@ export default function ForgotPassword() {
             setTimeout(() => {
                 setAlertCollapse(false);
               }, 3000);
+
+            if (previousLink) {
+                router.push(previousLink)
+            } else {
+                router.push("/")
+                //Todo - Fix the router. Doesn't work on any of the pages
+            }
         })
         .catch((error) => {
             const errorMessage = error.message;

@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers";
 import Footer from '@/components/footer';

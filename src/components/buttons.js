@@ -2,11 +2,9 @@
 
 import { TailSpin } from 'react-loading-icons';
 import { useFormStatus } from 'react-dom'
-import { db } from '@/firebase/firebaseClient';
 import { useEffect } from 'react';
 import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
-import { doc, getDoc } from "firebase/firestore";
 import { fetchSettings } from '@/functions/settings';
 
 export function CommentSubmitButton() {

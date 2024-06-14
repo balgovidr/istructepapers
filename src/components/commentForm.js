@@ -1,11 +1,9 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import RenderProfilePicture from '@/components/profilePicture';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from '@/firebase/firebaseClient';
-import { getDocs, getDoc, doc, addDoc, collection, query, where } from "firebase/firestore";
-// import { format } from 'date-fns';
+import { db } from '@/firebase/firebaseClient';
+import { addDoc, collection } from "firebase/firestore";
 import { revalidateTag } from "next/cache";
 const { format } = require("date-fns/format");
 

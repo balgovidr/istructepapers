@@ -1,4 +1,3 @@
-import { collection, addDoc, setDoc, doc, query, where, getDocs, updateDoc } from "firebase/firestore";
 import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
 
 export function updateUserRating(ownerId) {

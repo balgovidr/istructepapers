@@ -1,5 +1,4 @@
 import { doc, increment, updateDoc } from "firebase/firestore";
-import { pdfjs } from "react-pdf";
 import UserProfile from "@/components/userProfile";
 import RatePaper from "@/components/ratePaper";
 import Comments from "@/components/comments";

@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect} from "react";
 import logo from "@/app/assets/Logo.svg";
-import { auth, db } from '@/firebase/firebaseClient';
+import { auth } from '@/firebase/firebaseClient';
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
