@@ -6,14 +6,7 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_HOST,
-  },
-}
-
 export default async function RootLayout({ children }) {
-
   return (
     <html lang="en">
       <head>

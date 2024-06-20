@@ -14,6 +14,14 @@ import Head from "next/head";
 import { TailSpin } from 'react-loading-icons';
 import { useRouter } from 'next/navigation'
 
+export const metadata = {
+    title: 'Feedback form - Structural Papers',
+    description: "Send your thoughts on our site, tell us how we can help you with your IStructE exam preparation better. Let us know what resources you really want, or don't want.",
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/feedback',
+    },
+}
+
 export default function UploadPaper() {
     const [positiveAspects, setPositiveAspects] = useState('');
     const [negativeAspects, setNegativeAspects] = useState('');

@@ -3,8 +3,11 @@ import Head from "next/head";
 export const metadata = {
     title: 'Cookie Policy - Structural Papers',
     description: 'View the cookie policy of Structural Papers.',
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/statements/cookie-policy',
+    },
   }
-
+  
 export default function CookiePolicy() {
 
     return (

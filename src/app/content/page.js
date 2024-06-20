@@ -38,6 +38,9 @@ async function getData() {
 export const metadata = {
     title: 'IStructE exam sample answers - Structural Papers',
     description: 'Access a number of IStructE exam papers answered by a candidate. Browse and select the year and month of the IStructE exam papers solution pdf you would like to view.',
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/content',
+    },
 }
 
 export default async function Content() {

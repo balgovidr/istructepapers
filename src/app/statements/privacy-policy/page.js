@@ -3,7 +3,10 @@ import Head from "next/head";
 export const metadata = {
     title: 'Privacy Policy - Structural Papers',
     description: 'View the privacy policy of Structural Papers.',
-  }
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/statements/privacy-policy',
+    },
+}
 
 export default function PrivacyPolicy() {
 
@@ -261,7 +264,7 @@ export default function PrivacyPolicy() {
                         To learn more about how we use these
                         and your choices in relation to these tracking
                         technologies, please refer to our
-                        <a href="https://structuralpapers.com/cookie-policy">Cookie Policy.</a>
+                        <a href="https://structuralpapers.com/statements/cookie-policy">Cookie Policy.</a>
                     </p>
                 </li>
                 

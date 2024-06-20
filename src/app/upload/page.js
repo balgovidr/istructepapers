@@ -18,6 +18,14 @@ import { TailSpin } from 'react-loading-icons';
 import SparkMD5 from 'spark-md5';
 import { useRouter } from 'next/navigation'
 
+export const metadata = {
+    title: 'Upload solved IStructE exam papers - Structural Papers',
+    description: 'Upload your solved and scanned IStructE exam papers to gain points and access a repository of other papers to guide your exam preparation.',
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/uploads',
+    },
+}
+
 export default function UploadPaper() {
     const [date, setDate] = useState(undefined);
     const [questionNumber, setQuestionNumber] = useState(undefined);

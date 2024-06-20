@@ -12,6 +12,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'
 
+export const metadata = {
+    title: 'Reset your password - Structural Papers',
+    description: 'Reset your password to access Structural Papers.',
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/auth/forgot-password',
+    },
+}
+
 export default function ForgotPassword() {
     const router = useRouter();
     const params = new URLSearchParams(router.search);

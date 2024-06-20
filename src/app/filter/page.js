@@ -46,10 +46,15 @@ function getMonthName(monthNumber) {
 
 export async function generateMetadata(context) {
     const data = await getData(context);
+    const month = context.searchParams.month
+    const year = context.searchParams.year
    
     return {
       title: ("IStructE exam solutions from " + getMonthName(data.month) + " " + data.year + " - Structural Papers"),
       description: ("View all available IStructE solved exam papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the pdf."),
+      alternates: {
+        canonical: process.env.NEXT_PUBLIC_HOST + '/filter?year=' + year + '&month=' + month,
+      },
     }
   }
 

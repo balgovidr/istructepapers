@@ -14,6 +14,13 @@ import Head from 'next/head';
 import { TailSpin } from 'react-loading-icons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
+export const metadata = {
+  title: 'Login - Structural Papers',
+  description: 'Log in and access a repository of solved IStructE exam papers to guide your exam preparation.',
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_HOST + '/auth/login',
+  },
+}
 
 export default function Login() {
     const router = useRouter();

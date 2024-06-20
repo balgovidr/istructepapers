@@ -5,6 +5,9 @@ import Footer from '@/components/footer';
 export const metadata = {
   title: 'Solved IStructE exam papers - Structural Papers',
   description: 'Access a growing collection of IStructE exam paper solutions and benefit from community wisdom. Your resource for conquering the IStructE exam.',
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_HOST,
+  },
 }
 
 export default async function Home() {

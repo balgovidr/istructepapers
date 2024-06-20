@@ -18,6 +18,14 @@ import { useRouter } from "next/navigation";
 import PaperComponent from "@/components/paper";
 import { fetchSettings } from "@/functions/settings";
 
+export const metadata = {
+    title: 'Verify uploaded IStructE exam papers - Structural Papers',
+    description: 'Check details of uploaded papers to verify their quality and earn points. Points can be used to view further IStructE exam papers to guide your exam preparation.',
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/surveys',
+    },
+}
+
 export default function Surveys() {
     const [date, setDate] = useState(undefined);
     const [questionNumber, setQuestionNumber] = useState(undefined);
@@ -487,7 +495,7 @@ export default function Surveys() {
                 setAlertCollapse(false);
             }, 3000);
             //Reset the form fields
-            router.push("./surveys")
+            router.push("/surveys")
         })
       }
     

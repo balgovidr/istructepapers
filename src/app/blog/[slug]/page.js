@@ -28,6 +28,9 @@ export async function generateMetadata({ params, searchParams }, parent) {
   return {
     title: (post.metaTitle + ' - Structural Papers'),
     description: post.metaDescription,
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/blog/' + params.slug,
+    },
   }
 }
 

@@ -20,6 +20,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Typography } from '@mui/material';
 
+export const metadata = {
+  title: 'Sign up - Structural Papers',
+  description: 'Sign up to access a repository of solved IStructE exam papers to guide your exam preparation.',
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_HOST + '/auth/signup',
+  },
+}
+
 export default function SignUp() {
   const router = useRouter();
   const params = new URLSearchParams(router.search);
@@ -177,7 +185,7 @@ export default function SignUp() {
                     <a href="/auth/login" className="mg-l-20 font-size-12 text-color-grey underline">I&apos;m already a member</a>
                 </div>
                 <div className='flex flex-row justify-center items-center w-full my-10'>
-                <a href="/privacy-policy" className="mg-l-20 font-size-12 text-color-grey underline">Privacy policy</a>
+                <a href="/statements/privacy-policy" className="mg-l-20 font-size-12 text-color-grey underline">Privacy policy</a>
                 </div>
             </div>
             <Stack sx={{ width: "100%" }} spacing={2}>

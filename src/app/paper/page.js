@@ -94,6 +94,9 @@ export async function generateMetadata(context) {
   return {
     title: (paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " - Structural Papers"),
     description: ("Solved IStructE exam papers - View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by a new solution, rank the solution and comment your thoughts on it."),
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/paper?id=' + context.searchParams.id,
+    },
   }
 }
 
