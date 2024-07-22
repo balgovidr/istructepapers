@@ -4,7 +4,6 @@ import { CircularProgress } from "@mui/material";
 import Image from "next/image";
 
 export function RenderProfilePicture({userData}) {
-    console.log(userData)
   if (userData) {
       if (userData.photoUrl) {
           return <Image src={userData.photoUrl} alt="Profile" />

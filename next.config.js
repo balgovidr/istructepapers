@@ -11,6 +11,12 @@ const nextConfig = {
             port: '',
             pathname: '/**',
           },
+          {
+            protocol: 'https',
+            hostname: 'istructepapers-test.appspot.com',
+            port: '',
+            pathname: '/**',
+          },
         ],
       },
       webpack: (config) => {
@@ -45,15 +51,6 @@ const nextConfig = {
           permanent: true
         }
     ]},
-  generateRobotsTxt: true,
-  robotsTxtOptions: {
-    policies: [
-        {userAgent: "*", disallow: "/api/*"},
-        {userAgent: "*", disallow: "/auth/*"},
-        {userAgent: "*", allow: "/"},
-    ],
-  },
-  exclude: ["/api/*", "/auth/*"]
 }
 
 module.exports = nextConfig

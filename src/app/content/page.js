@@ -37,10 +37,25 @@ async function getData() {
 
 export const metadata = {
     title: 'IStructE exam sample answers - Structural Papers',
-    description: 'Access a number of IStructE exam papers answered by a candidate. Browse and select the year and month of the IStructE exam papers solution pdf you would like to view.',
+    description: 'Access several IStructE solved exam papers. Browse and select the year and month of the IStructE past papers solution pdf you want to view.',
     alternates: {
       canonical: process.env.NEXT_PUBLIC_HOST + '/content',
     },
+    openGraph: {
+        title: 'IStructE exam sample answers - Structural Papers',
+        description: 'Access several IStructE solved exam papers. Browse and select the year and month of the IStructE past papers solution pdf you want to view.',
+        url: process.env.NEXT_PUBLIC_HOST + '/content',
+        siteName: 'Structural Papers',
+        images: [
+          {
+            url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp', // Must be an absolute URL
+            width: 1200,
+            height: 628,
+            alt: 'Image describing Structural Papers',
+          },
+        ],
+        type: 'website',
+      },
 }
 
 export default async function Content() {

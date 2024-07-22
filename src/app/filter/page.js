@@ -51,9 +51,24 @@ export async function generateMetadata(context) {
    
     return {
       title: ("IStructE exam solutions from " + getMonthName(data.month) + " " + data.year + " - Structural Papers"),
-      description: ("View all available IStructE solved exam papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the pdf."),
+      description: ("View all available IStructE solved past papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the solved exam paper's pdf."),
       alternates: {
         canonical: process.env.NEXT_PUBLIC_HOST + '/filter?year=' + year + '&month=' + month,
+      },
+      openGraph: {
+        title: ("IStructE exam solutions from " + getMonthName(data.month) + " " + data.year + " - Structural Papers"),
+        description: ("View all available IStructE solved past papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the solved exam paper's pdf."),
+        url: process.env.NEXT_PUBLIC_HOST + '/filter?year=' + year + '&month=' + month,
+        siteName: 'Structural Papers',
+        images: [
+          {
+            url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp',
+            width: 1200,
+            height: 628,
+            alt: 'Image describing Structural Papers',
+          },
+        ],
+        type: 'website',
       },
     }
   }
@@ -68,7 +83,7 @@ export default async function Filter(context) {
             <h1 className="text-2xl mb-5">Solved <span className="text-gradient d-inline">IStructE</span> papers - {getMonthName(data.month) + " " + data.year}</h1>
             <div className="font-size-20">Pick a solved paper to view.</div>
             <div className="grid mg-l-10p mg-r-10p center h-full">
-                {data.papers.map((doc, index) => (
+                {data ? data.papers.map((doc, index) => (
                     <a key={index} className="cell" href={'./paper?id='+doc.id}>
                         <h2 className="mg-t-10">{doc.year + ' ' + getMonthName(doc.month)}</h2>
                         <div className="info">
@@ -79,7 +94,9 @@ export default async function Filter(context) {
                             ))}</span>
                         </div>
                     </a>
-                ))}
+                ))
+                :
+                <div className="text-md">Papers could not be loaded. Please refresh the page or go back to the <a href="/content">contents page</a>.</div>}
             </div>
         </div>
     )

@@ -64,13 +64,14 @@ export default function Navbar() {
                         <Image src={logo} alt="Structural Papers logo" height={"40"} className="mx-2.5"/>
                         <span className="h1 heading">STRUCTURAL PAPERS</span>
                     </Link>
-                    <div onClick={() => {setShowMenu(!showMenu)}} className="mx-4 sm:hidden">
+                    <div onClick={() => {setShowMenu(!showMenu)}} className="mx-4 sm:hidden flex">
                         <IconButton aria-label="close" size="small">
                             <MenuIcon fontSize="inherit" sx={{ color: "#FFFFFF" }}/>
                         </IconButton>
                     </div>
                 </div>
                 <div className={"flex-row align-middle w-full sm:w-min sm:mr-2.5 sm:flex-shrink-0 justify-center sm:flex " + (showMenu ? "flex" : "hidden")}>
+                    <a className="ease-in-out py-1.5 md:py-2 px-4 md:px-6 text-center text-sm md:text-base text-white hover:bg-white/20 mr-3 transition rounded-md items-center md:flex hidden" href="/blog">Blog</a>
                     {user ?
                         <div className="flex flex-row button-container gap-3">
                             {userData?

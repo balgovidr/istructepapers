@@ -1,5 +1,6 @@
 import admin, { getApps, initializeApp, cert } from "firebase-admin/app";
 const { getFirestore } = require("firebase-admin/firestore");
+const { getStorage } = require('firebase-admin/storage');
 
 const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
 
@@ -13,6 +14,7 @@ if (environment === 'production') {
 
 const options = {
   credential: cert(serviceAccount),
+  storageBucket: environment === 'production' ? 'gs://istructepapers.appspot.com' : 'gs://istructepapers-test.appspot.com'
 };
 
 export function initializeFirebase() {
@@ -29,4 +31,11 @@ export function initializeFirestore() {
 
   const firestore = getFirestore(app);
   return firestore;
+}
+
+export function initializeStorage() {
+  const app = initializeFirebase();
+
+  const storage = getStorage(app);
+  return storage;
 }

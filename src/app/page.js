@@ -8,6 +8,21 @@ export const metadata = {
   alternates: {
     canonical: process.env.NEXT_PUBLIC_HOST,
   },
+  openGraph: {
+    title: 'Solved IStructE exam papers - Structural Papers',
+    description: 'Access a growing collection of IStructE exam paper solutions and benefit from community wisdom. Your resource for conquering the IStructE exam.',
+    url: process.env.NEXT_PUBLIC_HOST,
+    siteName: 'Structural Papers',
+    images: [
+      {
+        url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp',
+        width: 1200,
+        height: 628,
+        alt: 'Image describing Structural Papers',
+      },
+    ],
+    type: 'website',
+  },
 }
 
 export default async function Home() {
@@ -56,8 +71,9 @@ export default async function Home() {
         <section className="min-h-screen flex flex-col bg-light items-center md:flex-row-reverse py-20">
           <div className="md:w-1/2 w-full md:h-full flex flex-col justify-center gap-4 p-8 items-center md:items-start">
             <h2 className="text-4xl text-center md:text-left">Latest from our blog</h2>
+            <a className="btn btn-primary-outline hidden md:flex" href="/blog">View our entire blog</a>
           </div>
-          <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col justify-evenly px-8 gap-5">
+          <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col justify-evenly px-8 gap-5 items-center">
             <a className='flex flex-col rounded-md border border-gray-100 shadow-md bg-white w-full p-3 gap-2' href="/blog/cracking-the-istructe-exam">
               <h3 className='flex flex-row justify-between items-center'>Cracking the IStructE exam</h3>
               <hr className='border-gray-300'/>
@@ -68,6 +84,7 @@ export default async function Home() {
               <hr className='border-gray-300'/>
               <p className='text-sm'>Explore why and how practicing for the IStructE exam using past papers is vital.</p>
             </a>
+            <a className="btn btn-primary-outline md:hidden" href="/blog">View our entire blog</a>
           </div>
         </section>
         <section className="flex flex-col md:flex-row bg-primary text-white gap-8 py-20">

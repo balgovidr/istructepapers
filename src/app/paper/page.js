@@ -93,9 +93,24 @@ export async function generateMetadata(context) {
  
   return {
     title: (paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " - Structural Papers"),
-    description: ("Solved IStructE exam papers - View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by a new solution, rank the solution and comment your thoughts on it."),
+    description: ("View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by new solutions, rank them and comment your thoughts."),
     alternates: {
       canonical: process.env.NEXT_PUBLIC_HOST + '/paper?id=' + context.searchParams.id,
+    },
+    openGraph: {
+      title: (paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " - Structural Papers"),
+      description: ("View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by new solutions, rank them and comment your thoughts."),
+      url: process.env.NEXT_PUBLIC_HOST + '/paper?id=' + context.searchParams.id,
+      siteName: 'Structural Papers',
+      images: [
+        {
+          url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp',
+          width: 1200,
+          height: 628,
+          alt: 'Image describing Structural Papers',
+        },
+      ],
+      type: 'article',
     },
   }
 }
@@ -152,25 +167,37 @@ export default async function Viewer(context) {
       )
     }
   }
-  
-  return (
-    <div className="column viewer">
-      <div className="pdf-container pdf-container-viewer align-items-center column">
-          <PaperComponent paper={paper} pageLimit={displayedPages} />
-          {limitReached()}
-      </div>
-      <div className="tail-container mt-2.5 mb-5">
-        <h1 className="text-3xl self-center font-extralight flex flex-row align-middle gap-2">
-            <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)}</p>
-            <p className="d-inline h2">|</p>
-            <p className="d-inline">Question number: {paper.questionNumber}</p>
-        </h1>
-        <div className="row justify-content-space-between info">
-            <UserProfile uid={paper.owner} />
-            <RatePaper id={paper.id} />
+  if (paper) {
+    return (
+      <div className="column viewer">
+        <div className="pdf-container pdf-container-viewer align-items-center column">
+            <PaperComponent paper={paper} pageLimit={displayedPages} />
+            {limitReached()}
         </div>
-        <Comments paperId={paper.id} user={user} userData={userData}/>
+        <div className="tail-container mt-2.5 mb-5">
+          <h1 className="text-3xl self-center font-extralight flex flex-row align-middle gap-2">
+              <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)}</p>
+              <p className="d-inline h2">|</p>
+              <p className="d-inline">Question number: {paper.questionNumber}</p>
+          </h1>
+          <div className="row justify-content-space-between info">
+              <UserProfile uid={paper.owner} />
+              <RatePaper id={paper.id} />
+          </div>
+          <Comments paperId={paper.id} user={user} userData={userData}/>
+        </div>
       </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col">
+      <h1 className="text-3xl self-center font-extralight flex flex-row align-middle gap-2">
+        <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)}</p>
+        <p className="d-inline h2">|</p>
+        <p className="d-inline">Question number: {paper.questionNumber}</p>
+      </h1>
+      <div className="text-md">Paper could not be loaded. Please refresh the page or go back to the <a href="/content">contents page</a>.</div>
     </div>
   )
 }
