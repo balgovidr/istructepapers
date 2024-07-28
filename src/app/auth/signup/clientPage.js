@@ -3,7 +3,7 @@
 import React, {useState, useEffect} from 'react';
 import logo from "@/app/assets/Logo.svg";
 import { setDoc, doc } from "firebase/firestore"; 
-import { auth, db } from '@/firebase/firebaseClient';
+import { auth, db } from '@/firebase/config';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
@@ -73,12 +73,10 @@ export default function SignUp() {
                   setTimeout(() => {
                       setAlertCollapse(false);
                     }, 3000);
-
-                  navigate("/")
                 } catch (e) {
                   console.error("Error adding document: ", e);
                 }
-              
+
                 // Sending info to the server
                 fetch("/api/login", {
                   method: "POST",

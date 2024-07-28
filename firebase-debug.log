@@ -1,0 +1,266 @@
+[debug] [2024-07-28T20:13:55.685Z] ----------------------------------------------------------------------
+[debug] [2024-07-28T20:13:55.689Z] Command:       C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2024-07-28T20:13:55.689Z] CLI Version:   13.11.2
+[debug] [2024-07-28T20:13:55.690Z] Platform:      win32
+[debug] [2024-07-28T20:13:55.690Z] Node Version:  v18.17.0
+[debug] [2024-07-28T20:13:55.692Z] Time:          Sun Jul 28 2024 21:13:55 GMT+0100 (British Summer Time)
+[debug] [2024-07-28T20:13:55.692Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-07-28T20:13:55.870Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-07-28T20:13:55.871Z] > authorizing via signed-in user (balgovidr@gmail.com)
+[debug] [2024-07-28T20:13:56.121Z] java version "11.0.18" 2023-01-17 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.18+9-LTS-195)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.18+9-LTS-195, mixed mode)
+
+[debug] [2024-07-28T20:13:56.134Z] Parsed Java major version: 11
+[info] i  emulators: Starting emulators: auth, functions, firestore, hosting, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, hosting, storage"}}
+[debug] [2024-07-28T20:13:56.177Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:13:56.177Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:13:56.177Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:13:56.178Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:13:56.178Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:13:56.178Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:13:56.179Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-07-28T20:13:56.192Z] [hub] writing locator at C:\Users\balgo\AppData\Local\Temp\hub-istructepapers.json
+[debug] [2024-07-28T20:13:56.206Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers [none]
+[debug] [2024-07-28T20:13:56.611Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers 200
+[debug] [2024-07-28T20:13:56.611Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers {"projectId":"istructepapers","projectNumber":"479657269473","displayName":"istructepapers","name":"projects/istructepapers","resources":{"hostingSite":"istructepapers","storageBucket":"istructepapers.appspot.com","locationId":"europe-west2"},"state":"ACTIVE","etag":"1_f9745664-0c59-4064-ba01-975c080962e3"}
+[debug] [2024-07-28T20:14:04.986Z] defaultcredentials: writing to file C:\Users\balgo\AppData\Roaming\firebase\balgovidr_gmail_com_application_default_credentials.json
+[debug] [2024-07-28T20:14:04.990Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/istructepapers/sites pageToken=&pageSize=10
+[debug] [2024-07-28T20:14:06.292Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/istructepapers/sites 200
+[debug] [2024-07-28T20:14:06.292Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/istructepapers/sites {"sites":[{"name":"projects/istructepapers/sites/istructepapers","defaultUrl":"https://istructepapers.web.app","appId":"1:479657269473:web:730b8d2b614726c5dbbfa0","type":"DEFAULT_SITE"}]}
+[debug] [2024-07-28T20:14:06.292Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:479657269473:web:730b8d2b614726c5dbbfa0/config [none]
+[debug] [2024-07-28T20:14:07.145Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:479657269473:web:730b8d2b614726c5dbbfa0/config 200
+[debug] [2024-07-28T20:14:07.145Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:479657269473:web:730b8d2b614726c5dbbfa0/config {"projectId":"istructepapers","appId":"1:479657269473:web:730b8d2b614726c5dbbfa0","storageBucket":"istructepapers.appspot.com","locationId":"europe-west2","apiKey":"AIzaSyCJTuVp5PURWWkDYQmyB810zXdsHhQSRh0","authDomain":"istructepapers.firebaseapp.com","messagingSenderId":"479657269473","measurementId":"G-4QXX33B0FZ"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2024-07-28T20:14:33.550Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "europe-west1"
+      },
+      "site": "istructepapers",
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "ssristructepapers",
+            "region": "europe-west1",
+            "pinTag": true
+          }
+        }
+      ],
+      "redirects": [],
+      "headers": [
+        {
+          "source": "**/*.[jt]s",
+          "headers": [
+            {
+              "key": "Set-Cookie",
+              "value": "__FIREBASE_DEFAULTS__=eyJlbXVsYXRvckhvc3RzIjp7ImF1dGgiOiIxMjcuMC4wLjE6OTA5OSIsImZpcmVzdG9yZSI6IjEyNy4wLjAuMTo4MDgwIiwic3RvcmFnZSI6IjEyNy4wLjAuMTo5MTk5In0sImNvbmZpZyI6eyJwcm9qZWN0SWQiOiJpc3RydWN0ZXBhcGVycyIsImFwcElkIjoiMTo0Nzk2NTcyNjk0NzM6d2ViOjczMGI4ZDJiNjE0NzI2YzVkYmJmYTAiLCJzdG9yYWdlQnVja2V0IjoiaXN0cnVjdGVwYXBlcnMuYXBwc3BvdC5jb20iLCJsb2NhdGlvbklkIjoiZXVyb3BlLXdlc3QyIiwiYXBpS2V5IjoiQUl6YVN5Q0pUdVZwNVBVUldXa0RZUW15QjgxMHpYZHNIaFFTUmgwIiwiYXV0aERvbWFpbiI6ImlzdHJ1Y3RlcGFwZXJzLmZpcmViYXNlYXBwLmNvbSIsIm1lc3NhZ2luZ1NlbmRlcklkIjoiNDc5NjU3MjY5NDczIiwibWVhc3VyZW1lbnRJZCI6IkctNFFYWDMzQjBGWiJ9LCJfYXV0aFRva2VuU3luY1VSTCI6Ii9fX3Nlc3Npb24ifQ; SameSite=Strict; Expires=2026-06-23T06:54:33.550Z; Path=/;"
+            }
+          ]
+        }
+      ],
+      "cleanUrls": true,
+      "public": ".firebase\\istructepapers\\hosting",
+      "webFramework": "next_ssr"
+    }
+  ],
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    },
+    {
+      "source": "istructepapers",
+      "codebase": "istructepapers",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    },
+    {
+      "source": ".firebase\\istructepapers\\functions",
+      "codebase": "firebase-frameworks-istructepapers"
+    }
+  ]
+}
+[debug] [2024-07-28T20:14:33.569Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:14:33.569Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-07-28T20:14:33.570Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: database, pubsub, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mdatabase, pubsub, dataconnect\u001b[22m"}}
+[warn] !  functions: Your GOOGLE_APPLICATION_CREDENTIALS environment variable points to C:\Users\balgo\AppData\Roaming\firebase\balgovidr_gmail_com_application_default_credentials.json. Non-emulated services will access production using these credentials. Be careful! {"metadata":{"emulator":{"name":"functions"},"message":"Your GOOGLE_APPLICATION_CREDENTIALS environment variable points to C:\\Users\\balgo\\AppData\\Roaming\\firebase\\balgovidr_gmail_com_application_default_credentials.json. Non-emulated services will access production using these credentials. Be careful!"}}
+[debug] [2024-07-28T20:14:33.592Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/adminSdkConfig [none]
+[debug] [2024-07-28T20:14:34.014Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/adminSdkConfig 200
+[debug] [2024-07-28T20:14:34.014Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/adminSdkConfig {"projectId":"istructepapers","storageBucket":"istructepapers.appspot.com","locationId":"europe-west2"}
+[debug] [2024-07-28T20:14:34.055Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-07-28T20:14:34.055Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2024-07-28T20:14:34.055Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\balgo\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.19.7.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","istructepapers","--rules","C:\\Users\\balgo\\Documents\\Websites\\istructepapers\\firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\balgo\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.19.7.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"istructepapers\",\"--rules\",\"C:\\\\Users\\\\balgo\\\\Documents\\\\Websites\\\\istructepapers\\\\firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2024-07-28T20:14:53.740Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-07-28T20:14:56.362Z] Temp file directory for storage emulator: C:\Users\balgo\AppData\Local\Temp/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: C:\\Users\\balgo\\AppData\\Local\\Temp/firebase/storage/blobs"}}
+[debug] [2024-07-28T20:14:56.383Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/istructepapers/sites 
+[debug] [2024-07-28T20:14:57.600Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/istructepapers/sites 200
+[debug] [2024-07-28T20:14:57.600Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/istructepapers/sites {"sites":[{"name":"projects/istructepapers/sites/istructepapers","defaultUrl":"https://istructepapers.web.app","appId":"1:479657269473:web:730b8d2b614726c5dbbfa0","type":"DEFAULT_SITE"}]}
+[debug] [2024-07-28T20:14:57.601Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/webApps/1:479657269473:web:730b8d2b614726c5dbbfa0/config [none]
+[debug] [2024-07-28T20:14:58.396Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/webApps/1:479657269473:web:730b8d2b614726c5dbbfa0/config 200
+[debug] [2024-07-28T20:14:58.396Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/webApps/1:479657269473:web:730b8d2b614726c5dbbfa0/config {"projectId":"istructepapers","appId":"1:479657269473:web:730b8d2b614726c5dbbfa0","storageBucket":"istructepapers.appspot.com","locationId":"europe-west2","apiKey":"AIzaSyCJTuVp5PURWWkDYQmyB810zXdsHhQSRh0","authDomain":"istructepapers.firebaseapp.com","messagingSenderId":"479657269473","measurementId":"G-4QXX33B0FZ"}
+[info] i  hosting[istructepapers]: Serving hosting files from: .firebase\istructepapers\hosting {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1m.firebase\\istructepapers\\hosting\u001b[22m"}}
+[info] +  hosting[istructepapers]: Local server: http://127.0.0.1:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5000\u001b[22m\u001b[24m"}}
+[debug] [2024-07-28T20:14:58.446Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-07-28T20:14:58.446Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-07-28T20:14:58.447Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\balgo\\.cache\\firebase\\emulators\\ui-v1.12.1\\server\\server.mjs"],"optionalArgs":[],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\balgo\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.12.1\\\\server\\\\server.mjs\"],\"optionalArgs\":[],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-07-28T20:14:58.816Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2024-07-28T20:14:58.817Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] i  functions: Watching "C:\Users\balgo\Documents\Websites\istructepapers\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\balgo\\Documents\\Websites\\istructepapers\\functions\" for Cloud Functions..."}}
+[debug] [2024-07-28T20:14:58.906Z] Validating nodejs source
+[debug] [2024-07-28T20:15:02.264Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-07-28T20:15:02.265Z] Building nodejs source
+[debug] [2024-07-28T20:15:02.266Z] Failed to find version of module node: reached end of search path C:\Users\balgo\Documents\Websites\istructepapers\functions\node_modules
+[info] +  functions: Using node@18 from host. 
+[debug] [2024-07-28T20:15:02.270Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-07-28T20:15:02.293Z] Found firebase-functions binary at 'C:\Users\balgo\Documents\Websites\istructepapers\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8579
+
+[debug] [2024-07-28T20:15:03.708Z] Got response from /__/functions.yaml {"endpoints":{},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] +  functions: Loaded functions definitions from source: . {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ."}}
+[info] i  functions: Watching "C:\Users\balgo\Documents\Websites\istructepapers\istructepapers" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\balgo\\Documents\\Websites\\istructepapers\\istructepapers\" for Cloud Functions..."}}
+[debug] [2024-07-28T20:15:03.761Z] Validating nodejs source
+[debug] [2024-07-28T20:15:07.329Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-07-28T20:15:07.329Z] Building nodejs source
+[debug] [2024-07-28T20:15:07.329Z] Failed to find version of module node: reached end of search path C:\Users\balgo\Documents\Websites\istructepapers\istructepapers\node_modules
+[info] +  functions: Using node@18 from host. 
+[debug] [2024-07-28T20:15:07.331Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-07-28T20:15:07.354Z] Found firebase-functions binary at 'C:\Users\balgo\Documents\Websites\istructepapers\istructepapers\node_modules\.bin\firebase-functions'
+[info] Serving at port 8407
+
+[debug] [2024-07-28T20:15:08.862Z] Got response from /__/functions.yaml {"endpoints":{},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] +  functions: Loaded functions definitions from source: . {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ."}}
+[info] i  functions: Watching "C:\Users\balgo\Documents\Websites\istructepapers\.firebase\istructepapers\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\balgo\\Documents\\Websites\\istructepapers\\.firebase\\istructepapers\\functions\" for Cloud Functions..."}}
+[debug] [2024-07-28T20:15:08.909Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2024-07-28T20:15:12.107Z] > [functions] package.json contents: {
+  "main": "server.js",
+  "dependencies": {
+    "firebase-frameworks": "^0.11.0",
+    "firebase-functions": "^4.5.0",
+    "firebase-admin": "^11.11.1"
+  },
+  "engines": {
+    "node": "18"
+  }
+}
+[debug] [2024-07-28T20:15:12.108Z] Building nodejs source
+[debug] [2024-07-28T20:15:12.108Z] Failed to find version of module node: reached end of search path C:\Users\balgo\Documents\Websites\istructepapers\.firebase\istructepapers\functions\node_modules
+[info] +  functions: Using node@18 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2024-07-28T20:15:12.113Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-07-28T20:15:12.134Z] Found firebase-functions binary at 'C:\Users\balgo\Documents\Websites\istructepapers\.firebase\istructepapers\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8466
+
+[debug] [2024-07-28T20:15:13.475Z] Got response from /__/functions.yaml {"endpoints":{"ssristructepapers":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["europe-west1"],"labels":{},"httpsTrigger":{},"entryPoint":"ssristructepapers"}},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] +  functions: Loaded functions definitions from source: ssristructepapers. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ssristructepapers."}}
+[info] +  functions[europe-west1-ssristructepapers]: http function initialized (http://127.0.0.1:5001/istructepapers/europe-west1/ssristructepapers). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/istructepapers/europe-west1/ssristructepapers)."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬─────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth      │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Hosting        │ 127.0.0.1:5000 │ n/a                             │
+├────────────────┼────────────────┼─────────────────────────────────┤
+│ Storage        │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage   │
+└────────────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2024-07-28T20:16:13.931Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/adminSdkConfig [none]
+[debug] [2024-07-28T20:16:14.640Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/adminSdkConfig 200
+[debug] [2024-07-28T20:16:14.641Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/istructepapers/adminSdkConfig {"projectId":"istructepapers","storageBucket":"istructepapers.appspot.com","locationId":"europe-west2"}
+[info] i  hosting: 127.0.0.1 - - [28/Jul/2024:20:18:11 +0000] "GET / HTTP/1.1" - - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [28/Jul/2024:20:18:11 +0000] \"GET / HTTP/1.1\" - - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36\""}}

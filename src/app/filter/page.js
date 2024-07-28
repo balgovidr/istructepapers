@@ -1,25 +1,25 @@
 import { ButtonsWithPoints } from "@/components/buttons";
-import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
+import { db } from "@/firebase/config";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 async function getData(context) {
-    const db = initializeFirestore()
     //Fetch papers
     const month = context.searchParams.month
     const year = context.searchParams.year
     let papers = null
   
     try {
-        const collectionRef = db.collection('solvedPapers');
+        const collectionRef = collection(db, 'solvedPapers');
         let baseQuery = collectionRef;
 
         if (year !== 'N/A') {
-            baseQuery = baseQuery.where('year', '==', year);
+            baseQuery = query(baseQuery, where('year', '==', year));
         }
         if (month !== 'N/A') {
-            baseQuery = baseQuery.where('month', '==', month);
+            baseQuery = query(baseQuery, where('month', '==', month));
         }
         
-        const querySnapshot = await baseQuery.get();
+        const querySnapshot = await getDocs(baseQuery);
         const documents = querySnapshot.docs.map((doc) => {
             const value = doc.data();
             value.id = doc.id;

@@ -1,10 +1,11 @@
-import { initializeFirebase } from "@/firebase/firebaseAdmin";
-import { auth } from "firebase-admin";
+import { auth, getAuth } from "firebase-admin";
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { initializeApp, getApps, getApp } from 'firebase-admin/app';
+import {app, firebaseConfig} from '@/firebase/config'
 
 export async function POST() {
-  initializeFirebase()
+  const app = !getApps().length ? initializeApp() : getApp();
   const authorization = headers().get("Authorization");
   if (authorization?.startsWith("Bearer ")) {
     const idToken = authorization.split("Bearer ")[1];
@@ -33,7 +34,7 @@ export async function POST() {
 }
 
 export async function GET(request) {
-  initializeFirebase()
+  const app = !getApps().length ? initializeApp() : getApp();
   const session = cookies().get("session")?.value;
 
   //Validate if the cookie exist in the request

@@ -1,4 +1,4 @@
-import { db } from '@/firebase/firebaseClient';
+import { db } from '@/firebase/config';
 import { query, collection, where, getDocs, doc, getDoc } from 'firebase/firestore';
 
 export async function fetchUserData(uid) {

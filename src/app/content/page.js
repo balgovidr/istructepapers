@@ -1,14 +1,15 @@
 import { ButtonsWithPoints } from "@/components/buttons";
-import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
+import { db } from "@/firebase/config";
+import { collection, query, where, getDocs } from "firebase/firestore";
+
 
 async function getData() {
-    const db = initializeFirestore()
     //Fetch paper data
     let papers = null;
 
     try {
-        const papersRef = db.collection("solvedPapers");
-        const querySnapshot = await papersRef.get();
+        const papersRef = collection(db, "solvedPapers");
+        const querySnapshot = await getDocs(papersRef);
 
         // Filter unique combinations of month and year
         const filteredData = Array.from(

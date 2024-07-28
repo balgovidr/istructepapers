@@ -2,7 +2,7 @@
 
 import React, {useState} from 'react';
 import logo from "@/app/assets/Logo.svg";
-import { auth } from '@/firebase/firebaseClient';
+import { auth } from '@/firebase/config';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation'
 import Head from 'next/head';
 import { TailSpin } from 'react-loading-icons';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 
 export default function Login() {
     const router = useRouter();
@@ -26,32 +26,34 @@ export default function Login() {
     const [alertSeverity, setAlertSeverity] = useState('error');
     const [alertCollapse, setAlertCollapse] = React.useState(false);
     const [loading, setLoading] = useState(false);
+
+    const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
  
     const onSubmit = async (e) => {
       e.preventDefault()
       setLoading(true)
       
-      signInWithEmailAndPassword(auth, email, password)
+      signInWithEmailAndPassword(email, password)
         .then(async (userCredential) => {
             // Signed in
             const user = userCredential.user;
 
             // Sending info to the server
             fetch("/api/login", {
-                method: "POST",
-                headers: {
-                  Authorization: `Bearer ${await user.getIdToken()}`,
-                },
-              }).then((response) => {
-                if (response.status === 200) {
-                  if (previousLink) {
-                    router.push(previousLink)
-                  } else {
-                    router.push("/")
-                    //Todo - Fix the router. Doesn't work on any of the pages
-                  }
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${await user.getIdToken()}`,
+              },
+            }).then((response) => {
+              if (response.status === 200) {
+                if (previousLink) {
+                  router.push(previousLink)
+                } else {
+                  router.push("/")
+                  //Todo - Fix the router. Doesn't work on any of the pages
                 }
-              });
+              }
+            });
         })
         .catch((error) => {
             const errorCode = error.code;

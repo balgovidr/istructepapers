@@ -1,8 +1,7 @@
-import { getDocs, getDoc, doc, collection, query, where } from "firebase/firestore";
-import { db } from '@/firebase/firebaseClient';
+import { getDocs, getDoc, doc, collection, query, where, setDoc } from "firebase/firestore";
+import { db } from '@/firebase/config';
 import { format } from 'date-fns';
 import { revalidateTag } from "next/cache";
-import { initializeFirestore } from "@/firebase/firebaseAdmin";
 import { CommentSubmitButton } from "./buttons";
 import { RenderProfilePicture } from "./profilePicture";
 
@@ -86,14 +85,13 @@ export default async function Comments({paperId, user = null, userData = null}) 
 
   async function commentSubmit(formData) {
     "use server"
-    const db = initializeFirestore()
   
     const comment = formData.get("comment");
   
     if (!comment || comment === '') return;
   
     try {
-      await db.collection("comments").add({
+      await setDoc(doc(collection(db, "comments")), {
         paperId: paperId,
         userId: user.uid,
         dateTime: format(new Date(), 'yyyy-MM-dd-kk-mm-ss'),

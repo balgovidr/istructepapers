@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import RenderProfilePicture from '@/components/profilePicture';
-import { db } from '@/firebase/firebaseClient';
+import { db } from '@/firebase/config';
 import { addDoc, collection } from "firebase/firestore";
 import { revalidateTag } from "next/cache";
 const { format } = require("date-fns/format");

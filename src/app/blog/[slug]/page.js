@@ -1,16 +1,15 @@
-import { initializeFirestore } from "@/firebase/firebaseAdmin";
+import { db } from "@/firebase/config";
 import { FieldValue } from 'firebase-admin/firestore';
 import Image from "next/image";
-
-const db = initializeFirestore()
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 
 async function fetchPost(slug) {
     let content = null
   
     //Fetch paper data
     try {
-      const docRef = db.collection("blog").doc(slug);
-      const docSnap = await docRef.get();
+      const docRef = doc(db, "blog", slug);
+      const docSnap = await getDoc(docRef);
   
       if (docSnap.exists) {
           content = docSnap.data();
@@ -61,10 +60,10 @@ export default async function Page({params}) {
   const post = await fetchPost(params.slug)
 
   //Increase blog view count
-  const blogRef = db.collection('blog').doc(params.slug);
+  const blogRef = doc(db, 'blog', params.slug);
 
-  await blogRef.update({
-    views: FieldValue.increment(1)
+  await updateDoc(blogRef, {
+    views: increment(1)
   });
 
     return (

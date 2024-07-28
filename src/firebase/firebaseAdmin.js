@@ -1,4 +1,4 @@
-import admin, { getApps, initializeApp, cert } from "firebase-admin/app";
+import admin, { getApps, initializeApp, cert, credential } from "firebase-admin/app";
 const { getFirestore } = require("firebase-admin/firestore");
 const { getStorage } = require('firebase-admin/storage');
 

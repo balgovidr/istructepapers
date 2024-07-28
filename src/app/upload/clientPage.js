@@ -3,7 +3,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import logo from "@/app/assets/Logo.svg";
 import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment, query, where, getDocs } from "firebase/firestore"; 
-import { auth, db, storage } from '@/firebase/firebaseClient';
+import { auth, db, storage } from '@/firebase/config';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';

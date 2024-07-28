@@ -1,14 +1,14 @@
-import { initializeFirestore } from "@/firebase/firebaseAdmin";
+import { db } from "@/firebase/config";
 import Image from "next/image";
+import { collection, getDocs } from "firebase/firestore";
 
 async function getData() {
-    const db = initializeFirestore()
     //Fetch paper data
     let blogs = null;
 
     try {
-        const blogsRef = db.collection("blog");
-        const querySnapshot = await blogsRef.get();
+        const blogsRef = collection(db, "blog");
+        const querySnapshot = await getDocs(blogsRef);
 
         blogs = querySnapshot.docs.map((doc) => {
             const value = doc.data();

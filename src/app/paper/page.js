@@ -1,15 +1,14 @@
-import { doc, increment, updateDoc } from "firebase/firestore";
+import { doc, increment, updateDoc, getDoc } from "firebase/firestore";
 import UserProfile from "@/components/userProfile";
 import RatePaper from "@/components/ratePaper";
 import Comments from "@/components/comments";
 import PaperComponent from '@/components/paper';
-import { initializeFirestore } from "@/firebase/firebaseAdmin";
+import { db } from "@/firebase/config";
 import { cookies } from "next/headers";
 import { ButtonsWithPoints } from "@/components/buttons";
 import { fetchSettings } from "@/functions/settings";
 
 var displayedPages = 0
-const db = initializeFirestore()
 const pointSettings = await fetchSettings("points");
 
 async function getUserData(user) {
@@ -18,8 +17,8 @@ async function getUserData(user) {
   //Fetch user information
   if (user !== null) {
     try {
-      const userDocRef = db.collection("users").doc(user.uid);
-      const userDocSnap = await userDocRef.get();
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
 
       if (userDocSnap.exists) {
         userData = userDocSnap.data()
@@ -39,8 +38,8 @@ async function getPaper(context) {
 
   //Fetch paper data
   try {
-    const docRef = db.collection("solvedPapers").doc(id);
-    const docSnap = await docRef.get();
+    const docRef = doc(db, "solvedPapers", id);
+    const docSnap = await getDoc(docRef);
 
     if (docSnap.exists) {
         paper = docSnap.data();
@@ -123,8 +122,7 @@ export default async function Viewer(context) {
 
   try {
     const session = cookies().get("session");
-    const encodedResponse = await fetch(process.env.NEXT_PUBLIC_HOST + "/api/login", {method: "GET",
-      headers: { Cookie: `session=${session?.value}` }, });
+    const encodedResponse = await fetch("/api/login");
     const response = await encodedResponse.json();
 
     if (response.isLogged) {

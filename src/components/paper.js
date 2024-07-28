@@ -1,7 +1,7 @@
 'use client'
 
 import { updateDoc, doc } from 'firebase/firestore';
-import { db } from '@/firebase/firebaseClient';
+import { db } from '@/firebase/config';
 import React, {useState} from 'react';
 import { Document, Page, pdfjs } from "react-pdf";
 

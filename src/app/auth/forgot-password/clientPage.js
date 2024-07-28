@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import logo from "@/app/assets/Logo.svg";
 import {  sendPasswordResetEmail  } from 'firebase/auth';
-import { auth} from '@/firebase/firebaseClient';
+import {auth} from '@/firebase/config'
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
 import IconButton from '@mui/material/IconButton';
