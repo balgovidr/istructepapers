@@ -122,7 +122,8 @@ export default async function Viewer(context) {
 
   try {
     const session = cookies().get("session");
-    const encodedResponse = await fetch("/api/login");
+    const encodedResponse = await fetch(process.env.NEXT_PUBLIC_HOST + "/api/login", {method: "GET",
+      headers: { Cookie: `session=${session?.value}` }, });
     const response = await encodedResponse.json();
 
     if (response.isLogged) {
