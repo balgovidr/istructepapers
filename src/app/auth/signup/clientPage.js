@@ -12,9 +12,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/navigation'
 import Head from 'next/head';
 import Image from 'next/image';
-import {useCreateUserWithEmailAndPassword} from 'react-firebase-hooks/auth'
 import { TailSpin } from 'react-loading-icons'
-import {  onAuthStateChanged  } from 'firebase/auth';
+import {  createUserWithEmailAndPassword, onAuthStateChanged  } from 'firebase/auth';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -38,21 +37,19 @@ export default function SignUp() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
-
     const onSubmit = async (e) => {
       e.preventDefault()
 
       setLoading(true)
 
       if (firstName !== '' && lastName !== '' && privacy) {
-        await createUserWithEmailAndPassword(email, password)
+        await createUserWithEmailAndPassword(auth, email, password)
           .then(async (userCredential) => {
               // Signed in
               const user = userCredential.user;
 
               try {
-                  const docRef = await setDoc(doc(db, "users", user.uid), {
+                  const userDoc = await setDoc(doc(db, "users", user.uid), {
                     firstName: firstName,
                     lastName: lastName,
                     uid: user.uid,
@@ -104,8 +101,6 @@ export default function SignUp() {
               setTimeout(() => {
                   setAlertCollapse(false);
                 }, 3000);
-
-              // ..
           });
       } else {
         if (!privacy) {

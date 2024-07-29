@@ -1,4 +1,5 @@
-import admin, { getApps, initializeApp, cert, credential } from "firebase-admin/app";
+// import admin, { getApps, initializeApp, cert, credential } from "firebase-admin/app";
+import * as admin from 'firebase-admin';
 const { getFirestore } = require("firebase-admin/firestore");
 const { getStorage } = require('firebase-admin/storage');
 
@@ -13,17 +14,18 @@ if (environment === 'production') {
 }
 
 const options = {
-  credential: cert(serviceAccount),
-  storageBucket: environment === 'production' ? 'gs://istructepapers.appspot.com' : 'gs://istructepapers-test.appspot.com'
+  credential: admin.credential.cert(serviceAccount),
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
 };
 
+// const options = {
+//   credential: cert(serviceAccount),
+//   storageBucket: environment === 'production' ? 'gs://istructepapers.appspot.com' : 'gs://istructepapers-test.appspot.com'
+// };
+
 export function initializeFirebase() {
-  const firebaseAdminApps = getApps();
-  if (firebaseAdminApps.length > 0) {
-    return firebaseAdminApps[0];
-  }
-  
-  return initializeApp(options);
+  const app = admin.apps.length ? admin.apps[0] : admin.initializeApp(options);
+  return app;
 }
 
 export function initializeFirestore() {
