@@ -139,7 +139,7 @@ export default function SignUp() {
             const errorMessage = error.message;
         }
     });
-});
+  });
 
   return (
     <div className="row full-height">
