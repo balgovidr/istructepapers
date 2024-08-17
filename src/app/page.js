@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers";
 import Footer from '@/components/footer';
+import GenerateHomepageBlogs from '@/components/homepageBlog';
 
 export const metadata = {
   title: 'Solved IStructE exam papers - Structural Papers',
@@ -73,19 +74,7 @@ export default async function Home() {
             <h2 className="text-4xl text-center md:text-left">Latest from our blog</h2>
             <a className="btn btn-primary-outline hidden md:flex" href="/blog">View our entire blog</a>
           </div>
-          <div className="md:w-1/2 w-full h-1/2 md:h-full flex flex-col justify-evenly px-8 gap-5 items-center">
-            <a className='flex flex-col rounded-md border border-gray-100 shadow-md bg-white w-full p-3 gap-2' href="/blog/cracking-the-istructe-exam">
-              <h3 className='flex flex-row justify-between items-center'>Cracking the IStructE exam</h3>
-              <hr className='border-gray-300'/>
-              <p className='text-sm'>Master the IStructE exam with these proven strategies and tips. From study schedules to practice papers, unlock success with expert insights.</p>
-            </a>
-            <a className='flex flex-col rounded-md border border-gray-100 shadow-md bg-white w-full p-3 gap-2' href="/blog/importance-of-practice">
-              <h3 className='flex flex-row justify-between items-center'>The Importance of Practice</h3>
-              <hr className='border-gray-300'/>
-              <p className='text-sm'>Explore why and how practicing for the IStructE exam using past papers is vital.</p>
-            </a>
-            <a className="btn btn-primary-outline md:hidden" href="/blog">View our entire blog</a>
-          </div>
+          <GenerateHomepageBlogs />
         </section>
         <section className="flex flex-col md:flex-row bg-primary text-white gap-8 py-20">
           <h2 className="text-3xl text-center md:w-1/2 self-center">Ready to get started?</h2>
