@@ -39,13 +39,13 @@ export async function generateMetadata(context) {
   //Todo - improve metadata for each paper
  
   return {
-	title: (paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " - Structural Papers"),
+	title: ("IStructE " + getMonthName(paper.month) + " " + paper.year + " Question " + paper.questionNumber + "solution - Structural Papers"),
 	description: ("View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by new solutions, rank them and comment your thoughts."),
 	alternates: {
 	  canonical: process.env.NEXT_PUBLIC_HOST + '/paper?id=' + context.searchParams.id,
 	},
 	openGraph: {
-	  title: (paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + " - Structural Papers"),
+	  title: ("IStructE " + getMonthName(paper.month) + " " + paper.year + " Question " + paper.questionNumber + "solution - Structural Papers"),
 	  description: ("View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by new solutions, rank them and comment your thoughts."),
 	  url: process.env.NEXT_PUBLIC_HOST + '/paper?id=' + context.searchParams.id,
 	  siteName: 'Structural Papers',
@@ -72,7 +72,7 @@ export default async function Viewer(context) {
 		<PaperComponent paper={paper} />
 		<div className="tail-container mt-2.5 mb-5">
 		  <h1 className="text-3xl self-center font-extralight flex flex-row align-middle gap-2">
-			  <p className="d-inline h2">{paper.year + ' ' + getMonthName(paper.month)}</p>
+			  <p className="d-inline h2">IStructE {paper.year + ' ' + getMonthName(paper.month)} solution</p>
 			  <p className="d-inline h2">|</p>
 			  <p className="d-inline">Question number: {paper.questionNumber}</p>
 		  </h1>

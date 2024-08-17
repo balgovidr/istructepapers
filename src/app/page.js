@@ -51,8 +51,8 @@ export default async function Home() {
   return (
     <div className='flex flex-col justify-between welcome'>
         <section className='min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-65px)] flex flex-col justify-center text-center px-[10%]'>
-          <h1 className="text-4xl md:text-5xl my-8">Solved <span className="text-gradient d-inline">IStructE</span> exam papers</h1>
-          <p className="md:text-lg my-5">The <span className="text-gradient">IStructE</span> membership exam is notoriously difficult. Use the community and our repository of solutions to help you.</p>
+          <h1 className="text-4xl md:text-5xl my-8">Solved <span className="text-gradient d-inline">IStructE</span> past paper solutions</h1>
+          <p className="md:text-lg my-5">The <span className="text-gradient">IStructE</span> membership exam is notoriously difficult. Use the community and our repository of IStructE sample answers to help you.</p>
           <div className="row mg-t-100 justify-content-center button-container">
             <a className="btn btn-primary" href="/content">Solved papers</a>
             <a className="btn btn-primary-outline mg-l-50" href="/upload">Upload a paper</a>
@@ -63,9 +63,9 @@ export default async function Home() {
             <span className='md:w-1/2'>
               <p>Structural Papers is your dedicated platform for mastering the <a href='https://www.istructe.org/training-and-development/membership-exams/chartered-membership-exam/'>IStructE exam</a>. We understand the challenges and demands of preparing for the <a href='https://www.istructe.org/'>Institution of Structural Engineers (IStructE)</a> exam, and we are here to support you to achieve your goal of becoming a <a href='https://www.istructe.org/membership/chartered-membership/'>Chartered Structural Engineer</a>.</p>
               <br />
-              <p>We offer an extensive collection of solved IStructE exam papers. By accessing these solutions, you can gain valuable insights into the <b>exam&apos;s format</b>, <b>question types</b>, <b>engineering techniques</b>, <b>clever details</b>, and effective <b>problem-solving strategies</b>.</p>
+              <p>We offer an extensive collection of solved IStructE membership exam papers. By accessing these solutions, you can gain valuable insights into the <b>exam&apos;s format</b>, <b>question types</b>, <b>engineering techniques</b>, <b>clever details</b>, and effective <b>problem-solving strategies</b>.</p>
               <br />
-              <p>Beyond providing solved papers, we are committed to fostering a collaborative learning environment using comments to discuss each other&apos;s papers and features to review papers. By engaging with peers who are also preparing for the IStructE exam, you can <b>gain diverse perspectives and strategies</b> that can enhance your own preparation.</p>
+              <p>Beyond providing solved IStructE exam papers, we are committed to fostering a collaborative learning environment using comments to discuss each other&apos;s papers and features to review papers. By engaging with peers who are also going through the IStructE exam preparation, you can <b>gain diverse perspectives and strategies</b> that can enhance your own preparation.</p>
             </span>
         </section>
         <section className="min-h-screen flex flex-col bg-light items-center md:flex-row-reverse py-20">
