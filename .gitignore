@@ -28,3 +28,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 src/pages/surveys.js
+
+# firebase keys
+istructepapers-firebase-adminsdk-gusds-1904b5e02b.json
+istructepapers-test-firebase-adminsdk-s4b6h-0121aff92b.json

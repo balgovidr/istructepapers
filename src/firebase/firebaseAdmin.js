@@ -8,9 +8,9 @@ const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
 let serviceAccount;
 
 if (environment === 'production') {
-  serviceAccount = require('./istructepapers-firebase-adminsdk-gusds-0a67e7b61d.json');
+  serviceAccount = require('./istructepapers-firebase-adminsdk-gusds-1904b5e02b.json');
 } else {
-  serviceAccount = require('./istructepapers-test-firebase-adminsdk-s4b6h-c172725ac2.json');
+  serviceAccount = require('./istructepapers-test-firebase-adminsdk-s4b6h-0121aff92b.json');
 }
 
 const options = {
