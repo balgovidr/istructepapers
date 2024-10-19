@@ -57,7 +57,6 @@ export default function SignUp() {
                     monthsAllowed: [],
                     auditTrail: [],
                     authenticityScore: 0,
-                    points: 10,
                     emailConsent: emailConsent,
                     rating: 0,
                     surveyAgreement: 1,
