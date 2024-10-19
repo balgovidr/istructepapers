@@ -2,25 +2,35 @@
 
 import React, { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
+import {functions} from '@/firebase/config'
+import { httpsCallable } from "firebase/functions";
+import { CircularProgress } from '@mui/material';
 
 export default function Return() {
   const [status, setStatus] = useState(null);
   const [customerEmail, setCustomerEmail] = useState('');
 
-  useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const sessionId = urlParams.get('session_id');
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const sessionId = urlParams.get('session_id');
 
-    fetch(`/api/checkout_sessions?session_id=${sessionId}`, {
-      method: "GET",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setStatus(data.status);
-        setCustomerEmail(data.customer_email);
-      });
-  }, []);
+  useEffect(() => {
+    async function checkoutSession() {
+      try {
+        const getCheckoutSession = httpsCallable(functions,'getCheckoutSession')
+        const res = await getCheckoutSession({sessionId: sessionId});
+
+        setStatus(res.data.sessionStatus);
+        setCustomerEmail(res.data.customer_email);
+      } catch (e) {
+        setStatus("invalid")
+      }
+    }
+
+    if (sessionId) {
+      checkoutSession()
+    }
+  }, [sessionId]);
 
   if (status === 'open') {
     return (
@@ -30,11 +40,30 @@ export default function Return() {
 
   if (status === 'complete') {
     return (
-      <section id="success">
-        <p>
-          We appreciate your business! A confirmation email will be sent to {customerEmail}.
+      <section id="success" className="container px-[10%] h-[calc(100%-65px)] flex flex-col justify-center gap-10 items-center">
+        <p className='text-xl'>
+          Thank you!
+        </p>
+        <p className='text-md'>
+          Go back to the paper you were viewing and you&apos;ll be able to access it and more now!
+        </p>
+      </section>
+    )
+  }
 
-          If you have any questions, please email <a href="mailto:orders@example.com">orders@example.com</a>.
+  if (!status) {
+    return (
+      <section className="container px-[10%] h-[calc(100%-65px)] flex flex-col justify-center gap-10 items-center">
+        <CircularProgress />
+      </section>
+    )
+  }
+
+  if (status === 'invalid') {
+    return (
+      <section id="success" className="container px-[10%] h-[calc(100%-65px)] flex flex-col justify-center gap-10 items-center">
+        <p className='text-md'>
+          This link is invalid.
         </p>
       </section>
     )
