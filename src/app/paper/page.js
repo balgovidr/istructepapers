@@ -17,7 +17,6 @@ async function getPaper(context) {
 	if (docSnap.exists) {
 		paper = docSnap.data();
 		paper.id = docSnap.id;
-		console.log(paper)
 	} else {
 	  // docSnap.data() will be undefined in this case
 	}
