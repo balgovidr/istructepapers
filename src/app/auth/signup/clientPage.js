@@ -54,12 +54,9 @@ export default function SignUp() {
                     lastName: lastName,
                     uid: user.uid,
                     papersAllowed: [],
-                    monthsAllowed: [],
                     auditTrail: [],
-                    authenticityScore: 0,
                     emailConsent: emailConsent,
                     rating: 0,
-                    surveyAgreement: 1,
                   });
 
                   setAlertContent("Registration complete. Signing in...");
