@@ -56,6 +56,7 @@ export default function SignUp() {
                     papersAllowed: [],
                     auditTrail: [],
                     emailConsent: emailConsent,
+                    points: 0,
                     rating: 0,
                   });
 

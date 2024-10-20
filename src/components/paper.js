@@ -1,14 +1,12 @@
 'use client'
 
-import { updateDoc, doc, getDoc, increment } from 'firebase/firestore';
+import { updateDoc, doc, getDoc, increment, getDocs } from 'firebase/firestore';
 import { auth, db } from '@/firebase/config';
 import React, {useState, useEffect} from 'react';
 import { Document, Page, pdfjs } from "react-pdf";
 import { onAuthStateChanged  } from 'firebase/auth';
 import { fetchSettings } from '@/functions/settings';
-import { ButtonsWithPoints } from "@/components/buttons";
-import { Button } from '@mui/material';
-import { getMonthName } from '@/functions/paper';
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 //If facing CORS issues: https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin
@@ -119,6 +117,59 @@ export default function PaperComponent({paper, pageLimit = null}) {
 		}
 	}
 
+	async function removePaper() {
+		if (userData.hasOwnProperty("access") && userData.access == "admin") {
+			// Remove the file from storage first
+			const storage = getStorage();
+
+			const fileRef = ref(storage, paper.filePath);
+
+			// Delete the file
+			deleteObject(fileRef).then(async () => {
+				// File deleted successfully
+				const batch = db.batch();
+
+				// Remove all comments for this paper
+				const commentsQuery = query(collection(db, "comments"), where("paperId", "==", paper.id));
+				const commentsQuerySnapshot = await getDocs(commentsQuery);
+
+				if (commentsQuerySnapshot.length > 0) {
+					commentsQuerySnapshot.forEach((doc) => {
+						batch.delete(doc.ref);
+					});
+				}
+
+				//Remove all ratings for this paper
+				const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "==", paper.id));
+				const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
+				
+				if (paperReviewsQuerySnapshot.length > 0) {
+					paperReviewsQuerySnapshot.forEach((doc) => {
+						batch.delete(doc.ref);
+					});
+				}
+
+				// Remove the firestore entry for the solved paper itself
+				batch.delete(doc(db, "solvedPapers", paper.id));
+
+				//Execute all deletes
+				await batch.commit();
+			}).catch((error) => {
+				// Uh-oh, an error occurred!
+				console.log(error)
+			});
+
+		}
+	}
+
+	async function verifyPaper() {
+		if (userData.hasOwnProperty("access") && userData.access == "admin") {
+			await updateDoc(doc(db, "solvedPapers", paper.id), {
+				verified: true
+			})
+		}
+	}
+
 	function LimitReached() {
 		if (user !== undefined && userData !== undefined && pointSettings !== undefined) {
 		  if (userData.points < pointSettings.paperView && !paperAccessible) {
@@ -182,6 +233,17 @@ export default function PaperComponent({paper, pageLimit = null}) {
 
     return (
         <div className="pdf-container pdf-container-viewer align-items-center column">
+			{userData ?
+				(userData.hasOwnProperty("access") && userData.access == "admin") ?
+					<div className='flex flex-row'>
+						<button className='border border-primary p-3' onClick={() => removePaper()}>Remove paper</button>
+						<button className='border border-primary p-3' onClick={() => verifyPaper()}>Verify paper</button>
+					</div>
+				:
+					null
+			:
+				null
+			}
 			<Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} loading={<PageLoadDiv />}>
 				{displayedPages === 0 ?
 				<PageLoadDiv /> :
