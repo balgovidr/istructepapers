@@ -21,12 +21,12 @@ const storage = getStorage(app);
 const functions = getFunctions(app);
 
 //To configure client side firebase with the firebase emulator
-const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
-if (environment === 'development') {
-    connectFirestoreEmulator(db, '127.0.0.1', 8080);
-    connectAuthEmulator(auth, "http://127.0.0.1:9099");
-    connectStorageEmulator(storage, "127.0.0.1", 9199);
-    connectFunctionsEmulator( functions, "127.0.0.1", 5001 );
-}
+// const environment = process.env.NEXT_PUBLIC_ENVIRONMENT;
+// if (environment === 'development') {
+//     connectFirestoreEmulator(db, '127.0.0.1', 8080);
+//     connectAuthEmulator(auth, "http://127.0.0.1:9099");
+//     connectStorageEmulator(storage, "127.0.0.1", 9199);
+//     connectFunctionsEmulator( functions, "127.0.0.1", 5001 );
+// }
 
 export {firebaseConfig, app, auth, db, storage, functions}

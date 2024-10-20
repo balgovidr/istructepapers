@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect, useRef} from "react";
 import logo from "@/app/assets/Logo.svg";
-import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment, query, where, getDocs } from "firebase/firestore"; 
+import { collection, addDoc, updateDoc, doc, arrayUnion, getDoc, increment, query, where, getDocs, setDoc } from "firebase/firestore"; 
 import { auth, db, storage } from '@/firebase/config';
 import Alert from '@mui/material/Alert';
 import Stack from "@mui/material/Stack";
@@ -32,6 +32,10 @@ export default function UploadPaper() {
     const [schemeDiagram, setSchemeDiagram] = useState(undefined);
     const [userAllowedToUpload, setUserAllowedToUpload] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [fetchBankDetails, setFetchBankDetails] = useState(false);
+    const [accountNumber, setAccountNumber] = useState(undefined);
+    const [sortcode, setSortcode] = useState(undefined);
+    const [nameOnAccount, setNameOnAccount] = useState(undefined);
     const router = useRouter()
 
     //Todo - The papers that the viewer can watch is added to a waiting list and is only appended to the final list after their papers have been verified.
@@ -43,9 +47,37 @@ export default function UploadPaper() {
         });
 
         return () => {
-        unsubscribe();
+            unsubscribe();
         };
     }, []);
+
+    useEffect(() => {
+        async function checkBankDetails() {
+            const bankDetailsRef = doc(db, "bankDetails", user.uid);
+            const bankDetailsSnap = await getDoc(bankDetailsRef);
+            
+            if (bankDetailsSnap.exists()) {
+                const data = bankDetailsSnap.data();
+
+                if (data.accountNumber && data.sortcode && data.nameOnAccount) {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                return false
+            }
+        }
+
+        async function toggleCollectBankDetails() {
+            const bankDetailsExist = await checkBankDetails()
+            setFetchBankDetails(!bankDetailsExist)
+        }
+
+        if (user) {
+            toggleCollectBankDetails()
+        }
+    }, [user])
 
     function appendToAttempted(value) {
         if (attempted.includes(value)) {
@@ -182,6 +214,15 @@ export default function UploadPaper() {
                         }, 3000);
                     });
 
+                    //Add their bank details if they've provided it
+                    if (accountNumber && sortcode && nameOnAccount) {
+                        setDoc(doc(db, "bankDetails", user.uid), {
+                            accountNumber: accountNumber,
+                            sortcode: sortcode,
+                            nameOnAccount: nameOnAccount
+                        })
+                    }
+
                     //Reset the form fields
                     router.push('/upload')
                 })
@@ -189,7 +230,7 @@ export default function UploadPaper() {
         setLoading(false);
       }
     
-      if (!user) {
+    if (!user) {
         return (
             <div className="row full-height">
                 <Head>
@@ -257,6 +298,21 @@ export default function UploadPaper() {
                     <input type="number" className="form-control mg-b-20" id="scheme-diagram" placeholder="1" value={schemeDiagram} onChange={(e) => setSchemeDiagram(e.target.value)} min="1" required/>
                     <label htmlFor="password" className="mg-t-20">Attach pdf file *</label>
                     <input type="file" accept="application/pdf" className="form-control" id="file" name="Attach" onChange={(e) => setFile(e.target.files[0])} onClick={e =>  (e.target.value = "")} required/>
+
+                    {fetchBankDetails ?
+                    <div className="flex flex-col">
+                        <span className="text-sm mt-4 mb-3">Your bank details are not on file. Please provide us the details below so we can pay you.</span>
+                        <span className="text-sm mb-4">Payments will be provided at the end of the month depending on the number of views you get. Please ensure the details you provide is correct.</span>
+                        <label htmlFor="account-number">Account number</label>
+                        <input type="number" className="form-control mg-b-20" id="account-number" placeholder="12345678" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)}/>
+                        <label htmlFor="sortcode">Sortcode (without the dashes)</label>
+                        <input type="number" className="form-control mg-b-20" id="sortcode" placeholder="040004" value={sortcode} onChange={(e) => setSortcode(e.target.value)}/>
+                        <label htmlFor="name-on-account">Name on account</label>
+                        <input type="text" className="form-control mg-b-20" id="name-on-account" placeholder="First Last" value={nameOnAccount} onChange={(e) => setNameOnAccount(e.target.value)}/>
+                    </div>
+                    :
+                    null
+                    }
 
                     <div className="row justify-content-center align-items-center mg-t-25 mg-b-20">
                         <button type="submit" onClick={onSubmit} className="btn btn-primary" disabled={loading}>
