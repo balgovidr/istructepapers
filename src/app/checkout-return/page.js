@@ -5,14 +5,14 @@ import { redirect } from 'next/navigation';
 import {functions} from '@/firebase/config'
 import { httpsCallable } from "firebase/functions";
 import { CircularProgress } from '@mui/material';
+import { useSearchParams } from 'next/navigation'
 
 export default function Return() {
   const [status, setStatus] = useState(null);
   const [customerEmail, setCustomerEmail] = useState('');
 
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const sessionId = urlParams.get('session_id');
+  const searchParams = useSearchParams()
+  const sessionId = searchParams.get('session_id')
 
   useEffect(() => {
     async function checkoutSession() {

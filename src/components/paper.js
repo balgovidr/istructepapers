@@ -18,6 +18,7 @@ export default function PaperComponent({paper, pageLimit = null}) {
 	const [userData, setUserData] = useState(undefined);
 	const [maxPages, setMaxPages] = useState(undefined);
 	const [paperAccessible, setPaperAccessible] = useState(false);
+	const [userDataChanged, setUserDataChanged] = useState(0)
 
 	useEffect(() => {
 		onAuthStateChanged(auth, async (user) => {
@@ -42,7 +43,7 @@ export default function PaperComponent({paper, pageLimit = null}) {
 		}
 
 		fetchUserData()
-	}, [user]);
+	}, [user, userDataChanged]);
 
 	useEffect(() => {
 	  async function fetchData() {
@@ -63,6 +64,9 @@ export default function PaperComponent({paper, pageLimit = null}) {
 				await updateDoc(doc(db, "users", user.uid), {
 					papersAllowed: [],
 				})
+
+				//Refresh userData
+				setUserDataChanged((prevCount) => prevCount + 1)
 			} else {
 				// Array is in the new format
 				const hasAccess = userData.papersAllowed.some((allowedPaper) => {
@@ -99,15 +103,18 @@ export default function PaperComponent({paper, pageLimit = null}) {
 	async function viewFullPaper() {
 		// User has opted to redeem credits and view the rest of the paper
 		if (user !== undefined && userData !== undefined && pointSettings !== undefined) {
-			if (userData.points > pointSettings.paperView && !paperAccessible) {
+			if (userData.points >= pointSettings.paperView && !paperAccessible && userData.points > 0) {
 				// Redact credits from the user and append this paper to the user's papers allowed list
 				await updateDoc(doc(db, "users", user.uid), {
 					papersAllowed: [...userData.papersAllowed, {paperId: paper.id, startDate: new Date()}],
 					points: increment(-1 * pointSettings.paperView)
 				})
 
-				// Change the number of pages visible to all of the pages
-				setDisplayedPages(maxPages)
+				//Refresh userData
+				setUserDataChanged((prevCount) => prevCount + 1)
+
+				// Set status of user being able to access the paper
+				await checkUserAccessToPaper()
 			} else {
 				// User does not have enough credits
 				throw Error("User does not have enough credits or already has access to this page. Refresh page.")

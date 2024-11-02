@@ -43,7 +43,7 @@ exports.createCheckoutSession = onCall(async (data, context) => {
         ui_mode: 'embedded',
         line_items: [
           {
-            price: 'price_1QB0d1KXrNJ2z07Vt3IKSSuM',
+            price: 'price_1QC8HzKXrNJ2z07VQZOvSCBw',
             quantity: 1,
           },
         ],

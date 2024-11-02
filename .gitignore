@@ -38,3 +38,5 @@ istructepapers-test-firebase-adminsdk-s4b6h-0121aff92b.json
 # Logs
 firebase-debug.log
 ui-debug.log
+.env.production
+functions/.env
