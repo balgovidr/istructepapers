@@ -10,9 +10,9 @@ export default function Footer({backgroundColor = "white"}) {
             </div>
             <div className={"flex flex-col gap-3 " + (backgroundColor == "white" ? "text-black" : "text-white")}>
                 <span className='text-xs'>For enquiries and feedback please contact</span>
-                <a href="mailto:structuralpapers@gmail.com" className="flex flex-row gap-3 text-sm">
+                <a href="mailto:info@structuralpapers.com" className="flex flex-row gap-3 text-sm">
                     <EmailIcon color='disabled'/>
-                    structuralpapers@gmail.com
+                    info@structuralpapers.com
                 </a>
             </div>
             <div className={"flex flex-col md:grid-cols-4 text-xs gap-3 justify-items-center" + (backgroundColor == "white" ? "text-black" : "text-white")}>
