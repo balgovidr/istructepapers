@@ -4,6 +4,7 @@ import Navbar from '@/components/navbar';
 import { Fab, Tooltip } from '@mui/material';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import { GoogleAnalytics } from '@next/third-parties/google'
+import Footer from '@/components/footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +22,7 @@ export default async function RootLayout({ children }) {
             <FeedbackIcon />
           </Fab>
         </Tooltip> */}
+        <Footer />
       </body>
       <GoogleAnalytics gaId="G-4QXX33B0FZ" />
     </html>

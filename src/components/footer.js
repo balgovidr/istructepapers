@@ -1,21 +1,21 @@
+import EmailIcon from '@mui/icons-material/Email';
 
-export default function Footer() {
+export default function Footer({backgroundColor = "white"}) {
     return (
-        <div className="flex flex-col md:flex-row bg-white py-14 px-8 gap-8 md:justify-between">
+        <div className={"flex flex-col md:flex-row py-14 mx-8 gap-8 md:justify-between border-primary border-t " + (backgroundColor == "white" ? "bg-white" : "bg-primary")}>
             <div className="flex flex-col md:flex-row md:justify-evenly items-center gap-8">
-                <a className="border-secondary text-secondary border-2 rounded-lg py-1 px-5 max-w-[200px] hover:border-primary hover:text-primary duration-300" href="/upload">
+                <a className="border-secondary text-secondary border rounded-lg py-2 px-5 max-w-[200px] hover:bg-secondary hover:text-white duration-300" href="/upload">
                     Upload papers
                 </a>
-                {/* <div className="flex flex-col gap-3">
-                    <div className="flex flex-row gap-3">
-                    <span className="material-symbols-outlined">
-                        mail
-                    </span>
-                    <a href="mailto:info@neatnest.com">info@structuralpapers.com</a>
-                    </div>
-                </div> */}
             </div>
-            <div className="flex flex-col md:grid-cols-4 text-xs gap-3 justify-items-center">
+            <div className={"flex flex-col gap-3 " + (backgroundColor == "white" ? "text-black" : "text-white")}>
+                <span className='text-xs'>For enquiries and feedback please contact</span>
+                <a href="mailto:structuralpapers@gmail.com" className="flex flex-row gap-3 text-sm">
+                    <EmailIcon color='disabled'/>
+                    structuralpapers@gmail.com
+                </a>
+            </div>
+            <div className={"flex flex-col md:grid-cols-4 text-xs gap-3 justify-items-center" + (backgroundColor == "white" ? "text-black" : "text-white")}>
                 <div>
                     Structural Papers &copy; {new Date().getFullYear()}
                 </div>

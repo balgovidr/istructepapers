@@ -80,12 +80,11 @@ export default async function Home() {
           <h2 className="text-3xl text-center md:w-1/2 self-center">Ready to get started?</h2>
           <div className="flex flex-col justify-center items-center md:w-1/2 gap-3">
             <div className="text-xl">Start revising</div>
-            <a className="border-white border-2 rounded-lg py-1 px-5 self-center hover:border-secondary hover:text-secondary duration-300" href="/content">
+            <a className="border-white border rounded-lg py-2 px-5 self-center hover:bg-white hover:text-primary duration-300" href="/content">
               View sample answers
             </a>
           </div>
         </section>
-        <Footer />
     </div>
   )
 }
