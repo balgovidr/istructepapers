@@ -3,7 +3,7 @@
 import { TailSpin } from 'react-loading-icons';
 import { useFormStatus } from 'react-dom'
 import { useEffect } from 'react';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { fetchSettings } from '@/functions/settings';
 
@@ -31,29 +31,16 @@ export function ButtonsWithPoints() {
   })
 
   return (
-    <div className="flex flex-row flex-wrap mg-t-50 justify-center button-container">
-        <a className="btn btn-primary-outline min-w-[150px] mx-[5%] flex flex-col items-center gap-3" href="/upload">
+    <div className="flex flex-row flex-wrap mg-t-50 justify-center button-container gap-4">
+      <Tooltip title="Earn money by uploading solved papers">
+        <a className="btn btn-primary-outline min-w-[150px] mx-[5%] flex flex-col items-center gap-3 justify-center" href="/upload">
           <span>Upload a paper</span>
-          <div className='flex flex-col items-center'>
-            {points ?
-              <span className='text-md'>+{points.paperUpload}</span>
-            :
-              <CircularProgress size={24} />
-            }
-            <span className='text-xs'>Points</span>
-          </div>
         </a>
-        <a className="btn btn-primary-outline min-w-[150px] mx-[5%] flex flex-col items-center gap-3" href="/surveys">
-          <span>Review papers</span>
-          <div className='flex flex-col items-center'>
-            {points ?
-              <span className='text-md'>+{points.paperReview}</span>
-            :
-              <CircularProgress size={24} />
-            }
-            <span className='text-xs'>Points</span>
-          </div>
-        </a>
+      </Tooltip>
+      <div className='flex flex-col max-w-96 gap-2'>
+        <span className="text-left">Earn money by uploading a solved paper.</span>
+        <span className="text-left">We get about 300 visitors each month viewing papers. Earn £1 for each visitor that chooses to view your entire paper.</span>
+      </div>
     </div>
   )
 }

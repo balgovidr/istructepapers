@@ -17,7 +17,6 @@ async function getPaper(context) {
 	if (docSnap.exists) {
 		paper = docSnap.data();
 		paper.id = docSnap.id;
-		console.log(paper)
 	} else {
 	  // docSnap.data() will be undefined in this case
 	}
@@ -39,13 +38,13 @@ export async function generateMetadata(context) {
   //Todo - improve metadata for each paper
  
   return {
-	title: ("IStructE " + getMonthName(paper.month) + " " + paper.year + " Question " + paper.questionNumber + "solution - Structural Papers"),
+	title: ("IStructE " + getMonthName(paper.month) + " " + paper.year + " Question " + paper.questionNumber + " solution - Structural Papers"),
 	description: ("View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by new solutions, rank them and comment your thoughts."),
 	alternates: {
 	  canonical: process.env.NEXT_PUBLIC_HOST + '/paper?id=' + context.searchParams.id,
 	},
 	openGraph: {
-	  title: ("IStructE " + getMonthName(paper.month) + " " + paper.year + " Question " + paper.questionNumber + "solution - Structural Papers"),
+	  title: ("IStructE " + getMonthName(paper.month) + " " + paper.year + " Question " + paper.questionNumber + " solution - Structural Papers"),
 	  description: ("View a solution for the IStructE exam of " + paper.year + " " + getMonthName(paper.month) + " Question " + paper.questionNumber + ". Be inspired by new solutions, rank them and comment your thoughts."),
 	  url: process.env.NEXT_PUBLIC_HOST + '/paper?id=' + context.searchParams.id,
 	  siteName: 'Structural Papers',

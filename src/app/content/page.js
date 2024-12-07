@@ -9,7 +9,8 @@ async function getData() {
 
     try {
         const papersRef = collection(db, "solvedPapers");
-        const querySnapshot = await getDocs(papersRef);
+        const q = query(papersRef, where("verified", "==", true));
+        const querySnapshot = await getDocs(q);
 
         // Filter unique combinations of month and year
         const filteredData = Array.from(

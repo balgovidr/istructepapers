@@ -1,12 +1,12 @@
 'use client'
 
-import { updateDoc, doc, getDoc, increment } from 'firebase/firestore';
+import { updateDoc, doc, getDoc, increment, getDocs } from 'firebase/firestore';
 import { auth, db } from '@/firebase/config';
 import React, {useState, useEffect} from 'react';
 import { Document, Page, pdfjs } from "react-pdf";
 import { onAuthStateChanged  } from 'firebase/auth';
 import { fetchSettings } from '@/functions/settings';
-import { ButtonsWithPoints } from "@/components/buttons";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 //If facing CORS issues: https://stackoverflow.com/questions/37760695/firebase-storage-and-access-control-allow-origin
@@ -17,16 +17,16 @@ export default function PaperComponent({paper, pageLimit = null}) {
 	const [user, setUser] = useState(undefined);
 	const [userData, setUserData] = useState(undefined);
 	const [maxPages, setMaxPages] = useState(undefined);
+	const [paperAccessible, setPaperAccessible] = useState(false);
+	const [userDataChanged, setUserDataChanged] = useState(0)
 
 	useEffect(() => {
 		onAuthStateChanged(auth, async (user) => {
-			console.log(1)
 			setUser(user);
 		});
 	});
 
 	useEffect(() => {
-		console.log(4)
 		async function fetchUserData() {
 			if (user) {
 				try {
@@ -43,57 +43,163 @@ export default function PaperComponent({paper, pageLimit = null}) {
 		}
 
 		fetchUserData()
-	}, [user]);
+	}, [user, userDataChanged]);
 
 	useEffect(() => {
 	  async function fetchData() {
-		console.log(2)
 		const pointSettings1 = await fetchSettings('points');
-		console.log(pointSettings1)
 		setPointSettings(pointSettings1)
 	  }
 
 	  fetchData();
 	}, []);
 
-	const onDocumentLoadSuccess = async ({ numPages }) => {
-		console.log(3)
-		console.log(paper)
-		if (userData && user && pointSettings) {
-			console.log(userData)
-			console.log(user)
-			console.log(pointSettings)
-			console.log(numPages)
-			// If the user is logged in, check if they have prior access to this specific paper or this months paper
-			if (userData.papersAllowed.includes(paper.id) || userData.monthsAllowed.includes(paper.month + '-' + paper.year)) {
-				setDisplayedPages(numPages)
-			} else if (userData.points >= pointSettings.paperView) {
-				// If they don't have access to this paper, then deduct from their credits and show the paper
+	// If the user is logged in, check if they have prior access to this specific paper by looping through all papers they have access to
+	const checkUserAccessToPaper = async () => {
+		const date = new Date()
+		if (userData.papersAllowed.length > 0) {
+			// The papers allowed list already contains something
+			if (typeof(userData.papersAllowed[0]) == "string") {
+				// For the old system, the list would have strings instead of objects. If that is the case, delete it.
 				await updateDoc(doc(db, "users", user.uid), {
-					papersAllowed: [...userData.papersAllowed, paper.id],
-					points: increment(-1 * pointSettings.paperView)
+					papersAllowed: [],
 				})
-				//Todo - Update costs of viewing a paper to be a variable that's fetched
 
+				//Refresh userData
+				setUserDataChanged((prevCount) => prevCount + 1)
+			} else {
+				// Array is in the new format
+				const hasAccess = userData.papersAllowed.some((allowedPaper) => {
+					let maxAllowedDate = allowedPaper.startDate.toDate()
+					maxAllowedDate.setDate(maxAllowedDate.getDate() + 60);
+					// If the paper is in the allowed list and if the paper was bought within the last 60 days then allow access
+					return (allowedPaper.paperId == paper.id && maxAllowedDate >= date)
+				})
+
+				setPaperAccessible(hasAccess);
+    			return hasAccess;
+			}
+		}
+
+		setPaperAccessible(false)
+		return false
+	}
+
+	const onDocumentLoadSuccess = async ({ numPages }) => {
+		if (userData && user && pointSettings) {
+			// If the user does not have access to the paper then show them the preview of 2 pages
+			if ((await checkUserAccessToPaper())) {
 				setDisplayedPages(numPages)
 			} else {
-				setDisplayedPages(1)
+				setDisplayedPages(2)
 			}
 		} else {
-		setDisplayedPages(2)
+			// For all external visitors show 2 pages
+			setDisplayedPages(2)
+		}
+		setMaxPages(numPages)
+	}
+
+	async function viewFullPaper() {
+		// User has opted to redeem credits and view the rest of the paper
+		if (user !== undefined && userData !== undefined && pointSettings !== undefined) {
+			if (userData.points >= pointSettings.paperView && !paperAccessible && userData.points > 0) {
+				// Redact credits from the user and append this paper to the user's papers allowed list
+				await updateDoc(doc(db, "users", user.uid), {
+					papersAllowed: [...userData.papersAllowed, {paperId: paper.id, startDate: new Date()}],
+					points: increment(-1 * pointSettings.paperView)
+				})
+
+				//Refresh userData
+				setUserDataChanged((prevCount) => prevCount + 1)
+
+				// Set status of user being able to access the paper
+				await checkUserAccessToPaper()
+			} else {
+				// User does not have enough credits
+				throw Error("User does not have enough credits or already has access to this page. Refresh page.")
+			}
+		} else {
+			throw Error("User is not logged in.")
+		}
+	}
+
+	async function removePaper() {
+		if (userData.hasOwnProperty("access") && userData.access == "admin") {
+			// Remove the file from storage first
+			const storage = getStorage();
+
+			const fileRef = ref(storage, paper.filePath);
+
+			// Delete the file
+			deleteObject(fileRef).then(async () => {
+				// File deleted successfully
+				const batch = db.batch();
+
+				// Remove all comments for this paper
+				const commentsQuery = query(collection(db, "comments"), where("paperId", "==", paper.id));
+				const commentsQuerySnapshot = await getDocs(commentsQuery);
+
+				if (commentsQuerySnapshot.length > 0) {
+					commentsQuerySnapshot.forEach((doc) => {
+						batch.delete(doc.ref);
+					});
+				}
+
+				//Remove all ratings for this paper
+				const paperReviewsQuery = query(collection(db, "paperReviews"), where("paperId", "==", paper.id));
+				const paperReviewsQuerySnapshot = await getDocs(paperReviewsQuery);
+				
+				if (paperReviewsQuerySnapshot.length > 0) {
+					paperReviewsQuerySnapshot.forEach((doc) => {
+						batch.delete(doc.ref);
+					});
+				}
+
+				// Remove the firestore entry for the solved paper itself
+				batch.delete(doc(db, "solvedPapers", paper.id));
+
+				//Execute all deletes
+				await batch.commit();
+			}).catch((error) => {
+				// Uh-oh, an error occurred!
+				console.log(error)
+			});
+
+		}
+	}
+
+	async function verifyPaper() {
+		if (userData.hasOwnProperty("access") && userData.access == "admin") {
+			await updateDoc(doc(db, "solvedPapers", paper.id), {
+				verified: true
+			})
 		}
 	}
 
 	function LimitReached() {
 		if (user !== undefined && userData !== undefined && pointSettings !== undefined) {
-		  if (user.points < pointSettings.paperView && !userData.papersAllowed.includes(paper.id) && !userData.monthsAllowed.includes(paper.month + '-' + paper.year)) {
-			// User is logged in but does not have enough credits to view the paper. Ask to upload or answer questions
+		  if (userData.points < pointSettings.paperView && !paperAccessible) {
+			// User is logged in but does not have enough credits to view the paper.
 			return (
-			  <div className="background-color-light pd-a-10p full-width">
-				<span className="text-gradient">You&#39;ve already used up your allowance.</span>
-				<br />
-				<span>View the rest of the solved papers of {paper.year + ' ' + getMonthName(paper.month)} by uploading a solved paper of your own or view this paper by answering a few questions.</span>
-				<ButtonsWithPoints />
+			  <div className="background-color-light pd-a-10p full-width flex flex-col">
+				<span className="text-gradient">You do not have enough credits.</span>
+				<span>View the rest of this solved paper for 2 months for £2.</span>
+				<a className="transition-all px-4 py-1 rounded-md border-primary border text-primary hover:text-white hover:bg-primary flex flex-col items-center self-center mt-4" href="/checkout">
+					<span>Go to checkout</span>
+				</a>
+			  </div>
+			)
+		  }
+		  if (userData.points >= pointSettings.paperView && !paperAccessible) {
+			// Provide user with the option to unlock the rest of the paper.
+			return (
+			  <div className="background-color-light pd-a-10p full-width flex-col flex">
+				<span className="text-gradient">View the rest of the paper.</span>
+				<span>View the rest of this solved paper for 2 months by redeeming {pointSettings.paperView} credits.</span>
+				<button className="transition-all px-4 py-1 rounded-md border-primary border text-primary hover:text-white hover:bg-primary flex flex-col items-center self-center mt-4" onClick={() => viewFullPaper()}>
+					<span>Accept</span>
+				</button>
 			  </div>
 			)
 		  }
@@ -134,6 +240,17 @@ export default function PaperComponent({paper, pageLimit = null}) {
 
     return (
         <div className="pdf-container pdf-container-viewer align-items-center column">
+			{userData ?
+				(userData.hasOwnProperty("access") && userData.access == "admin") ?
+					<div className='flex flex-row'>
+						<button className='border border-primary p-3' onClick={() => removePaper()}>Remove paper</button>
+						<button className='border border-primary p-3' onClick={() => verifyPaper()}>Verify paper</button>
+					</div>
+				:
+					null
+			:
+				null
+			}
 			<Document file={paper.downloadUrl} options={{ workerSrc: "/pdf.worker.js" }} onLoadSuccess={onDocumentLoadSuccess} onLoadError={console.error} loading={<PageLoadDiv />}>
 				{displayedPages === 0 ?
 				<PageLoadDiv /> :
