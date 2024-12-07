@@ -1,25 +1,25 @@
-import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
-import { collection, query, where, getDocs, get } from "firebase/firestore";
+import { ButtonsWithPoints } from "@/components/buttons";
+import { db } from "@/firebase/config";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 async function getData(context) {
-    const db = initializeFirestore()
     //Fetch papers
     const month = context.searchParams.month
     const year = context.searchParams.year
     let papers = null
   
     try {
-        const collectionRef = db.collection('solvedPapers');
-        let baseQuery = collectionRef;
+        const collectionRef = collection(db, 'solvedPapers');
+        let baseQuery = query(collectionRef, where("verified", '==', true));
 
         if (year !== 'N/A') {
-            baseQuery = baseQuery.where('year', '==', year);
+            baseQuery = query(baseQuery, where('year', '==', year));
         }
         if (month !== 'N/A') {
-            baseQuery = baseQuery.where('month', '==', month);
+            baseQuery = query(baseQuery, where('month', '==', month));
         }
         
-        const querySnapshot = await baseQuery.get();
+        const querySnapshot = await getDocs(baseQuery);
         const documents = querySnapshot.docs.map((doc) => {
             const value = doc.data();
             value.id = doc.id;
@@ -46,10 +46,30 @@ function getMonthName(monthNumber) {
 
 export async function generateMetadata(context) {
     const data = await getData(context);
+    const month = context.searchParams.month
+    const year = context.searchParams.year
    
     return {
-      title: ("IStructE exam solutions from " + getMonthName(data.month) + " " + data.year + " - Structural Papers"),
-      description: ("View all available IStructE solved exam papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the pdf."),
+      title: ("IStructE " + getMonthName(data.month) + " " + data.year + " exam papers - Structural Papers"),
+      description: ("View all available IStructE solved past papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the solved exam paper's pdf."),
+      alternates: {
+        canonical: process.env.NEXT_PUBLIC_HOST + '/filter?year=' + year + '&month=' + month,
+      },
+      openGraph: {
+        title: ("IStructE " + getMonthName(data.month) + " " + data.year + " exam papers - Structural Papers"),
+        description: ("View all available IStructE solved past papers from " + getMonthName(data.month) + " " + data.year + ". Pick a solutions and view the solved exam paper's pdf."),
+        url: process.env.NEXT_PUBLIC_HOST + '/filter?year=' + year + '&month=' + month,
+        siteName: 'Structural Papers',
+        images: [
+          {
+            url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp',
+            width: 1200,
+            height: 628,
+            alt: 'Image describing Structural Papers',
+          },
+        ],
+        type: 'website',
+      },
     }
   }
 
@@ -58,15 +78,12 @@ export default async function Filter(context) {
 
     return (
         <div className="full-height column content text-center">
-            <div className="flex flex-row flex-wrap row mg-t-50 justify-center button-container">
-                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/upload">Upload a paper</a>
-                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/surveys">Answer questions</a>
-            </div>
+            <ButtonsWithPoints />
             <hr className="solid"/>
-            <h1 className="text-2xl mb-5">Solved <span className="text-gradient d-inline">IStructE</span> papers - {getMonthName(data.month) + " " + data.year}</h1>
+            <h1 className="text-2xl mb-5">Solved <span className="text-gradient d-inline">IStructE</span> {getMonthName(data.month) + " " + data.year} papers</h1>
             <div className="font-size-20">Pick a solved paper to view.</div>
             <div className="grid mg-l-10p mg-r-10p center h-full">
-                {data.papers.map((doc, index) => (
+                {data ? data.papers.map((doc, index) => (
                     <a key={index} className="cell" href={'./paper?id='+doc.id}>
                         <h2 className="mg-t-10">{doc.year + ' ' + getMonthName(doc.month)}</h2>
                         <div className="info">
@@ -77,7 +94,9 @@ export default async function Filter(context) {
                             ))}</span>
                         </div>
                     </a>
-                ))}
+                ))
+                :
+                <div className="text-md">Papers could not be loaded. Please refresh the page or go back to the <a href="/content">contents page</a>.</div>}
             </div>
         </div>
     )

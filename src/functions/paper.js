@@ -1,15 +1,14 @@
-import { collection, addDoc, setDoc, doc, query, where, getDocs, updateDoc } from "firebase/firestore";
-import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
+import { db } from "@/firebase/config";
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 
 export function updateUserRating(ownerId) {
-  const db = initializeFirestore();
     const fetchPaperData = async () => {
         try {
-            const q = db.collection("solvedPapers").where("owner", "==", ownerId);
+            const q = query(collection(db, "solvedPapers"), where("owner", "==", ownerId));
 
             var totalSum = 0;
 
-            const querySnapshot = await q.get();
+            const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 // Retrieve the values from the map and store them in an array
                 const valuesArray = Object.values(doc.data().rating);
@@ -26,8 +25,8 @@ export function updateUserRating(ownerId) {
 
             const finalAverageRating = totalSum / querySnapshot.size
 
-            const docRef = db.collection("users").doc(ownerId);
-            docRef.update({rating: finalAverageRating })
+            const docRef = doc(db, "users", ownerId);
+            updateDoc(docRef, {rating: finalAverageRating })
 
         } catch (error) {
           console.error("Error fetching paper data:", error);
@@ -36,3 +35,10 @@ export function updateUserRating(ownerId) {
   
       fetchPaperData();
 };
+
+export function getMonthName(monthNumber) {
+  const date = new Date();
+  date.setMonth(monthNumber - 1);
+
+  return date.toLocaleString('en-US', { month: 'short' });
+}

@@ -1,11 +1,9 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import RenderProfilePicture from '@/components/profilePicture';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from '@/firebase/firebaseClient';
-import { getDocs, getDoc, doc, addDoc, collection, query, where } from "firebase/firestore";
-// import { format } from 'date-fns';
+import { db } from '@/firebase/config';
+import { addDoc, collection } from "firebase/firestore";
 import { revalidateTag } from "next/cache";
 const { format } = require("date-fns/format");
 
@@ -35,7 +33,7 @@ export default function CommentForm({user, paperId}) {
           <div className="comment-form row mg-t-20">
               <form className="row full-width align-items-baseline">
               <div className="profile-picture-small">
-                  {RenderProfilePicture(user.photoUrl, user.firstName, user.lastName)}
+                  <RenderProfilePicture userData={user} />
               </div>
               <span
                   type="text"

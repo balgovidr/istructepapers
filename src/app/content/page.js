@@ -1,14 +1,16 @@
-import { initializeFirebase, initializeFirestore } from "@/firebase/firebaseAdmin";
-import { collection, get } from "firebase/firestore";
+import { ButtonsWithPoints } from "@/components/buttons";
+import { db } from "@/firebase/config";
+import { collection, query, where, getDocs } from "firebase/firestore";
+
 
 async function getData() {
-    const db = initializeFirestore()
     //Fetch paper data
     let papers = null;
 
     try {
-        const papersRef = db.collection("solvedPapers");
-        const querySnapshot = await papersRef.get();
+        const papersRef = collection(db, "solvedPapers");
+        const q = query(papersRef, where("verified", "==", true));
+        const querySnapshot = await getDocs(q);
 
         // Filter unique combinations of month and year
         const filteredData = Array.from(
@@ -37,7 +39,25 @@ async function getData() {
 
 export const metadata = {
     title: 'IStructE exam sample answers - Structural Papers',
-    description: 'Access a number of IStructE exam papers answered by a candidate. Browse and select the year and month of the IStructE exam papers solution pdf you would like to view.',
+    description: 'Access several IStructE solved exam papers. Browse and select the year and month of the IStructE past papers solution pdf you want to view.',
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/content',
+    },
+    openGraph: {
+        title: 'IStructE exam sample answers - Structural Papers',
+        description: 'Access several IStructE solved exam papers. Browse and select the year and month of the IStructE past papers solution pdf you want to view.',
+        url: process.env.NEXT_PUBLIC_HOST + '/content',
+        siteName: 'Structural Papers',
+        images: [
+          {
+            url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp', // Must be an absolute URL
+            width: 1200,
+            height: 628,
+            alt: 'Image describing Structural Papers',
+          },
+        ],
+        type: 'website',
+      },
 }
 
 export default async function Content() {
@@ -52,10 +72,7 @@ export default async function Content() {
 
     return (
         <div className="full-height column content text-center">
-            <div className="flex flex-row flex-wrap mg-t-50 justify-center button-container">
-                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/upload">Upload a paper</a>
-                <a className="btn btn-primary-outline min-w-[150px] mx-[5%]" href="/surveys">Answer questions</a>
-            </div>
+            <ButtonsWithPoints />
             <hr className="solid"/>
 
             <h1 className="text-2xl mb-5">Solved <span className="text-gradient d-inline">IStructE</span> paper repository</h1>

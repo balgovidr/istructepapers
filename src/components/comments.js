@@ -1,13 +1,9 @@
-import { getDocs, getDoc, doc, addDoc, collection, query, where } from "firebase/firestore";
-import { auth, db, storage } from '@/firebase/firebaseClient';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getDocs, getDoc, doc, collection, query, where, setDoc } from "firebase/firestore";
+import { db } from '@/firebase/config';
 import { format } from 'date-fns';
-// import ReplyIcon from '@mui/icons-material/Reply';
-import RenderProfilePicture from '@/components/profilePicture';
 import { revalidateTag } from "next/cache";
-import { initializeFirestore } from "@/firebase/firebaseAdmin";
-import { CommentSubmitButton } from "./commentSubmitButton";
-// import CommentForm from "./commentForm";
+import { CommentSubmitButton } from "./buttons";
+import { RenderProfilePicture } from "./profilePicture";
 
 async function getComments(paperId) {
   const fetchUserDocument = async (userId) => {
@@ -26,7 +22,7 @@ async function getComments(paperId) {
       return (
         <div className="row mg-b-20" key={commentData.id}>
           <div className="profile-picture-small">
-            {RenderProfilePicture(userDoc.photoUrl, userDoc.firstName, userDoc.lastName)}
+            <RenderProfilePicture userData={userDoc} />
           </div>
           <div className="column">
             <span>{userDoc.firstName + ' ' + userDoc.lastName}</span>
@@ -89,14 +85,13 @@ export default async function Comments({paperId, user = null, userData = null}) 
 
   async function commentSubmit(formData) {
     "use server"
-    const db = initializeFirestore()
   
     const comment = formData.get("comment");
   
     if (!comment || comment === '') return;
   
     try {
-      await db.collection("comments").add({
+      await setDoc(doc(collection(db, "comments")), {
         paperId: paperId,
         userId: user.uid,
         dateTime: format(new Date(), 'yyyy-MM-dd-kk-mm-ss'),
@@ -113,10 +108,10 @@ export default async function Comments({paperId, user = null, userData = null}) 
   return (
     <div className="comments-section mg-t-25">
       <div className="comment-form row mg-t-20">
-        {user ?
+        {userData ?
         <form className="row full-width align-items-baseline" action={commentSubmit}>
           <div className="profile-picture-small">
-              {user && RenderProfilePicture(userData.photoUrl, userData.firstName, userData.lastName)}
+              <RenderProfilePicture userData={userData} />
           </div>
           <textarea
               className="form-control col-1 mg-r-10 input-comment"
@@ -131,9 +126,6 @@ export default async function Comments({paperId, user = null, userData = null}) 
         <span className="text-sm mb-6"><a href="/auth/login" className="underline">Login</a> or <a href="/auth/signup" className="underline">signup</a> to post your own comments.</span>
         }
       </div>
-
-        {/* <CommentForm user={user} paperId={paperId} /> */}
-
       <div className="comments">
         <h3>Comments:</h3>
         <hr className="solid" style={{margin: "0px", marginBottom: "10px"}}/>

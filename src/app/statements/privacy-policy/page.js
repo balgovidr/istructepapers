@@ -3,7 +3,25 @@ import Head from "next/head";
 export const metadata = {
     title: 'Privacy Policy - Structural Papers',
     description: 'View the privacy policy of Structural Papers.',
-  }
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/statements/privacy-policy',
+    },
+    openGraph: {
+        title: 'Privacy Policy - Structural Papers',
+        description: 'View the privacy policy of Structural Papers.',
+        url: process.env.NEXT_PUBLIC_HOST + '/statements/privacy-policy',
+        siteName: 'Structural Papers',
+        images: [
+          {
+            url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp', // Must be an absolute URL
+            width: 1200,
+            height: 628,
+            alt: 'Image describing Structural Papers',
+          },
+        ],
+        type: 'website',
+      },
+}
 
 export default function PrivacyPolicy() {
 
@@ -32,7 +50,7 @@ export default function PrivacyPolicy() {
                 Seawoods, Navi Mumbai – 400706,
                 India,
                 <br/>
-                email: s.b.apps202@gmail.com,
+                email: info@structuralpapers.com,
                 <br/>
                 phone: 07401996138
                 <br/>
@@ -236,7 +254,7 @@ export default function PrivacyPolicy() {
                         with a statutory authority and such other rights
                         as may be relevant under applicable laws. To
                         exercise these rights, you can write to us at
-                        s.b.apps202@gmail.com.
+                        info@structuralpapers.com.
                         We will respond to your
                         request in accordance with applicable law.
                     </p>
@@ -261,7 +279,7 @@ export default function PrivacyPolicy() {
                         To learn more about how we use these
                         and your choices in relation to these tracking
                         technologies, please refer to our
-                        <a href="https://structuralpapers.com/cookie-policy">Cookie Policy.</a>
+                        <a href="https://structuralpapers.com/statements/cookie-policy">Cookie Policy.</a>
                     </p>
                 </li>
                 
@@ -313,7 +331,7 @@ export default function PrivacyPolicy() {
                         F-503, Tower 2, Sector 40, Seawoods Grand Central
                         Seawoods, Navi Mumbai – 400706,
                         India
-                        email: s.b.apps202@gmail.com.
+                        email: info@structuralpapers.com.
                         We will address your concerns in accordance with applicable law.
                     </p>
                 </li>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
-import { auth, db } from '@/firebase/firebaseClient';
+import { auth, db } from '@/firebase/config';
 import { onAuthStateChanged } from 'firebase/auth';
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';

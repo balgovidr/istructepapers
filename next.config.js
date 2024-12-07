@@ -11,6 +11,12 @@ const nextConfig = {
             port: '',
             pathname: '/**',
           },
+          {
+            protocol: 'https',
+            hostname: 'istructepapers-test.appspot.com',
+            port: '',
+            pathname: '/**',
+          },
         ],
       },
       webpack: (config) => {
@@ -35,7 +41,16 @@ const nextConfig = {
             })
         )
         return config
-    }
+    },
+    async redirects(){
+      return [
+        {
+          source: '/:path*',
+          has: [{ type: 'host', value: 'www.structuralpapers.com' }],
+          destination: 'https://structuralpapers.com/:path*',
+          permanent: true
+        }
+    ]},
 }
 
 module.exports = nextConfig

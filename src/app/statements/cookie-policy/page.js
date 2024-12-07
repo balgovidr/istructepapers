@@ -3,8 +3,26 @@ import Head from "next/head";
 export const metadata = {
     title: 'Cookie Policy - Structural Papers',
     description: 'View the cookie policy of Structural Papers.',
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_HOST + '/statements/cookie-policy',
+    },
+    openGraph: {
+        title: 'Cookie Policy - Structural Papers',
+        description: 'View the cookie policy of Structural Papers.',
+        url: process.env.NEXT_PUBLIC_HOST + '/statements/cookie-policy',
+        siteName: 'Structural Papers',
+        images: [
+          {
+            url: process.env.NEXT_PUBLIC_HOST + '/opengraph-image.webp', // Must be an absolute URL
+            width: 1200,
+            height: 628,
+            alt: 'Image describing Structural Papers',
+          },
+        ],
+        type: 'website',
+      },
   }
-
+  
 export default function CookiePolicy() {
 
     return (
@@ -91,7 +109,7 @@ export default function CookiePolicy() {
             <p>However if you are still looking for more information then you can contact us through one of our preferred contact methods:</p>
 
             <ul>
-            <li>Email: s.b.apps202@gmail.com</li>
+            <li>Email: info@structuralpapers.com</li>
 
             </ul>
 

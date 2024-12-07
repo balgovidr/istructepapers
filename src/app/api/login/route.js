@@ -1,15 +1,17 @@
-import { initializeFirebase } from "@/firebase/firebaseAdmin";
-import { auth } from "firebase-admin";
+import { auth, getAuth } from "firebase-admin";
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { initializeApp, getApps, getApp } from 'firebase-admin/app';
+import {app, firebaseConfig} from '@/firebase/config'
+import { initializeFirebase } from "@/firebase/firebaseAdmin";
 
 export async function POST() {
-  initializeFirebase()
+  initializeFirebase();
   const authorization = headers().get("Authorization");
   if (authorization?.startsWith("Bearer ")) {
     const idToken = authorization.split("Bearer ")[1];
     const decodedToken = await auth().verifyIdToken(idToken);
-
+    
     if (decodedToken) {
       //Generate session cookie
       const expiresIn = 60 * 60 * 24 * 5 * 1000;
@@ -33,7 +35,7 @@ export async function POST() {
 }
 
 export async function GET(request) {
-  initializeFirebase()
+  initializeFirebase();
   const session = cookies().get("session")?.value;
 
   //Validate if the cookie exist in the request
