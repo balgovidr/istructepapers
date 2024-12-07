@@ -50,7 +50,7 @@ export default function PrivacyPolicy() {
                 Seawoods, Navi Mumbai – 400706,
                 India,
                 <br/>
-                email: s.b.apps202@gmail.com,
+                email: info@structuralpapers.com,
                 <br/>
                 phone: 07401996138
                 <br/>
@@ -254,7 +254,7 @@ export default function PrivacyPolicy() {
                         with a statutory authority and such other rights
                         as may be relevant under applicable laws. To
                         exercise these rights, you can write to us at
-                        s.b.apps202@gmail.com.
+                        info@structuralpapers.com.
                         We will respond to your
                         request in accordance with applicable law.
                     </p>
@@ -331,7 +331,7 @@ export default function PrivacyPolicy() {
                         F-503, Tower 2, Sector 40, Seawoods Grand Central
                         Seawoods, Navi Mumbai – 400706,
                         India
-                        email: s.b.apps202@gmail.com.
+                        email: info@structuralpapers.com.
                         We will address your concerns in accordance with applicable law.
                     </p>
                 </li>

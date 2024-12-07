@@ -109,7 +109,7 @@ export default function CookiePolicy() {
             <p>However if you are still looking for more information then you can contact us through one of our preferred contact methods:</p>
 
             <ul>
-            <li>Email: s.b.apps202@gmail.com</li>
+            <li>Email: info@structuralpapers.com</li>
 
             </ul>
 

@@ -10,7 +10,7 @@ async function getData(context) {
   
     try {
         const collectionRef = collection(db, 'solvedPapers');
-        let baseQuery = collectionRef;
+        let baseQuery = query(collectionRef, where("verified", '==', true));
 
         if (year !== 'N/A') {
             baseQuery = query(baseQuery, where('year', '==', year));

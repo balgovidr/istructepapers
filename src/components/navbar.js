@@ -78,7 +78,7 @@ export default function Navbar() {
                                 <Tooltip title="Points are used to view papers">
                                     <div className="flex flex-col items-center text-white">
                                         <span className="text-md">{userData.points}</span>
-                                        <span className="text-sm">Points</span>
+                                        <span className="text-sm">Credits</span>
                                     </div>
                                 </Tooltip>
                             :
