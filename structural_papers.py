@@ -57,7 +57,7 @@ def structural_papers():
         image = post[0]
         caption = post[2]
 
-        generate_image_from_image(f'images\\{image}', 1080, 1080)
+        generate_image_from_image(f'images/{image}', 1080, 1080)
     
     # Modify the caption
     # Include the 'link in the bio' mention
