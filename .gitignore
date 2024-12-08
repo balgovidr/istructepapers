@@ -37,12 +37,18 @@ src/pages/surveys.js
 istructepapers-firebase-adminsdk-gusds-1904b5e02b.json
 istructepapers-test-firebase-adminsdk-s4b6h-0121aff92b.json
 
+# Python files
 instagram-publisher/.venv
+instagram-publisher/.vscode
+instagram-publisher/__pycache__
+.venv
+.vscode
+__pycache__
+config
+.env
 
 # Logs
 firebase-debug.log
 ui-debug.log
 .env.production
 functions/.env
-instagram-publisher/.vscode
-instagram-publisher/__pycache__
