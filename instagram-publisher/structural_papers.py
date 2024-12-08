@@ -83,7 +83,6 @@ def structural_papers():
     # Append the message and hashtag back together
     caption = message + hashtags
 
-    print(caption)
     return caption
 
 if __name__ == "__main__":

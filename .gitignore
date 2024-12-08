@@ -42,3 +42,5 @@ firebase-debug.log
 ui-debug.log
 .env.production
 functions/.env
+instagram-publisher/.vscode
+instagram-publisher/__pycache__

@@ -84,7 +84,7 @@ def generate_image_from_image(image_path, img_width, img_height):
   if(width != height):
     bigside = width if width > height else height
 
-    background = Image.new('RGBA', (bigside, bigside), (255, 255, 255, 255))
+    background = Image.new('RGB', (bigside, bigside), (255, 255, 255, 255))
     offset = (int(round(((bigside - width) / 2), 0)), int(round(((bigside - height) / 2),0)))
 
     background.paste(image, offset)
@@ -93,12 +93,6 @@ def generate_image_from_image(image_path, img_width, img_height):
 
   else:
     print("Image is already a square, it has not been resized !")
-      
-# Example usage
-text = "Extremely long text that I don't think is going to fit on the screen but I'm going to keep writing to make sure it doesn't. Extremely long text that I don't think is going to fit on the screen but I'm going to keep writing to make sure it doesn't."
-background_color = (255, 255, 255)  # White
-text_color = (0, 0, 0)  # Black
-output_path = "output.jpg"
 
 if __name__ == "__main__":
     # generate_image_from_text(text, background_color, text_color, output_path, 1080, 1080)
