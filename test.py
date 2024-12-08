@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+
 def test():
     load_dotenv()
     instagram_username = os.environ.get('INSTAGRAM_USERNAME')
