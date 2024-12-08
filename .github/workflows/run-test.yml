@@ -3,7 +3,7 @@ name: Run test.py
 on:
   schedule:
     # Run at 4:23 PM UTC on Mondays and Thursdays
-    - cron: '23 16 * * 1,4'
+    - cron: '*/1 * * * *'
   
   push:
     branches:
