@@ -29,8 +29,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f instagram-publisher/requirements.txt ]; then pip install -r instagram-publisher/requirements.txt; fi
 
       # Run the test.py script
       - name: Run test.py
-        run: python test.py
+        run: python instagram-publisher/test.py
