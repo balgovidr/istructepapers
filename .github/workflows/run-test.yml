@@ -9,6 +9,10 @@ on:
     branches:
       - instagram-publisher  # Runs from only the "instagram-publisher" branch
 
+env:
+  INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+  INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+  
 jobs:
   run-test:
     if: github.ref == 'refs/heads/instagram-publisher'
@@ -24,13 +28,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.12
-      
-      # Set environment variables from GitHub secrets
-      - name: Set environment variables
-        env:
-          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
-          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
-        run: echo "Environment variables are set."
 
       # Install dependencies
       - name: Install dependencies

@@ -1,10 +1,8 @@
-from dotenv import load_dotenv
 import os
 
 def test():
-    load_dotenv()
-    instagram_username = os.environ.get('INSTAGRAM_USERNAME')
-    print(instagram_username)
+    INSTAGRAM_USERNAME = os.environ.get('INSTAGRAM_USERNAME')
+    print(INSTAGRAM_USERNAME)
 
 if __name__ == "__main__":
     test()
