@@ -3,7 +3,7 @@ name: Run test.py
 on:
   schedule:
     # Run at 4:23 PM UTC on Mondays and Thursdays
-    - cron: '*/1 * * * *'
+    - cron: '*/5 * * * *'
   
   push:
     branches:
@@ -23,14 +23,21 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12  # Replace with your Python version (e.g., 3.8)
+          python-version: 3.12
+      
+      # Set environment variables from GitHub secrets
+      - name: Set environment variables
+        env:
+          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+        run: echo "Environment variables are set."
 
-      # Install dependencies (if any)
+      # Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f instagram-publisher/requirements.txt ]; then pip install -r instagram-publisher/requirements.txt; fi
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       # Run the test.py script
       - name: Run test.py
-        run: python instagram-publisher/test.py
+        run: python test.py
