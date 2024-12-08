@@ -24,13 +24,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.12
-      
-      # Set environment variables from GitHub secrets
-      - name: Set environment variables
-        env:
-          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
-          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
-        run: echo $INSTAGRAM_USERNAME
 
       # Install dependencies
       # - name: Install dependencies
@@ -40,4 +33,7 @@ jobs:
 
       # Run the test.py script
       - name: Run test.py
+        env:
+          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
+          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
         run: python test.py
