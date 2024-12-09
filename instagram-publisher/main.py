@@ -6,8 +6,8 @@ from instagrapi.exceptions import LoginRequired
 
 def post_to_instagram():
     load_dotenv()
-    instagram_username = os.environ.get('instagram_username')
-    instagram_password = os.environ.get('instagram_password')
+    INSTAGRAM_USERNAME = os.environ.get('INSTAGRAM_USERNAME')
+    INSTAGRAM_PASSWORD = os.environ.get('INSTAGRAM_PASSWORD')
 
     # Create the image and get the caption
     caption = structural_papers()
@@ -17,7 +17,7 @@ def post_to_instagram():
 
     try:
         # Login to Instagram
-        instagram_client.login(instagram_username, instagram_password)
+        instagram_client.login(INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD)
         
         # Upload a photo with a caption
         instagram_client.photo_upload("output.jpg", caption=caption)

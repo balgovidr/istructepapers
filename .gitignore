@@ -44,3 +44,4 @@ ui-debug.log
 functions/.env
 instagram-publisher/.vscode
 instagram-publisher/__pycache__
+instagram-publisher/.env

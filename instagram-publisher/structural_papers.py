@@ -1,5 +1,6 @@
 import random
 import csv
+import os
 from image_generator import *
 
 def random_line_from_csv(filename):
@@ -51,13 +52,21 @@ def structural_papers():
         generate_image_from_text(content, background_color, text_color, 1080, 1080)
     
     else:
-       # Generate an image using one of the images
-       # Select a random row from the image_posts.csv
-        post = random_line_from_csv('image_posts.csv')
-        image = post[0]
-        caption = post[2]
+      # Generate an image using one of the images
+      # Select a random row from the image_posts.csv
+      post = random_line_from_csv('image_posts.csv')
+      image = post[0]
+      caption = post[2]
 
-        generate_image_from_image(f'images\\{image}', 1080, 1080)
+      LOCALHOST = os.environ.get('LOCALHOST')
+
+      if LOCALHOST == "true":
+         # Needs to use the forward slashes as shown below to work on localhost (Windows) and on Github (Ubuntu)
+         starting_image_location = f'images\\{image}'
+      else:
+         starting_image_location = f'images/{image}'
+
+      generate_image_from_image(starting_image_location, 1080, 1080)
     
     # Modify the caption
     # Include the 'link in the bio' mention
