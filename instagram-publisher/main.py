@@ -1,11 +1,9 @@
-from dotenv import load_dotenv
 import os
 from structural_papers import structural_papers
 from instagrapi import Client
 from instagrapi.exceptions import LoginRequired
 
 def post_to_instagram():
-    load_dotenv()
     INSTAGRAM_USERNAME = os.environ.get('INSTAGRAM_USERNAME')
     INSTAGRAM_PASSWORD = os.environ.get('INSTAGRAM_PASSWORD')
 

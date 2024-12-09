@@ -1,5 +1,11 @@
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
+import os
+
+LOCALHOST = os.environ.get('LOCALHOST')
+folder_prefix = ''
+if LOCALHOST != "true":
+   folder_prefix = 'instagram-publisher/'
 
 def generate_image_from_text(text, background_color, text_color, img_width, img_height):
     """Generates a 1080x1080 pixel image with the specified text.
@@ -12,7 +18,7 @@ def generate_image_from_text(text, background_color, text_color, img_width, img_
         output_path: The path where the output image will be saved.
     """
     # Select font file
-    font_path = r'fonts\coolvetica rg.otf'
+    font_path = f'{folder_prefix}fonts/coolvetica rg.otf'
 
     # Create a new image
     img = Image.new('RGB', (img_width, img_height), background_color)

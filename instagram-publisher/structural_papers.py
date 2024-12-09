@@ -3,6 +3,11 @@ import csv
 import os
 from image_generator import *
 
+LOCALHOST = os.environ.get('LOCALHOST')
+folder_prefix = ''
+if LOCALHOST != "true":
+   folder_prefix = 'instagram-publisher/'
+
 def random_line_from_csv(filename):
   """Selects a random line from a CSV file, excluding the header.
 
@@ -32,7 +37,7 @@ def structural_papers():
     if random_integer > 1:
         # Post a text
         # Select a random row from the text_posts.csv
-        post = random_line_from_csv('text_posts.csv')
+        post = random_line_from_csv(folder_prefix + 'text_posts.csv')
         content = post[1]
         caption = post[2]
 
@@ -54,7 +59,7 @@ def structural_papers():
     else:
       # Generate an image using one of the images
       # Select a random row from the image_posts.csv
-      post = random_line_from_csv('image_posts.csv')
+      post = random_line_from_csv(folder_prefix + 'image_posts.csv')
       image = post[0]
       caption = post[2]
 
@@ -64,7 +69,7 @@ def structural_papers():
          # Needs to use the forward slashes as shown below to work on localhost (Windows) and on Github (Ubuntu)
          starting_image_location = f'images\\{image}'
       else:
-         starting_image_location = f'images/{image}'
+         starting_image_location = f'{folder_prefix}images/{image}'
 
       generate_image_from_image(starting_image_location, 1080, 1080)
     
