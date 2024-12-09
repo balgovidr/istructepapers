@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /api/
+Disallow: /assets/

@@ -1,0 +1,20 @@
+env:
+  # Get these values from the Firebase console
+  - variable: NEXT_PUBLIC_ENVIRONMENT
+    value: production
+  - variable: NEXT_PUBLIC_HOST
+    value: https://structuralpapers.com
+  - variable: NEXT_PUBLIC_DB_HOST
+    value: https://istructepapers--dev-edrr0ikk.web.app
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyCJTuVp5PURWWkDYQmyB810zXdsHhQSRh0
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: istructepapers.firebaseapp.com
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: istructepapers
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: istructepapers.appspot.com
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: 479657269473
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:479657269473:web:730b8d2b614726c5dbbfa0
