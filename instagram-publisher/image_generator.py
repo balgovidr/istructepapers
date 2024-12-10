@@ -4,8 +4,8 @@ import os
 
 LOCALHOST = os.environ.get('LOCALHOST')
 folder_prefix = ''
-if LOCALHOST != "true":
-   folder_prefix = 'instagram-publisher/'
+# if LOCALHOST != "true":
+#    folder_prefix = 'instagram-publisher/'
 
 def generate_image_from_text(text, background_color, text_color, img_width, img_height):
     """Generates a 1080x1080 pixel image with the specified text.

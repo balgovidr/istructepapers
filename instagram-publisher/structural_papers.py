@@ -5,8 +5,8 @@ from image_generator import *
 
 LOCALHOST = os.environ.get('LOCALHOST')
 folder_prefix = ''
-if LOCALHOST != "true":
-   folder_prefix = 'instagram-publisher/'
+# if LOCALHOST != "true":
+#    folder_prefix = 'instagram-publisher/'
 
 def random_line_from_csv(filename):
   """Selects a random line from a CSV file, excluding the header.
